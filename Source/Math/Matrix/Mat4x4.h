@@ -31,8 +31,8 @@ namespace mat4x4
 		output(0, 0) = 1.0f / (aspectRatio * tanHalfFov);
 		output(1, 1) = 1.0f / (tanHalfFov);
 		output(2, 2) = -(farPlane + nearPlane) / (farPlane - nearPlane);
-		output(3, 2) = -1;
-		output(2, 3) = -(2 * farPlane * nearPlane) / (farPlane - nearPlane);
+		output(2, 3) = -1;
+		output(3, 2) = -(2 * farPlane * nearPlane) / (farPlane - nearPlane);
 		return output;
 	}
 }

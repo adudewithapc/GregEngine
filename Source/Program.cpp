@@ -55,25 +55,6 @@ unsigned int indices[] = {
 
 int main()
 {
-	Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
-	glm::mat4 proper = glm::mat4(1.0f);
-	proper = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-	auto test = glm::value_ptr(proper);
-
-	std::cout << "Mine: \n" << projectionMatrix << "\n";
-
-	std::cout << "Proper: \n";
-	for(int i = 0; i < 16; i++)
-	{
-		std::cout << test[i] << ", ";
-
-		if(i % 4 == 3 && i != 0)
-		{
-			std::cout << "\n";
-		}
-	}
-
 	using FloatingSeconds = std::chrono::duration<float>;
 
 	std::cout << "Creating window" << std::endl;

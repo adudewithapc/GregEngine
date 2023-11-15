@@ -103,13 +103,13 @@ void TriangleRenderer::Draw()
 
 	Mat4x4f modelMatrix = mat4x4::Identity<float>.Rotate(Vec3f(1, 0, 0), trigonometry::Radians(-55.0f));
 	Mat4x4f viewMatrix = mat4x4::Identity<float>.Translate(Vec3f(0, 0, -3));
-	Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
+	Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(-45.0f), 800.0f / 600.0f, 0.1f, 100);
 
 	int modelLocation = glGetUniformLocation(shader->programID, "model");
-	glUniformMatrix4fv(modelLocation, 1, GL_TRUE, modelMatrix.ToArray());
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, modelMatrix.ToArray());
 
 	int viewLocation = glGetUniformLocation(shader->programID, "view");
-	glUniformMatrix4fv(viewLocation, 1, GL_TRUE, viewMatrix.ToArray());
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, viewMatrix.ToArray());
 
 	int projectionLocation = glGetUniformLocation(shader->programID, "projection");
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projectionMatrix.ToArray());
