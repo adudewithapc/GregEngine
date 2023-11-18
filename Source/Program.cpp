@@ -161,6 +161,7 @@ int main()
 		}
 
 		previousTime = currentTime;
+		std::cout << deltaTime << "\n";
 	}
 
 	DestroyRenderer();
@@ -265,8 +266,6 @@ void CustomRender()
 	glBindTexture(GL_TEXTURE_2D, texture2);
 
 	glBindVertexArray(VAO);
-
-	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	for(unsigned int i = 0; i < 10; i++)
 	{
