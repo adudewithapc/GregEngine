@@ -87,6 +87,19 @@ const float cube[] = {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
+Vec3f cubePositions[] = {
+	Vec3f(0.0f,  0.0f,  0.0f),
+	Vec3f(2.0f,  5.0f, -15.0f),
+	Vec3f(-1.5f, -2.2f, -2.5f),
+	Vec3f(-3.8f, -2.0f, -12.3f),
+	Vec3f(2.4f, -0.4f, -3.5f),
+	Vec3f(-1.7f,  3.0f, -7.5f),
+	Vec3f(1.3f, -2.0f, -2.5f),
+	Vec3f(1.5f,  2.0f, -2.5f),
+	Vec3f(1.5f,  0.2f, -1.5f),
+	Vec3f(-1.3f,  1.0f, -1.5f)
+};
+
 /*const float vertices2[] = {
 	-0.75f, 0.25f, 0,
 	-0.75f, -0.5f, 0,
@@ -230,13 +243,11 @@ void CustomRender()
 {
 	shader->Use();
 
-	Mat4x4f modelMatrix = mat4x4::Identity<float>.Rotate(Vec3f(1, 0, 0), trigonometry::Radians(-55.0f)).Rotate(Vec3f(0.447214f, 0.894427f, 0.0f), Time::GetTimeSinceStartup() * trigonometry::Radians(50.0f));
+	Mat4x4f modelMatrix = mat4x4::Identity<float>.Rotate(Vec3f(1, 0, 0), trigonometry::Radians(-55.0f)).Rotate(Vec3f(0.5f, 1, 0), Time::GetTimeSinceStartup() * trigonometry::Radians(50.0f));
 
 	Mat4x4f viewMatrix = mat4x4::Identity<float>.Translate(Vec3f(0.0f, 0.0f, -3.0f));
-	Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(-45.0f), 800.0f / 600.0f, 0.1f, 100);
-
-	int modelLocation = glGetUniformLocation(shader->programID, "model");
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, modelMatrix.ToArray());
+	//Bigger aspect ratio makes objects taller, smaller makes objects wider
+	Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
 
 	int viewLocation = glGetUniformLocation(shader->programID, "view");
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, viewMatrix.ToArray());
@@ -256,6 +267,21 @@ void CustomRender()
 	glBindVertexArray(VAO);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	for(unsigned int i = 0; i < 10; i++)
+	{
+		Mat4x4f model = mat4x4::Identity<float>.Rotate(Vec3f(1, 0.3f, 0.5f), trigonometry::Radians(20.0f * (i + 1)));
+
+		if(i % 3 == 0)
+		{
+			model = model.Rotate(Vec3f(1, 0.3f, 0.5f), Time::GetTimeSinceStartup());
+		}
+
+		model = model.Translate(cubePositions[i]);
+
+		glUniformMatrix4fv(glGetUniformLocation(shader->programID, "model"), 1, GL_FALSE, model.ToArray());
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 }
 
 void DestroyRenderer()
