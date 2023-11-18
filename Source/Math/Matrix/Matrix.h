@@ -229,6 +229,7 @@ struct Matrix
 	//https://learnopengl.com/Getting-started/Transformations under "Rotation"
 	Matrix<T, 4, 4> Rotate(Vec3<float> axis, double amount)
 	{
+		axis.Normalize();
 		T const c = cos(amount);
 		T const s = sin(amount);
 

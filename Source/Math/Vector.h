@@ -36,6 +36,27 @@ TypeT struct Vec2
 		return output;
 	}
 
+	Vec2<T>& operator /(const T scalar)
+	{
+		x /= scalar;
+		y /= scalar;
+		return *this;
+	}
+	Vec2<T>& operator /=(const T scalar)
+	{
+		return *this = *this / scalar;
+	}
+
+	T Magnitude()
+	{
+		return sqrt((T) (x * x + y * y));
+	}
+
+	Vec2<T> Normalize()
+	{
+		return *this /= Magnitude();
+	}
+
 	T x, y;
 };
 
@@ -61,6 +82,18 @@ TypeT struct Vec3
 		return Vec2<T>(x, y);
 	}
 
+	Vec3<T>& operator /(const T scalar)
+	{
+		x /= scalar;
+		y /= scalar;
+		z /= scalar;
+		return *this;
+	}
+	Vec3<T>& operator /=(const T scalar)
+	{
+		return *this = *this / scalar;
+	}
+
 	T operator [](int axis)
 	{
 		switch(axis)
@@ -74,6 +107,16 @@ TypeT struct Vec3
 		}
 
 		throw std::invalid_argument("Trying to get a value outside of the 3 dimensions");
+	}
+
+	T Magnitude()
+	{
+		return sqrt((T) (x * x + y * y + z * z));
+	}
+
+	Vec3<T>& Normalize()
+	{
+		return *this /= Magnitude();
 	}
 
 	T x, y, z;
@@ -95,6 +138,19 @@ TypeT struct Vec4
 
 	T x, y, z, w = 0;
 
+	Vec4<T>& operator /(const T scalar)
+	{
+		x /= scalar;
+		y /= scalar;
+		z /= scalar;
+		w /= scalar;
+		return *this;
+	}
+	Vec4<T>& operator /=(const T scalar)
+	{
+		return *this = *this / scalar;
+	}
+
 	T& operator [](int axis)
 	{
 		switch(axis)
@@ -110,6 +166,16 @@ TypeT struct Vec4
 		}
 
 		throw std::invalid_argument("Trying to get a value outside of the 4 dimensions");
+	}
+
+	T Magnitude()
+	{
+		return sqrt((T) (x * x + y * y + z * z + w * w));
+	}
+
+	Vec4<T> Normalize()
+	{
+		return *this /= Magnitude();
 	}
 };
 
