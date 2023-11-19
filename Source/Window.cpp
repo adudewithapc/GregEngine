@@ -229,6 +229,23 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 		input->MoveWindowMouse(wParam, x, y);
 		break;
 	}
+	case WM_SETFOCUS:
+	{
+		SetCapture(hWnd);
+		RECT clipRect;
+		clipRect.left = WindowX;
+		clipRect.top = WindowY;
+		clipRect.right = clipRect.left + WindowWidth;
+		clipRect.bottom = clipRect.top + WindowHeight;
+		ClipCursor(&clipRect);
+		break;
+	}
+	case WM_KILLFOCUS:
+	{
+		ReleaseCapture();
+		ClipCursor(nullptr);
+		break;
+	}
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
