@@ -42,14 +42,20 @@ Mat4x4f Camera::GetViewMatrix()
 	cameraFront.z = sin(trigonometry::Radians(yaw)) * cos(trigonometry::Radians(pitch));
 	cameraFront.Normalize();
 
-	//Forward/back
-	cameraPos += cameraFront * cameraSpeed * (Keyboard::IsKeyDown(W) - Keyboard::IsKeyDown(S));
+	// Flying camera
+	////Forward/back
+	//cameraPos += cameraFront * cameraSpeed * (Keyboard::IsKeyDown(W) - Keyboard::IsKeyDown(S));
 
-	//Left/right
-	cameraPos += cameraFront.Cross(cameraUp).Normalize() * cameraSpeed * (Keyboard::IsKeyDown(D) - Keyboard::IsKeyDown(A));
+	////Left/right
+	//cameraPos += cameraFront.Cross(cameraUp).Normalize() * cameraSpeed * (Keyboard::IsKeyDown(D) - Keyboard::IsKeyDown(A));
 
-	//Up/down
-	cameraPos += Vec3f(0, -1, 0) * cameraSpeed * (Keyboard::IsKeyDown(Space) - Keyboard::IsKeyDown(LeftControl));
+	////Up/down
+	//cameraPos += Vec3f(0, -1, 0) * cameraSpeed * (Keyboard::IsKeyDown(Space) - Keyboard::IsKeyDown(LeftControl));
+
+	Vec3f groundedFront = Vec3f(cameraFront.x, 0, cameraFront.z).Normalize();
+	cameraPos += groundedFront * cameraSpeed * (Keyboard::IsKeyDown(W) - Keyboard::IsKeyDown(S));
+	std::cout << (groundedFront * cameraSpeed * (Keyboard::IsKeyDown(W) - Keyboard::IsKeyDown(S))) << "\n";
+	cameraPos += groundedFront.Cross(cameraUp).Normalize() * cameraSpeed * (Keyboard::IsKeyDown(D) - Keyboard::IsKeyDown(A));
 
 	return mat4x4::LookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 }
