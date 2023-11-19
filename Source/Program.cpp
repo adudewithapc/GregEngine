@@ -2,6 +2,7 @@
 #include "Window.h"
 #include <glad/glad.h>
 #include "Input/Keyboard.h"
+#include "Input/Mouse.h"
 #include "Rendering/TriangleRenderer.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -12,8 +13,10 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "Camera.h"
 
-#define USE_WIREFRAMES 0
+constexpr bool USE_WIREFRAMES = 0;
+constexpr bool PRINT_FRAMERATE = 0;
 
 const float triangle1[] = {
 	//Positions        //Colors
@@ -115,6 +118,8 @@ void CustomInit();
 void CustomRender();
 void DestroyRenderer();
 
+Camera* camera;
+
 int main()
 {
 	using FloatingSeconds = std::chrono::duration<float>;
@@ -130,6 +135,7 @@ int main()
 	}
 	
 	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
+	camera = new Camera();
 
 	TriangleRenderer triangle1(quad, indices);
 	CustomInit();
@@ -146,6 +152,8 @@ int main()
 		float deltaTime = std::chrono::duration_cast<FloatingSeconds>(currentTime - previousTime).count();
 		time.Tick(deltaTime);
 
+		camera->GetViewMatrix();
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -161,10 +169,15 @@ int main()
 		}
 
 		previousTime = currentTime;
-		std::cout << deltaTime << "\n";
+
+		if(PRINT_FRAMERATE)
+		{
+			std::cout << 1 / deltaTime << "\n";
+		}
 	}
 
 	DestroyRenderer();
+	delete camera;
 }
 
 Shader* shader;
@@ -246,18 +259,14 @@ void CustomRender()
 
 	Mat4x4f modelMatrix = mat4x4::Identity<float>.Rotate(Vec3f(1, 0, 0), trigonometry::Radians(-55.0f)).Rotate(Vec3f(0.5f, 1, 0), Time::GetTimeSinceStartup() * trigonometry::Radians(50.0f));
 
-	Mat4x4f viewMatrix = mat4x4::Identity<float>.Translate(Vec3f(0.0f, 0.0f, -3.0f));
 	//Bigger aspect ratio makes objects taller, smaller makes objects wider
 	Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
 
 	int viewLocation = glGetUniformLocation(shader->programID, "view");
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, viewMatrix.ToArray());
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, camera->GetViewMatrix().ToArray());
 
 	int projectionLocation = glGetUniformLocation(shader->programID, "projection");
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projectionMatrix.ToArray());
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);
@@ -269,12 +278,7 @@ void CustomRender()
 
 	for(unsigned int i = 0; i < 10; i++)
 	{
-		Mat4x4f model = mat4x4::Identity<float>.Rotate(Vec3f(1, 0.3f, 0.5f), trigonometry::Radians(20.0f * (i + 1)));
-
-		if(i % 3 == 0)
-		{
-			model = model.Rotate(Vec3f(1, 0.3f, 0.5f), Time::GetTimeSinceStartup());
-		}
+		Mat4x4f model = mat4x4::Identity<float>.Rotate(Vec3f(1, 0.3f, 0.5f), trigonometry::Radians(20.0f * i));
 
 		model = model.Translate(cubePositions[i]);
 

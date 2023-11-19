@@ -30,21 +30,31 @@ TypeT struct Vec2
 		return Vec3<T>(x, y, 0);
 	}
 
-	Vec2<T>& operator +(Vec2<T>&& other)
+	Vec2<T> operator *(const T scalar) const
 	{
-		Vec2<T> output(x + other.x, y + other.y);
-		return output;
+		return Vec2<T>(x * scalar, y * scalar);
+	}
+	Vec2<T>& operator *=(const T scalar)
+	{
+		return *this = *this * scalar;
 	}
 
-	Vec2<T>& operator /(const T scalar)
+	Vec2<T> operator /(const T scalar) const
 	{
-		x /= scalar;
-		y /= scalar;
-		return *this;
+		return Vec2<T>(x / scalar, y / scalar);
 	}
 	Vec2<T>& operator /=(const T scalar)
 	{
 		return *this = *this / scalar;
+	}
+
+	Vec2<T> operator +(const Vec2<T>& other) const
+	{
+		return Vec2<T>(x + other.x, y + other.y);
+	}
+	Vec2<T>& operator +=(const Vec2<T>& other)
+	{
+		return *this = *this + other;
 	}
 
 	T Magnitude()
@@ -62,17 +72,17 @@ TypeT struct Vec2
 
 TypeT struct Vec3
 {
-	Vec3() :
+	Vec3<T>() :
 		x(0),
 		y(0),
 		z(0) {}
 
-	Vec3(T xIn, T yIn) :
+	Vec3<T>(T xIn, T yIn) :
 		x(xIn),
 		y(yIn),
 		z(0) {}
 
-	Vec3(T xIn, T yIn, T zIn) :
+	Vec3<T>(T xIn, T yIn, T zIn) :
 		x(xIn),
 		y(yIn),
 		z(zIn) {}
@@ -82,16 +92,50 @@ TypeT struct Vec3
 		return Vec2<T>(x, y);
 	}
 
-	Vec3<T>& operator /(const T scalar)
+	Vec3<T> operator *(const T scalar) const
 	{
-		x /= scalar;
-		y /= scalar;
-		z /= scalar;
-		return *this;
+		Vec3<T> output(x * scalar, y * scalar, z * scalar);
+		return output;
+	}
+	Vec3<T>& operator *=(const T scalar)
+	{
+		return *this = *this * scalar;
+	}
+
+	Vec3<T> operator /(const T scalar) const
+	{
+		return Vec3<T>(x / scalar, y / scalar, z / scalar);
 	}
 	Vec3<T>& operator /=(const T scalar)
 	{
 		return *this = *this / scalar;
+	}
+
+	Vec3<T> operator +(const Vec3<T>& right) const
+	{
+		return Vec3<T>(x + right.x, y + right.y, z + right.z);
+	}
+	Vec3<T>& operator +=(const Vec3<T>& right)
+	{
+		return *this = *this + right;
+	}
+
+	Vec3<T> operator -(const Vec3<T>& right) const
+	{
+		return Vec3<T>(x - right.x, y - right.y, z - right.z);
+	}
+	Vec3<T>& operator -=(const Vec3<T>& right)
+	{
+		return *this = *this - right;
+	}
+	Vec3<T> operator -() const
+	{
+		return Vec3<T>(-x, -y, -z);
+	}
+
+	bool operator ==(Vec3<T> other)
+	{
+		return x == other.x && y == other.y && z == other.z;
 	}
 
 	T operator [](int axis)
@@ -117,6 +161,15 @@ TypeT struct Vec3
 	Vec3<T>& Normalize()
 	{
 		return *this /= Magnitude();
+	}
+
+	Vec3<T> Cross(const Vec3<T>& right) const
+	{
+		Vec3<T> output(y * right.z - z * right.y,
+					   z * right.x - x * right.z,
+					   x * right.y - y * right.x);
+
+		return output;
 	}
 
 	T x, y, z;

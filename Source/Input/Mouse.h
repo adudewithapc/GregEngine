@@ -19,20 +19,29 @@
 class Mouse
 {
 public:
-	//Mouse();
+	Mouse();
 	Mouse(const Mouse&) = delete;
 	bool operator =(const Mouse&) = delete;
 	//~Mouse();
 
 	void SetPosition(const WPARAM& pressedButtons, const int x, const int y);
+	void MoveRawPosition(const int xMovement, const int yMovement);
 
-	static Vec2i GetPosition();
+	static Vec2i& GetPosition();
+
+	//Returns the mouse position from the previous frame
+	static Vec2i& GetLastPosition();
+
+	static Vec2i GetRawPosition();
 
 	/*static bool IsButtonDown(const MouseButton& button);
 	static bool IsButtonUp(const MouseButton& button);*/
 private:
 	//inline static std::map<MouseButton, bool> pressedButtons;
 	//inline static std::vector<MouseButton> buttons = { Left, Middle, Right, Forward, Back };
+	inline static Vec2i LastPosition;
 	inline static Vec2i Position;
+
+	inline static Vec2i RawPosition;
 };
 
