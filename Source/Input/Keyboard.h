@@ -7,10 +7,12 @@
 enum Key : int
 {
 	Esc = VK_ESCAPE,
+	Space = VK_SPACE,
+	LeftControl = VK_CONTROL,
 	A = 0x41,
 	D = 0x44,
 	S = 0x53,
-	W = 0x57
+	W = 0x57,
 };
 
 class Keyboard
@@ -32,5 +34,5 @@ private:
 	bool KeyIsRegistered(const int keyID);
 
 	inline static std::map<Key, bool> pressedKeys;
-	inline static std::vector<Key> keys = { Esc, A, D, S, W };
+	inline static std::vector<Key> keys = { Esc, Space, LeftControl, A, D, S, W };
 };
