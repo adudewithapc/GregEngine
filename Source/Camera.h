@@ -14,6 +14,7 @@ public:
 	~Camera();
 
 	Mat4x4f GetViewMatrix();
+	void Viewbob(Vec3f movement);
 
 	static Camera* Get();
 
@@ -23,11 +24,13 @@ private:
 	float yaw = -90;
 	float pitch = 0;
 
-	Vec3f cameraPos = Vec3f(0, 0, 3);
-	Vec3f cameraFront = Vec3f(0, 0, -1);
-	Vec3f cameraUp = Vec3f(0, 1, 0);
+	Vec3f position = Vec3f(0, 0, 3);
+	Vec3f front = Vec3f(0, 0, -1);
+	Vec3f up = Vec3f(0, 1, 0);
 
-	Vec2i lastPos = Vec2i(Window::WindowY + Window::WindowWidth / 2, Window::WindowX + Window::WindowHeight);
+	Vec2i lastMousePos = Vec2i(Window::WindowY + Window::WindowWidth / 2, Window::WindowX + Window::WindowHeight);
+
+	float viewbobY = 0;
 
 	static constexpr float sensitivity = 0.1f;
 };

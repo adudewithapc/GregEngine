@@ -153,7 +153,7 @@ TypeT struct Vec3
 		throw std::invalid_argument("Trying to get a value outside of the 3 dimensions");
 	}
 
-	T Magnitude()
+	const T Magnitude() const
 	{
 		return sqrt((T) (x * x + y * y + z * z));
 	}
@@ -161,6 +161,12 @@ TypeT struct Vec3
 	Vec3<T>& Normalize()
 	{
 		return *this /= Magnitude();
+	}
+
+	Vec3<T> Normalized() const
+	{
+		Vec3<T> output = Vec3f(x, y, z) / Magnitude();
+		return output;
 	}
 
 	Vec3<T> Cross(const Vec3<T>& right) const
