@@ -90,6 +90,10 @@ struct Matrix
 	{
 		return elements[index];
 	}
+	const T& operator[](const int index) const
+	{
+		return elements[index];
+	}
 
 	T& operator()(const int column, const int row)
 	{
@@ -143,7 +147,7 @@ struct Matrix
 	}
 
 	//Matrix + Matrix
-	Matrix<T, R, C>& operator +(Matrix<T, R, C>& right)
+	Matrix<T, R, C>& operator +(const Matrix<T, R, C>& right)
 	{
 		Matrix<T, R, C> output;
 
@@ -154,13 +158,13 @@ struct Matrix
 
 		return output;
 	}
-	Matrix<T, R, C>& operator +=(Matrix<T, R, C>& right)
+	Matrix<T, R, C>& operator +=(const Matrix<T, R, C>& right)
 	{
 		return *this = *this + right;
 	}
 
 	//Matrix - Matrix
-	Matrix<T, R, C>& operator -(Matrix<T, R, C>& right)
+	Matrix<T, R, C>& operator -(const Matrix<T, R, C>& right)
 	{
 		Matrix<T, R, C> output;
 
@@ -171,14 +175,14 @@ struct Matrix
 
 		return output;
 	}
-	Matrix<T, R, C>& operator -=(Matrix<T, R, C>& right)
+	Matrix<T, R, C>& operator -=(const Matrix<T, R, C>& right)
 	{
 		return *this = *this - right;
 	}
 
 	//Matrix * Matrix
 	template<size_t C2>
-	Matrix<T, R, C2> operator *(Matrix<T, R, C2>& right)
+	Matrix<T, R, C2> operator *(const Matrix<T, R, C2>& right)
 	{
 		Matrix<T, R, C2> output;
 
@@ -196,7 +200,7 @@ struct Matrix
 		return output;
 	}
 	template<size_t C2>
-	Matrix<T, 4, 4>& operator *=(Matrix<T, R, C2>& left)
+	Matrix<T, 4, 4>& operator *=(const Matrix<T, R, C2>& left)
 	{
 		return *this = left * *this;
 	}
@@ -271,23 +275,26 @@ std::ostream& operator <<(std::ostream& stream, Matrix<T, R, C> mat)
 {
 	stream << "[";
 
-	for(int i = 0; i < C * R; i++)
+	for(int row = 0; row < R; row++)
 	{
-		T element = abs(mat[i]) < FLT_EPSILON ? 0 : mat[i];
-		stream << element;
+		for(int column = 0; column < C; column++)
+		{
+			T element = abs(mat(column, row)) < FLT_EPSILON ? 0 : mat(column, row);
+			stream << element;
 
-		if(i % R == R - 1)
-		{
-			stream << "]";
-			
-			if(i != (R * C) - 1)
+			if(column == C - 1)
 			{
-				stream << "\n[";
+				stream << "]";
+
+				if(column != C - 1 || row != R - 1)
+				{
+					stream << "\n[";
+				}
 			}
-		}
-		else
-		{
-			stream << ", ";
+			else
+			{
+				stream << ", ";
+			}
 		}
 	}
 
