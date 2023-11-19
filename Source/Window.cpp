@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Window.h"
 #include <glad/glad.h>
+#include "Math/Vector.h"
 
 //Window class name
 static const wchar_t* CLASS_NAME = L"Gregine Example 8)";
@@ -25,8 +26,8 @@ Window::Window() :
 	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | CS_OWNDC | WS_MAXIMIZEBOX;
 
 	RECT rect;
-	rect.left = 250;
-	rect.top = 250;
+	rect.left = WindowX;
+	rect.top = WindowY;
 	rect.right = rect.left + WindowWidth;
 	rect.bottom = rect.top + WindowHeight;
 
@@ -35,7 +36,6 @@ Window::Window() :
 
 	//Make the window dimensions define the actual canvas, as opposed to the decorations (like the title bar)
 	AdjustWindowRect(&rect, style, false);
-
 
 	//Settings for window
 	hWnd = CreateWindowEx(
@@ -57,15 +57,39 @@ Window::Window() :
 	input->RegisterInputDevices();
 
 	ShowWindow(hWnd, SW_SHOW);
+	CaptureCursor(true);
+	SetCursorPos(MouseStartingX, MouseStartingY);
+	input->MoveWindowMouse(0, WindowWidth / 2, WindowHeight / 2);
 
 	CreateGLContext();
 }
 
 Window::~Window()
 {
+	CaptureCursor(false);
 	wglDeleteContext(glContext);
 	UnregisterClass(CLASS_NAME, hInstance);
 	delete input;
+}
+
+void Window::CaptureCursor(bool capture)
+{
+	SetCapture(capture ? hWnd : nullptr);
+	if(capture)
+	{
+		RECT clipRect;
+		clipRect.left = WindowX;
+		clipRect.top = WindowY;
+		clipRect.right = clipRect.left + WindowWidth;
+		clipRect.bottom = clipRect.top + WindowHeight;
+		ClipCursor(&clipRect);
+	}
+	else
+	{
+		ClipCursor(nullptr);
+	}
+	
+	ShowCursor(!capture);
 }
 
 bool Window::ProcessMessages()
@@ -184,6 +208,15 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 			input->ReceiveKeyboardInput(rawInput->data.keyboard);
 		}
 
+		//Mouse input?
+		if(rawInput->header.dwType == RIM_TYPEMOUSE)
+		{
+			int deltaX = rawInput->data.mouse.lLastX;
+			int deltaY = rawInput->data.mouse.lLastY;
+
+			input->MoveScreenMouse(deltaX, deltaY);
+		}
+
 		delete[] rawData;
 		break;
 	}
@@ -192,7 +225,8 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 		//Coordinates are local to canvas
 		int x = LOWORD(lParam);
 		int y = HIWORD(lParam);
-		input->MoveMouse(wParam, x, y);
+
+		input->MoveWindowMouse(wParam, x, y);
 		break;
 	}
 	}
