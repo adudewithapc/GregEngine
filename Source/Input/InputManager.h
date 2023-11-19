@@ -16,7 +16,8 @@ public:
 	bool RegisterInputDevices();
 
 	void ReceiveKeyboardInput(const RAWKEYBOARD& keyboardInput);
-	void MoveMouse(const WPARAM& virtualKeys, const int x, const int y);
+	void MoveWindowMouse(const WPARAM& virtualKeys, const int x, const int y);
+	void MoveScreenMouse(const int xMovement, const int yMovement);
 
 private:
 	Keyboard* keyboard;

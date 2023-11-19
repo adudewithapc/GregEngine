@@ -3,11 +3,12 @@
 #include <hidusage.h>
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "../Window.h"
 
 InputManager::InputManager()
 {
 	keyboard = new Keyboard();
-	//mouse = new Mouse();
+	mouse = new Mouse();
 }
 
 InputManager::~InputManager()
@@ -25,7 +26,7 @@ bool InputManager::RegisterInputDevices()
 		return false;
 	}
 
-	RAWINPUTDEVICE inputDevices[3];
+	RAWINPUTDEVICE inputDevices[4];
 
 	//Keyboard
 	inputDevices[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
@@ -46,12 +47,12 @@ bool InputManager::RegisterInputDevices()
 	inputDevices[2].hwndTarget = 0;
 
 	//Mouse
-	/*inputDevices[3].usUsagePage = HID_USAGE_PAGE_GENERIC;
+	inputDevices[3].usUsagePage = HID_USAGE_PAGE_GENERIC;
 	inputDevices[3].usUsage = HID_USAGE_GENERIC_MOUSE;
 	inputDevices[3].dwFlags = RIDEV_NOLEGACY;
-	inputDevices[3].hwndTarget = 0;*/
+	inputDevices[3].hwndTarget = 0;
 
-	if(!RegisterRawInputDevices(inputDevices, 3, sizeof(inputDevices[0])))
+	if(!RegisterRawInputDevices(inputDevices, 4, sizeof(inputDevices[0])))
 	{
 		std::cout << "Error " << GetLastError() << " while registering input devices." << std::endl;
 		return false;
@@ -69,7 +70,12 @@ void InputManager::ReceiveKeyboardInput(const RAWKEYBOARD& keyboardInput)
 
 //https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
 //Coordinates are local to canvas
-void InputManager::MoveMouse(const WPARAM& virtualKeys, const int x, const int y)
+void InputManager::MoveWindowMouse(const WPARAM& virtualKeys, const int x, const int y)
 {
 	mouse->SetPosition(virtualKeys, x, y);
+}
+
+void InputManager::MoveScreenMouse(const int xMovement, const int yMovement)
+{
+	mouse->MoveRawPosition(xMovement, yMovement);
 }

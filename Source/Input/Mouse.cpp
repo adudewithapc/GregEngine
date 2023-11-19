@@ -1,28 +1,38 @@
 #include "Mouse.h"
 #include "../Math/Vector.h"
+#include <iostream>
 
-/*Mouse::Mouse()
+Mouse::Mouse()
 {
-	for(MouseButton& button : buttons)
-	{
-		pressedButtons[button] = false;
-	}
+	POINT screenPos;
+	GetCursorPos(&screenPos);
+	RawPosition = Vec2i(screenPos.x, screenPos.y);
 }
-
-Mouse::~Mouse()
-{
-	pressedButtons.clear();
-}*/
-
 
 void Mouse::SetPosition(const WPARAM& pressedButtons, int x, int y)
 {
+	LastPosition = Position;
 	Position = Vec2i(0, 0) + Vec2i(x, y);
 }
 
-Vec2i Mouse::GetPosition()
+void Mouse::MoveRawPosition(const int xMovement, const int yMovement)
+{
+	RawPosition += Vec2i(xMovement, yMovement);
+}
+
+Vec2i& Mouse::GetPosition()
 {
 	return Position;
+}
+
+Vec2i& Mouse::GetLastPosition()
+{
+	return LastPosition;
+}
+
+Vec2i Mouse::GetRawPosition()
+{
+	return RawPosition;
 }
 
 /*bool Mouse::IsButtonDown(const MouseButton& button)
