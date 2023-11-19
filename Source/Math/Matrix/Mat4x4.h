@@ -35,4 +35,19 @@ namespace mat4x4
 		output(3, 2) = -(2 * farPlane * nearPlane) / (farPlane - nearPlane);
 		return output;
 	}
+	
+	template<typename T>
+	static Mat4x4<T> LookAt(const Vec3<T>& cameraPos, const Vec3<T>& target, const Vec3<T>& relativeUp)
+	{
+		Vec3<T> lookDirection = (target - cameraPos).Normalize();
+
+		Vec3<T> right = relativeUp.Cross(lookDirection).Normalize();
+		Vec3<T> up = lookDirection.Cross(right);
+
+		return Identity<float>.Translate(cameraPos) * Mat4x4<T>(
+						 {right.x, up.x, lookDirection.x, 0,
+						  right.y, up.y, lookDirection.y, 0,
+						  right.z, up.z, lookDirection.z, 0,
+						  0, 0, 0, 1});
+	}
 }
