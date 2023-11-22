@@ -39,55 +39,55 @@ const float triangle3[] = {
 };
 
 const float quad[] = {
-	//Positions       //Colors	//Texture coordinates
-	0.5f,   0.5f, 0,  1, 0, 0,	1, 1, //Top right
-	0.5f,  -0.5f, 0,  0, 1, 0,	1, 0, //Bottom right
-	-0.5f, -0.5f, 0,  0, 0, 1,  0, 0, //Bottom left
-	-0.5f,  0.5f, 0,  1, 1, 0,  0, 1 //Top left
+	//Positions       //Texture coordinates
+	0.5f,   0.5f, 0,  1, 1, //Top right
+	0.5f,  -0.5f, 0,  1, 0, //Bottom right
+	-0.5f, -0.5f, 0,  0, 0, //Bottom left
+	-0.5f,  0.5f, 0,  0, 1 //Top left
 };
 
 const float cube[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f, -0.5f,
+	 0.5f,  0.5f, -0.5f,
+	 0.5f,  0.5f, -0.5f,
+	-0.5f,  0.5f, -0.5f,
+	-0.5f, -0.5f, -0.5f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,
+	 0.5f, -0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f,  0.5f,
+	-0.5f, -0.5f,  0.5f,
 
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f, -0.5f,
+	-0.5f, -0.5f, -0.5f,
+	-0.5f, -0.5f, -0.5f,
+	-0.5f, -0.5f,  0.5f,
+	-0.5f,  0.5f,  0.5f,
 
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,
+	 0.5f,  0.5f, -0.5f,
+	 0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f, -0.5f,
+	 0.5f, -0.5f,  0.5f,
+	 0.5f, -0.5f,  0.5f,
+	-0.5f, -0.5f,  0.5f,
+	-0.5f, -0.5f, -0.5f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	-0.5f,  0.5f, -0.5f,
+	 0.5f,  0.5f, -0.5f,
+	 0.5f,  0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f, -0.5f
 };
 
 Vec3f cubePositions[] = {
@@ -114,10 +114,21 @@ unsigned int indices[] = {
 	1, 2, 3  //Second triangle
 };
 
-void CustomInit();
-void CustomRender();
-void DestroyRenderer();
+void CubeInit();
+void CubeRender();
+void DestroyCube();
 
+void LightInit();
+void LightRender();
+void DestroyLight();
+
+void InitFloor();
+void RenderFloor();
+void DestroyFloor();
+
+void ApplyTransforms(Shader* shader, Mat4x4f modelMatrix, Mat4x4f worldMatrix);
+
+const Vec3f lightPos(1.2f, 1, 2);
 Camera* camera;
 
 int main()
@@ -137,8 +148,9 @@ int main()
 	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
 	camera = new Camera();
 
-	TriangleRenderer triangle1(quad, indices);
-	CustomInit();
+	CubeInit();
+	LightInit();
+	InitFloor();
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -152,13 +164,12 @@ int main()
 		float deltaTime = std::chrono::duration_cast<FloatingSeconds>(currentTime - previousTime).count();
 		time.Tick(deltaTime);
 
-		camera->GetViewMatrix();
-
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//triangle1.Draw();
-		CustomRender();
+		CubeRender();
+		LightRender();
+		RenderFloor();
 
 		window.SwapBuffers();
 
@@ -174,9 +185,16 @@ int main()
 		{
 			std::cout << 1 / deltaTime << "\n";
 		}
+
+		if(USE_WIREFRAMES)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
 	}
 
-	DestroyRenderer();
+	DestroyCube();
+	DestroyLight();
+	DestroyFloor();
 	delete camera;
 }
 
@@ -184,18 +202,109 @@ Shader* shader;
 
 unsigned int VAO;
 unsigned int VBO;
-unsigned int texture1;
-unsigned int texture2;
 
-void CustomInit()
+void CubeInit()
 {
-	shader = new Shader("Shader/vertex.shader", "Shader/fragment.shader");
+	shader = new Shader("Shader/custom_vertex.shader", "Shader/custom_fragment.shader");
 
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	shader->Use();
+}
+
+void CubeRender()
+{
+	shader->Use();
+
+	shader->SetVec3("objectColor", 1, 0.5f, 0.31f);
+	shader->SetVec3("lightColor", 1, 1, 1);
+
+	Mat4x4f modelMatrix = mat4x4::Identity<float>;
+	Mat4x4f worldMatrix = mat4x4::Identity<float>;
+
+	ApplyTransforms(shader, modelMatrix, worldMatrix);
+
+	glBindVertexArray(VAO);
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void DestroyCube()
+{
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	delete shader;
+}
+
+unsigned int lightVAO;
+unsigned int lightVBO;
+Shader* lightingShader;
+
+void LightInit()
+{
+	lightingShader = new Shader("Shader/lightsource_vertex.shader", "Shader/lightsource_fragment.shader");
+	lightingShader->Use();
+
+	lightingShader->SetVec3("objectColor", 1, 0.5f, 0.31f);
+	lightingShader->SetVec3("lightColor", 1, 1, 1);
+
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+
+	glGenBuffers(1, &lightVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
+void LightRender()
+{
+	lightingShader->Use();
+
+	Mat4x4f model = mat4x4::Identity<float>.Scale(Vec3f(0.2f, 0.2f, 0.2f));
+	Mat4x4f world = mat4x4::Identity<float>.Translate(lightPos);
+	ApplyTransforms(lightingShader, model, world);
+
+	glBindVertexArray(lightVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
+
+void DestroyLight()
+{
+	glDeleteVertexArrays(1, &lightVAO);
+	glDeleteBuffers(1, &lightVBO);
+	delete lightingShader;
+}
+
+Shader* floorShader;
+
+unsigned int texture1;
+unsigned int floorVAO;
+unsigned int floorVBO;
+unsigned int floorEBO;
+
+void InitFloor()
+{
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -205,34 +314,14 @@ void CustomInit()
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
-
 	stbi_image_free(data);
 
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
+	glGenVertexArrays(1, &floorVAO);
+	glBindVertexArray(floorVAO);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	int width2, height2, channels2;
-	unsigned char* data2 = stbi_load("Textures/awesomeface.png", &width2, &height2, &channels2, 0);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width2, height2, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	stbi_image_free(data2);
-
-	shader = new Shader("Shader/custom_vertex.shader", "Shader/custom_fragment.shader");
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
+	glGenBuffers(1, &floorVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, floorVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -240,56 +329,57 @@ void CustomInit()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
+	glGenBuffers(1, &floorEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, floorEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 	glBindVertexArray(0);
-	shader->Use();
-	shader->SetInt("texture1", 0);
-	shader->SetInt("texture2", 1);
 
-	if(USE_WIREFRAMES)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
+	floorShader = new Shader("Shader/vertex.shader", "Shader/fragment.shader");
+	floorShader->Use();
+
+	glUniform1i(glGetUniformLocation(floorShader->programID, "texture1"), 0);
 }
 
-void CustomRender()
+void RenderFloor()
 {
-	shader->Use();
+	floorShader->Use();
 
-	Mat4x4f modelMatrix = mat4x4::Identity<float>.Rotate(Vec3f(1, 0, 0), trigonometry::Radians(-55.0f)).Rotate(Vec3f(0.5f, 1, 0), Time::GetTimeSinceStartup() * trigonometry::Radians(50.0f));
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture1);
 
+	glBindVertexArray(floorVAO);
+
+	Mat4x4f model = mat4x4::Identity<float>.Scale(Vec3f(100, 100, 1));
+	Mat4x4f world = mat4x4::Identity<float>.Translate(Vec3f(0, 0, -10)).Rotate(Vec3f(1, 0, 0), std::numbers::pi / 2.0f);
+
+	ApplyTransforms(floorShader, model, world);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void DestroyFloor()
+{
+	glDeleteVertexArrays(1, &floorVAO);
+	glDeleteBuffers(1, &floorVBO);
+	delete floorShader;
+}
+
+void ApplyTransforms(Shader* shader, Mat4x4f model, Mat4x4f world)
+{
 	//Bigger aspect ratio makes objects taller, smaller makes objects wider
 	Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
+
+	int modelLocation = glGetUniformLocation(shader->programID, "model");
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, model.ToArray());
+
+	int worldLocation = glGetUniformLocation(shader->programID, "world");
+	glUniformMatrix4fv(worldLocation, 1, GL_FALSE, world.ToArray());
 
 	int viewLocation = glGetUniformLocation(shader->programID, "view");
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, camera->GetViewMatrix().ToArray());
 
 	int projectionLocation = glGetUniformLocation(shader->programID, "projection");
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projectionMatrix.ToArray());
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-
-	glBindVertexArray(VAO);
-
-	for(unsigned int i = 0; i < 10; i++)
-	{
-		Mat4x4f model = mat4x4::Identity<float>.Rotate(Vec3f(1, 0.3f, 0.5f), trigonometry::Radians(20.0f * i));
-
-		model = model.Translate(cubePositions[i]);
-
-		glUniformMatrix4fv(glGetUniformLocation(shader->programID, "model"), 1, GL_FALSE, model.ToArray());
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-	}
-}
-
-void DestroyRenderer()
-{
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	delete shader;
 }

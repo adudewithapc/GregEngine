@@ -24,7 +24,7 @@ private:
 	float yaw = -90;
 	float pitch = 0;
 
-	Vec3f position = Vec3f(0, 0, 3);
+	Vec3f position = Vec3f(0, 1, 3);
 	Vec3f front = Vec3f(0, 0, -1);
 	Vec3f up = Vec3f(0, 1, 0);
 

@@ -7,7 +7,7 @@
 #include "Input/Keyboard.h"
 #include <glad/glad.h>
 
-constexpr bool USE_FPS_CAMERA = true;
+constexpr bool USE_FPS_CAMERA = 0;
 
 Camera::Camera()
 {
