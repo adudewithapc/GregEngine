@@ -66,6 +66,11 @@ TypeT struct Vec2
 	{
 		return *this /= Magnitude();
 	}
+	
+	T Dot(const Vec2<T>& right) const
+	{
+		return x * right.x + y * right.y;
+	}
 
 	T x, y;
 };
@@ -169,6 +174,11 @@ TypeT struct Vec3
 		return output;
 	}
 
+	T Dot(const Vec3<T>& right) const
+	{
+		return x * right.x + y * right.y + z * right.z;
+	}
+
 	Vec3<T> Cross(const Vec3<T>& right) const
 	{
 		Vec3<T> output(y * right.z - z * right.y,
@@ -235,6 +245,11 @@ TypeT struct Vec4
 	Vec4<T> Normalize()
 	{
 		return *this /= Magnitude();
+	}
+
+	T Dot(const Vec4<T>& right)
+	{
+		return x * right.x + y * right.y + z * right.z + w * right.w;
 	}
 };
 

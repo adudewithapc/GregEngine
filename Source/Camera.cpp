@@ -22,6 +22,11 @@ Camera::~Camera()
 	Instance = nullptr;
 }
 
+Vec3f Camera::GetPosition()
+{
+	return position;
+}
+
 Mat4x4f Camera::GetViewMatrix()
 {
 	float speed = 5 * Time::GetDeltaTime();

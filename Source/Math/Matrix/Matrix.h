@@ -215,7 +215,7 @@ struct Matrix
 		return output;
 	}
 
-	//Make sure to always apply translation first (actually does it last, arithmetically)
+	//Make sure to apply translation after rotation and scaling (actually does it last, arithmetically)
 	Matrix<T, 4, 4> Translate(Vec3<T> translation)
 	{
 		auto output = Matrix<T, 4, 4>({ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 });
@@ -228,7 +228,7 @@ struct Matrix
 		return *this * output;
 	}
 
-	//Make sure rotation is always after translation
+	//Make sure rotation is after scaling
 	//Implementation of the famous harder-to-gimbal-lock algorithm
 	//https://learnopengl.com/Getting-started/Transformations under "Rotation"
 	Matrix<T, 4, 4> Rotate(Vec3<float> axis, double amount)
@@ -245,7 +245,7 @@ struct Matrix
 		return *this * output;
 	}
 
-	//Make sure scaling is always after rotation and translation (actually does it last, arithmetically)
+	//Make sure scaling is first (actually does it last, arithmetically)
 	Matrix<T, 4, 4> Scale(Vec3<T> scale)
 	{
 		auto output = Matrix<T, 4, 4>();
@@ -261,7 +261,7 @@ struct Matrix
 	}
 
 	//Conversion
-	T* ToArray()
+	const T* ToArray() const
 	{
 		return elements;
 	}

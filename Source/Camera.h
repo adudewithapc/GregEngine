@@ -13,12 +13,14 @@ public:
 	void operator=(const Camera&) = delete;
 	~Camera();
 
+	Vec3f GetPosition();
 	Mat4x4f GetViewMatrix();
-	void Viewbob(Vec3f movement);
 
 	static Camera* Get();
 
 private:
+	void Viewbob(Vec3f movement);
+
 	static Camera* Instance;
 
 	float yaw = -90;

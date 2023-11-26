@@ -47,47 +47,48 @@ const float quad[] = {
 };
 
 const float cube[] = {
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
+	//Vertex position	  //Normal direction
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-	-0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f, -0.5f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-	-0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f,  0.5f, -0.5f
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
 Vec3f cubePositions[] = {
@@ -126,10 +127,13 @@ void InitFloor();
 void RenderFloor();
 void DestroyFloor();
 
-void ApplyTransforms(Shader* shader, Mat4x4f modelMatrix, Mat4x4f worldMatrix);
+void ApplyTransforms(Shader* shader, const Mat4x4f& modelMatrix);
 
-const Vec3f lightPos(1.2f, 1, 2);
+Vec3f lightPos(1.2f, 1, 2);
 Camera* camera;
+
+//Bigger aspect ratio makes objects taller, smaller makes objects wider
+const Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
 
 int main()
 {
@@ -179,8 +183,6 @@ int main()
 			running = false;
 		}
 
-		previousTime = currentTime;
-
 		if(PRINT_FRAMERATE)
 		{
 			std::cout << 1 / deltaTime << "\n";
@@ -190,6 +192,10 @@ int main()
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		}
+
+		lightPos = Vec3f(cos(Time::GetTimeSinceStartup()), sin(Time::GetTimeSinceStartup() * 2), sin(Time::GetTimeSinceStartup()));
+
+		previousTime = currentTime;
 	}
 
 	DestroyCube();
@@ -200,25 +206,28 @@ int main()
 
 Shader* shader;
 
-unsigned int VAO;
-unsigned int VBO;
+unsigned int cubeVAO;
+unsigned int cubeVBO;
 
 void CubeInit()
 {
-	shader = new Shader("Shader/custom_vertex.shader", "Shader/custom_fragment.shader");
+	shader = new Shader("Shader/cube_vertex.shader", "Shader/cube_fragment.shader");
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenVertexArrays(1, &cubeVAO);
+	glBindVertexArray(cubeVAO);
 
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glGenBuffers(1, &cubeVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*) 0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	shader->Use();
 }
 
 void CubeRender()
@@ -227,21 +236,23 @@ void CubeRender()
 
 	shader->SetVec3("objectColor", 1, 0.5f, 0.31f);
 	shader->SetVec3("lightColor", 1, 1, 1);
+	shader->SetVec3("lightPos", lightPos);
 
 	Mat4x4f modelMatrix = mat4x4::Identity<float>;
-	Mat4x4f worldMatrix = mat4x4::Identity<float>;
 
-	ApplyTransforms(shader, modelMatrix, worldMatrix);
+	ApplyTransforms(shader, modelMatrix);
 
-	glBindVertexArray(VAO);
+	glBindVertexArray(cubeVAO);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	glBindVertexArray(0);
 }
 
 void DestroyCube()
 {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &cubeVAO);
+	glDeleteBuffers(1, &cubeVBO);
 	delete shader;
 }
 
@@ -264,8 +275,11 @@ void LightInit()
 	glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*) 0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -275,9 +289,8 @@ void LightRender()
 {
 	lightingShader->Use();
 
-	Mat4x4f model = mat4x4::Identity<float>.Scale(Vec3f(0.2f, 0.2f, 0.2f));
-	Mat4x4f world = mat4x4::Identity<float>.Translate(lightPos);
-	ApplyTransforms(lightingShader, model, world);
+	Mat4x4f model = mat4x4::Identity<float>.Scale(Vec3f(0.2f, 0.2f, 0.2f)).Translate(lightPos);
+	ApplyTransforms(lightingShader, model);
 
 	glBindVertexArray(lightVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -351,10 +364,9 @@ void RenderFloor()
 
 	glBindVertexArray(floorVAO);
 
-	Mat4x4f model = mat4x4::Identity<float>.Scale(Vec3f(100, 100, 1));
-	Mat4x4f world = mat4x4::Identity<float>.Translate(Vec3f(0, 0, -10)).Rotate(Vec3f(1, 0, 0), std::numbers::pi / 2.0f);
+	Mat4x4f model = mat4x4::Identity<float>.Scale(Vec3f(100, 100, 1)).Rotate(Vec3f(1, 0, 0), std::numbers::pi / 2.0f).Translate(Vec3f(0, -10, 0));
 
-	ApplyTransforms(floorShader, model, world);
+	ApplyTransforms(floorShader, model);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -366,20 +378,9 @@ void DestroyFloor()
 	delete floorShader;
 }
 
-void ApplyTransforms(Shader* shader, Mat4x4f model, Mat4x4f world)
+void ApplyTransforms(Shader* shader, const Mat4x4f& model)
 {
-	//Bigger aspect ratio makes objects taller, smaller makes objects wider
-	Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
-
-	int modelLocation = glGetUniformLocation(shader->programID, "model");
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, model.ToArray());
-
-	int worldLocation = glGetUniformLocation(shader->programID, "world");
-	glUniformMatrix4fv(worldLocation, 1, GL_FALSE, world.ToArray());
-
-	int viewLocation = glGetUniformLocation(shader->programID, "view");
-	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, camera->GetViewMatrix().ToArray());
-
-	int projectionLocation = glGetUniformLocation(shader->programID, "projection");
-	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projectionMatrix.ToArray());
+	glUniformMatrix4fv(glGetUniformLocation(shader->programID, "model"), 1, GL_FALSE, model.ToArray());
+	glUniformMatrix4fv(glGetUniformLocation(shader->programID, "view"), 1, GL_FALSE, camera->GetViewMatrix().ToArray());
+	glUniformMatrix4fv(glGetUniformLocation(shader->programID, "projection"), 1, GL_FALSE, projectionMatrix.ToArray());
 }
