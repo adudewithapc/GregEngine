@@ -193,7 +193,7 @@ int main()
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		}
 
-		lightPos = Vec3f(cos(Time::GetTimeSinceStartup()), sin(Time::GetTimeSinceStartup() * 2), sin(Time::GetTimeSinceStartup()));
+		//lightPos = Vec3f(cos(Time::GetTimeSinceStartup()), sin(Time::GetTimeSinceStartup() * 2), sin(Time::GetTimeSinceStartup()));
 
 		previousTime = currentTime;
 	}
@@ -235,8 +235,19 @@ void CubeRender()
 	shader->Use();
 
 	shader->SetVec3("objectColor", 1, 0.5f, 0.31f);
-	shader->SetVec3("lightColor", 1, 1, 1);
-	shader->SetVec3("lightPos", lightPos);
+	
+	float currentTime = Time::GetTimeSinceStartup();
+	Vec3f lightColor(sin(currentTime * 20 + 1.57f) + 1, 0, sin(currentTime * 30 + 1.57f) + 1);
+
+	shader->SetVec3("light.position", lightPos);
+	shader->SetVec3("light.ambient", lightColor * 0.1f);
+	shader->SetVec3("light.diffuse", lightColor * 0.5f);
+	shader->SetVec3("light.specular", 1, 1, 1);
+
+	shader->SetVec3("material.ambient", 1, 0.5f, 1);
+	shader->SetVec3("material.diffuse", 1, 0.5f, 1);
+	shader->SetVec3("material.specular", 0.5f, 0.5f, 0.5f);
+	shader->SetFloat("material.shininess", 32);
 
 	Mat4x4f modelMatrix = mat4x4::Identity<float>;
 
