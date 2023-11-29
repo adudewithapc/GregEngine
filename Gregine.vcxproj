@@ -176,6 +176,10 @@
   <ItemGroup>
     <ResourceCompile Include="Grengine.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\container2.png" />
+    <Image Include="Textures\container2_specular.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
