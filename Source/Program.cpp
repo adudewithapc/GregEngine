@@ -16,7 +16,7 @@
 #include "Camera.h"
 
 constexpr bool USE_WIREFRAMES = 0;
-constexpr bool PRINT_FRAMERATE = 0;
+constexpr bool PRINT_FRAMERATE = 1;
 
 const float triangle1[] = {
 	//Positions        //Colors
@@ -129,7 +129,7 @@ void DestroyFloor();
 
 void ApplyTransforms(Shader* shader, const Mat4x4f& modelMatrix);
 
-Vec3f lightPos(1.2f, 1, 2);
+Vec3f lightPos(0, 1, 0);
 Camera* camera;
 
 //Bigger aspect ratio makes objects taller, smaller makes objects wider
@@ -303,10 +303,6 @@ void CubeRender()
 	shader->SetVec3("material.specular", 0.5f, 0.5f, 0.5f);
 	shader->SetFloat("material.shininess", 32);
 
-	Mat4x4f modelMatrix = mat4x4::Identity<float>;
-
-	ApplyTransforms(shader, modelMatrix);
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, cubeTexture);
 
@@ -317,7 +313,18 @@ void CubeRender()
 	glBindTexture(GL_TEXTURE_2D, cubeEmission);
 
 	glBindVertexArray(cubeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	shader->SetFloat("light.constant", 1);
+	shader->SetFloat("light.linear", 0.7f);
+	shader->SetFloat("light.quadratic", 1.8f);
+	for(unsigned int i = 0; i < 10; i++)
+	{
+		float angle = 20 * i;
+		Mat4x4f model = mat4x4::Identity<float>.Rotate(Vec3f(1, 0.3f, 0.5f), trigonometry::Radians(angle)).Translate(cubePositions[i]);
+		ApplyTransforms(shader, model);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 
 	glBindVertexArray(0);
 }
