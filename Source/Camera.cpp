@@ -22,9 +22,14 @@ Camera::~Camera()
 	Instance = nullptr;
 }
 
-Vec3f Camera::GetPosition()
+Vec3f Camera::GetPosition() const
 {
 	return position;
+}
+
+Vec3f Camera::GetFront() const
+{
+	return front;
 }
 
 Mat4x4f Camera::GetViewMatrix()

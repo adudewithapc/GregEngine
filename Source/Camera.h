@@ -13,7 +13,8 @@ public:
 	void operator=(const Camera&) = delete;
 	~Camera();
 
-	Vec3f GetPosition();
+	Vec3f GetPosition() const;
+	Vec3f GetFront() const;
 	Mat4x4f GetViewMatrix();
 
 	static Camera* Get();

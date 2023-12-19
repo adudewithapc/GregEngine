@@ -16,7 +16,7 @@
 #include "Camera.h"
 
 constexpr bool USE_WIREFRAMES = 0;
-constexpr bool PRINT_FRAMERATE = 1;
+constexpr bool PRINT_FRAMERATE = 0;
 
 const float triangle1[] = {
 	//Positions        //Colors
@@ -214,7 +214,7 @@ unsigned int cubeEmission;
 
 void CubeInit()
 {
-	shader = new Shader("Shader/cube_vertex.shader", "Shader/cube_fragment.shader");
+	shader = new Shader("Shader/cube_vertex_spot.shader", "Shader/cube_fragment_spot.shader");
 
 	//Color map
 	glGenTextures(1, &cubeTexture);
@@ -295,7 +295,10 @@ void CubeRender()
 	float currentTime = Time::GetTimeSinceStartup();
 	Vec3f lightColor(1, 1, 1);
 
-	shader->SetVec3("light.position", lightPos);
+	shader->SetVec3("light.position", camera->GetPosition());
+	shader->SetVec3("light.direction", camera->GetFront());
+	shader->SetFloat("light.cutoff", cos(trigonometry::Radians(12.5f)));
+
 	shader->SetVec3("light.ambient", lightColor * 0.1f);
 	shader->SetVec3("light.diffuse", lightColor * 0.5f);
 	shader->SetVec3("light.specular", 1, 1, 1);
@@ -314,9 +317,6 @@ void CubeRender()
 
 	glBindVertexArray(cubeVAO);
 
-	shader->SetFloat("light.constant", 1);
-	shader->SetFloat("light.linear", 0.7f);
-	shader->SetFloat("light.quadratic", 1.8f);
 	for(unsigned int i = 0; i < 10; i++)
 	{
 		float angle = 20 * i;
@@ -325,7 +325,7 @@ void CubeRender()
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
-
+	
 	glBindVertexArray(0);
 }
 

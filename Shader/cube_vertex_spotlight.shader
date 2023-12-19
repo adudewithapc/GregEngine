@@ -7,12 +7,14 @@ layout (location = 2) in vec2 aTexCoords;
 struct Light
 {
 	vec3 position;
-	vec3 direction;
-	float cutoff;
 	
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 uniform Light light;
@@ -29,6 +31,7 @@ void main()
 {
 	gl_Position = projection * view * model * vec4(aPos, 1);
 	fragPos = vec3(view * model * vec4(aPos, 1));
+	lightViewPos = vec3(view * vec4(light.position, 1));
 	//Recommended to do this on the CPU, since right now this will be done per vertex
 	//We do this in order to ignore the translation matrix, which might affect the normal direction
 	normal = mat3(transpose(inverse(view * model))) * aNormal;

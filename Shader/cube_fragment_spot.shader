@@ -11,20 +11,17 @@ struct Material
 struct Light
 {
 	vec3 position;
+	vec3 direction;
+	float cutoff;
 	
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
-
-	float constant;
-	float linear;
-	float quadratic;
 };
 
 in vec2 texCoords;
 in vec3 fragPos;
 in vec3 normal;
-in vec3 lightViewPos;
 
 uniform Light light;
 uniform Material material;
@@ -33,37 +30,36 @@ out vec4 fragColor;
 
 void main()
 {
-	//Ambient lighting
-	//vec3 ambient = light.ambient * material.ambient;
-	vec3 ambient = light.ambient * texture(material.diffuse, texCoords).rgb;
+	// Spotlight
+	float theta = dot(fragPos, normalize(light.direction));
 
-	//Diffuse lighting
-	vec3 norm = normalize(normal);
-	vec3 lightDirection = normalize(lightViewPos - fragPos);
-	float diffuseAmount = max(dot(norm, lightDirection), 0);
-	//vec3 diffuse = light.diffuse * diffuseAmount * material.diffuse;
-	vec3 diffuse = light.diffuse * diffuseAmount * texture(material.diffuse, texCoords).rgb;
+	if(theta > light.cutoff)
+	{
+		//Ambient lighting
+		//vec3 ambient = light.ambient * material.ambient;
+		vec3 ambient = light.ambient * texture(material.diffuse, texCoords).rgb;
 
-	//Specular lighting
-	vec3 viewDirection = normalize(-fragPos);
-	vec3 reflectionDirection = reflect(-lightDirection, norm);
+		//Diffuse lighting
+		vec3 norm = normalize(normal);
+		float diffuseAmount = max(dot(norm, -light.direction), 0);
+		vec3 diffuse = light.diffuse * diffuseAmount * texture(material.diffuse, texCoords).rgb;
 
-	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0), material.shininess);
-	vec3 specular = light.specular * specAmount * texture(material.specular, texCoords).rgb;
+		//Specular lighting
+		vec3 reflectionDirection = reflect(light.direction, norm);
 
-	//Attenuation
-	float distance = length(light.position - fragPos);
-	//float distance = 2;
-	float attentuation = 1 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-	ambient *= attentuation;
-	diffuse *= attentuation;
-	specular *= attentuation;
+		float specAmount = pow(max(dot(light.direction, reflectionDirection), 0), material.shininess);
+		vec3 specular = light.specular * specAmount * texture(material.specular, texCoords).rgb;
 
-	//Result
-	vec3 result = ambient + diffuse + specular;
+		//Result
+		vec3 result = ambient + diffuse + specular;
 
-	//Bonus result with emission map
-	//vec3 result = ambient + diffuse + specular + texture(material.emission, texCoords).rgb;
+		//Bonus result with emission map
+		//vec3 result = ambient + diffuse + specular + texture(material.emission, texCoords).rgb;
 
-	fragColor = vec4(result, 1);
+		fragColor = vec4(result, 1);
+	}
+	else
+	{
+		fragColor = vec4(light.ambient * vec3(texture(material.diffuse, texCoords)), 1);
+	}
 }
