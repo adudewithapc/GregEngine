@@ -1,6 +1,4 @@
 #include "Camera2D.h"
-#include "../Input/Keyboard.h"
-#include "../Time.h"
 
 Camera2D::Camera2D()
 {
@@ -16,15 +14,7 @@ Mat4x4f Camera2D::GetViewMatrix()
 	return view;
 }
 
-void Camera2D::Update()
-{
-	float horizontal = Keyboard::IsKeyDown(Key::D) - Keyboard::IsKeyDown(Key::A);
-	float vertical = Keyboard::IsKeyDown(Key::W) - Keyboard::IsKeyDown(Key::S);
-
-	Vec2f movement(horizontal, vertical);
-
-	Position += movement * Time::GetDeltaTime();
-}
+void Camera2D::Update() {}
 
 void Camera2D::Draw(Shader& shader, Vec2f position)
 {

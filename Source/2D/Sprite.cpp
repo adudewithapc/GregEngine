@@ -62,7 +62,7 @@ Sprite::Sprite(const std::string& textureLocation)
 	glUniform1i(glGetUniformLocation(SpriteShader->programID, "texture1"), 0);
 }
 
-void Sprite::Render()
+void Sprite::Render(const Vec2f& position)
 {
 	SpriteShader->Use();
 
@@ -71,7 +71,7 @@ void Sprite::Render()
 
 	glBindVertexArray(quadVAO);
 
-	Camera2D::Get()->Draw(*SpriteShader, Vec2f(1, 0.25f));
+	Camera2D::Get()->Draw(*SpriteShader, position);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

@@ -134,7 +134,6 @@ void ApplyTransforms(Shader* shader, const Mat4x4f& modelMatrix);
 
 Vec3f lightPos(0, 1, 0);
 Camera2D* camera;
-Level level;
 
 //Bigger aspect ratio makes objects taller, smaller makes objects wider
 //const Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
@@ -166,7 +165,8 @@ int main()
 	Time time;
 	std::chrono::time_point previousTime = std::chrono::high_resolution_clock::now();
 
-	Sprite sprite("Textures/awesomeface.png");
+	//Sprite sprite("Textures/awesomeface.png");
+	Level level;
 	bool running = true;
 	while(running)
 	{
@@ -186,7 +186,7 @@ int main()
 		//LightRender();
 		//RenderFloor();
 
-		sprite.Render();
+		//sprite.Render();
 
 		window.SwapBuffers();
 

@@ -1,9 +1,14 @@
 #include "Level.h"
+#include <iostream>
 
 Level::Level()
 {
-	GameObject test;
-	gameObjects.push_back(test);
+	gameObjects.push_back(GameObject());
+}
+
+Level::~Level()
+{
+	gameObjects.clear();
 }
 
 void Level::Update()

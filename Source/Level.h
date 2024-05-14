@@ -7,6 +7,7 @@ class Level
 {
 public:
 	Level();
+	~Level();
 
 	void Update();
 	void Draw();
