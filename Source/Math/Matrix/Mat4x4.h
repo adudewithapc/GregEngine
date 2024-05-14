@@ -15,12 +15,18 @@ namespace mat4x4
 												  0, 0, 1, 0,
 												  0, 0, 0, 1});
 
-	static Mat4x4f OrthographicView(int left, int right, int bottom, int top, float nearPlane, float farPlane)
+	static Mat4x4f OrthographicView(float left, float right, float bottom, float top, float nearPlane, float farPlane)
 	{
-		return Mat4x4f({ 2.0f / (right - left), 0, 0, (float) - (right + left) / (right - left),
-						  0, 2.0f / (top - bottom), 0, (float) -(top + bottom) / (top - bottom),
-						  0, 0, -2.0f / (farPlane - nearPlane), -(farPlane + nearPlane) / (farPlane - nearPlane),
-						  0, 0, 0, 1});
+		Mat4x4f output = mat4x4::Identity<float>;
+
+		output(0, 0) = 2.0f / (right - left);
+		output(3, 0) = -(right + left) / (right - left);
+		output(1, 1) = 2.0f / (top - bottom);
+		output(3, 1) = -(top + bottom) / (top - bottom);
+		output(2, 2) = -2.0f / (farPlane - nearPlane);
+		output(3, 2) = -(farPlane - nearPlane) / (farPlane - nearPlane);
+
+		return output;
 	}
 
 	static Mat4x4f PerspectiveView(float fov, float aspectRatio, float nearPlane, float farPlane)

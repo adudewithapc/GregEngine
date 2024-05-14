@@ -135,6 +135,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\GameObject.cpp" />
+    <ClCompile Include="Source\Level.cpp" />
+    <ClCompile Include="Source\2D\Camera2D.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Rendering\Shader.cpp" />
     <ClCompile Include="Source\Rendering\TriangleRenderer.cpp" />
@@ -146,8 +149,12 @@
     <ClCompile Include="Source\Window.cpp" />
     <ClCompile Include="Source\Time.cpp" />
     <ClCompile Include="Source\Math\Trigonometry.cpp" />
+    <ClCompile Include="Source\2D\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\GameObject.h" />
+    <ClInclude Include="Source\Level.h" />
+    <ClInclude Include="Source\2D\Camera2D.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Math\Matrix\Mat1x2.h" />
     <ClInclude Include="Source\Math\Matrix\Mat1x3.h" />
@@ -172,6 +179,7 @@
     <ClInclude Include="Source\Math\Vector.h" />
     <ClInclude Include="Source\Time.h" />
     <ClInclude Include="Source\Math\Trigonometry.h" />
+    <ClInclude Include="Source\2D\Sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Grengine.rc" />

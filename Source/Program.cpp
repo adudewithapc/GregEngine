@@ -1,11 +1,11 @@
+#include <stb_image.h>
+#define STB_IMAGE_IMPLEMENTATION
 #include <iostream>
 #include "Window.h"
 #include <glad/glad.h>
 #include "Input/Keyboard.h"
 #include "Input/Mouse.h"
 #include "Rendering/TriangleRenderer.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 #include <chrono>
 #include "Time.h"
 #include "Math/Matrix/Mat4x4.h"
@@ -14,9 +14,12 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "Camera.h"
+#include "2D/Sprite.h"
+#include "2D/Camera2D.h"
+#include "Level.h"
 
-constexpr bool USE_WIREFRAMES = 0;
-constexpr bool PRINT_FRAMERATE = 0;
+#define USE_WIREFRAMES 0;
+#define PRINT_FRAMERATE 0;
 
 const float triangle1[] = {
 	//Positions        //Colors
@@ -115,25 +118,27 @@ unsigned int indices[] = {
 	1, 2, 3  //Second triangle
 };
 
-void CubeInit();
-void CubeRender();
-void DestroyCube();
-
-void LightInit();
-void LightRender();
-void DestroyLight();
-
-void InitFloor();
-void RenderFloor();
-void DestroyFloor();
-
+//void CubeInit();
+//void CubeRender();
+//void DestroyCube();
+//
+//void LightInit();
+//void LightRender();
+//void DestroyLight();
+//
+//void InitFloor();
+//void RenderFloor();
+//void DestroyFloor();
+//
 void ApplyTransforms(Shader* shader, const Mat4x4f& modelMatrix);
 
 Vec3f lightPos(0, 1, 0);
-Camera* camera;
+Camera2D* camera;
+Level level;
 
 //Bigger aspect ratio makes objects taller, smaller makes objects wider
-const Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
+//const Mat4x4f projectionMatrix = mat4x4::PerspectiveView(trigonometry::Radians(45.0f), 800.0f / 600.0f, 0.1f, 100);
+const Mat4x4f projectionMatrix = mat4x4::OrthographicView(0, 800, 0, 600, 1, 100);
 
 int main()
 {
@@ -150,17 +155,18 @@ int main()
 	}
 	
 	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
-	camera = new Camera();
+	camera = new Camera2D();
 
-	CubeInit();
+	/*CubeInit();
 	LightInit();
-	InitFloor();
+	InitFloor();*/
 
 	glEnable(GL_DEPTH_TEST);
 
 	Time time;
 	std::chrono::time_point previousTime = std::chrono::high_resolution_clock::now();
-	
+
+	Sprite sprite("Textures/awesomeface.png");
 	bool running = true;
 	while(running)
 	{
@@ -168,12 +174,19 @@ int main()
 		float deltaTime = std::chrono::duration_cast<FloatingSeconds>(currentTime - previousTime).count();
 		time.Tick(deltaTime);
 
+		camera->Update();
+
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		CubeRender();
-		LightRender();
-		RenderFloor();
+		level.Update();
+		level.Draw();
+
+		//CubeRender();
+		//LightRender();
+		//RenderFloor();
+
+		sprite.Render();
 
 		window.SwapBuffers();
 
@@ -183,25 +196,22 @@ int main()
 			running = false;
 		}
 
-		if(PRINT_FRAMERATE)
-		{
-			std::cout << 1 / deltaTime << "\n";
-		}
+#if PRINT_FRAMERATE
+		std::cout << 1 / deltaTime << "\n";
+#endif
 
-		if(USE_WIREFRAMES)
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		}
+#if USE_WIREFRAMES
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#endif
 
 		//lightPos = Vec3f(cos(Time::GetTimeSinceStartup()), sin(Time::GetTimeSinceStartup() * 2), sin(Time::GetTimeSinceStartup()));
 
 		previousTime = currentTime;
 	}
 
-	DestroyCube();
+	/*DestroyCube();
 	DestroyLight();
-	DestroyFloor();
-	delete camera;
+	DestroyFloor();*/
 }
 
 Shader* shader;
@@ -212,7 +222,7 @@ unsigned int cubeTexture;
 unsigned int cubeSpecular;
 unsigned int cubeEmission;
 
-void CubeInit()
+/*void CubeInit()
 {
 	shader = new Shader("Shader/cube_vertex_spot.shader", "Shader/cube_fragment_spot.shader");
 
@@ -459,7 +469,7 @@ void DestroyFloor()
 	glDeleteVertexArrays(1, &floorVAO);
 	glDeleteBuffers(1, &floorVBO);
 	delete floorShader;
-}
+}*/
 
 void ApplyTransforms(Shader* shader, const Mat4x4f& model)
 {
