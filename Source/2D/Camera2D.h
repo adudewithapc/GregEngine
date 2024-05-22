@@ -13,7 +13,7 @@ public:
 
 	Mat4x4f GetViewMatrix();
 	void Update();
-	void Draw(Shader& shader, Vec2f position);
+	void Draw(Shader& shader, const Vec2f& position);
 
 	static std::shared_ptr<Camera2D> Get();
 private:

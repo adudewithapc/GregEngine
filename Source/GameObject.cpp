@@ -2,10 +2,14 @@
 #include "Time.h"
 #include "Input/Keyboard.h"
 
-GameObject::GameObject() : 
-	sprite(Sprite("Textures/awesomeface.png"))
+GameObject::GameObject() : Position(Vec2f(0.0f, 0.0f))//, test(0)
 {
 	
+}
+
+void GameObject::Initialize()
+{
+	components.push_back(std::make_unique<Sprite>(this, "Textures/awesomeface.png"));
 }
 
 void GameObject::Update()
@@ -14,11 +18,19 @@ void GameObject::Update()
 	float vertical = Keyboard::IsKeyDown(Key::W) - Keyboard::IsKeyDown(Key::S);
 
 	Vec2f movement(horizontal, vertical);
-
+	
 	Position += movement * Time::GetDeltaTime();
+
+	for(const auto&  component : components)
+	{
+		component->Update();
+	}
 }
 
 void GameObject::Draw()
 {
-	sprite.Render(Position);
+	for(const auto& component : components)
+	{
+		component->Draw();
+	}
 }

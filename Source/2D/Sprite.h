@@ -4,20 +4,26 @@
 #include <string>
 #include <memory>
 #include "../Math/Vector.h"
+#include "../Component.h"
 
 class Shader;
 
-class Sprite
+class Sprite : public Component
 {
 public:
-	Sprite(const std::string& textureLocation);
+	Sprite(GameObject* owner, const std::string& textureLocation);
+	~Sprite() override;
 
-	void Render(const Vec2f& position);
+	virtual void Draw() override;
 private:
+    float* GetScreenProportions(const float textureWidth, const float textureHeight, int& elements) const;
+
 	unsigned int textureID;
 	unsigned int quadVAO;
 	unsigned int quadVBO;
 	unsigned int quadEBO;
+
+	float* proportions;
 
 	static std::unique_ptr<Shader> SpriteShader;
 };

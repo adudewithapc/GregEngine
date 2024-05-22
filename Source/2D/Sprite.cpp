@@ -3,13 +3,15 @@
 #include "../Rendering/Shader.h"
 #include "../Math/Matrix/Mat4x4.h"
 #include "Camera2D.h"
+#include "../Window.h"
+#include "../GameObject.h"
 
 const float quad[] = {
 	//Pos      //Texture coordinates
-	1,   1, 0, 1, 1, //Top right
-	1,  -1, 0, 1, 0, //Bottom right
-	-1, -1, 0, 0, 0, //Bottom left
-	-1,  1, 0, 0, 1  //Top left
+	0.9975f,   0.99667, 0, 1, 1, //Top right
+	0.9975f,  -0.99667, 0, 1, 0, //Bottom right
+	-0.9975f, -0.99667, 0, 0, 0, //Bottom left
+	-0.9975f,  0.99667, 0, 0, 1  //Top left
 };
 
 const unsigned int indices[] = {
@@ -17,7 +19,7 @@ const unsigned int indices[] = {
 	1, 2, 3
 };
 
-Sprite::Sprite(const std::string& textureLocation)
+Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Component(owner)
 {
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
@@ -35,12 +37,15 @@ Sprite::Sprite(const std::string& textureLocation)
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(data);
 
+	int vertexElements;
+	proportions = GetScreenProportions(width, height, vertexElements);
+
 	glGenVertexArrays(1, &quadVAO);
 	glBindVertexArray(quadVAO);
 
 	glGenBuffers(1, &quadVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(proportions) * vertexElements, proportions, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &quadEBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadEBO);
@@ -55,14 +60,19 @@ Sprite::Sprite(const std::string& textureLocation)
 	glBindVertexArray(0);
 
 	if(!SpriteShader)
-		SpriteShader = std::unique_ptr<Shader>(new Shader("Shader/vertex.shader", "Shader/fragment.shader"));
+		SpriteShader = std::make_unique<Shader>("Shader/vertex.shader", "Shader/fragment.shader");
 
 	SpriteShader->Use();
 
 	glUniform1i(glGetUniformLocation(SpriteShader->programID, "texture1"), 0);
 }
 
-void Sprite::Render(const Vec2f& position)
+Sprite::~Sprite()
+{
+	
+}
+
+void Sprite::Draw()
 {
 	SpriteShader->Use();
 
@@ -71,11 +81,25 @@ void Sprite::Render(const Vec2f& position)
 
 	glBindVertexArray(quadVAO);
 
-	Camera2D::Get()->Draw(*SpriteShader, position);
+	Camera2D::Get()->Draw(*SpriteShader, gameObject->Position);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
+}
+
+float* Sprite::GetScreenProportions(const float textureWidth, const float textureHeight, int& elements) const
+{
+	elements = 20;
+	const float widthOnWindow = textureWidth / Window::WindowWidth;
+	const float heightOnWindow = textureHeight / Window::WindowHeight;
+	float* proportions = new float[elements] {
+		widthOnWindow,   heightOnWindow, 0, 1, 1,
+		widthOnWindow,  -heightOnWindow, 0, 1, 0,
+		-widthOnWindow, -heightOnWindow, 0, 0, 0,
+		-widthOnWindow,  heightOnWindow, 0, 0, 1
+	};
+	return proportions;
 }
 
 

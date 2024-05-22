@@ -36,16 +36,20 @@ TypeT struct Vec2
 	}
 	Vec2<T>& operator *=(const T scalar)
 	{
-		return *this = *this * scalar;
+		x *= scalar;
+		y *= scalar;
+		return *this;
 	}
 
-	Vec2<T> operator /(const T scalar) const
+	Vec2<T> operator /(const T denominator) const
 	{
-		return Vec2<T>(x / scalar, y / scalar);
+		return Vec2<T>(x / denominator, y / denominator);
 	}
-	Vec2<T>& operator /=(const T scalar)
+	Vec2<T>& operator /=(const T denominator)
 	{
-		return *this = *this / scalar;
+		x /= denominator;
+		y /= denominator;
+		return *this;
 	}
 
 	Vec2<T> operator +(const Vec2<T>& other) const
@@ -54,7 +58,9 @@ TypeT struct Vec2
 	}
 	Vec2<T>& operator +=(const Vec2<T>& other)
 	{
-		return *this = *this + other;
+		x += other.x;
+		y += other.y;
+		return *this;
 	}
 
 	T Magnitude()

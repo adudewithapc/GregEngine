@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\2D\Camera2D.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="Source\2D\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Level.h" />
     <ClInclude Include="Source\2D\Camera2D.h" />

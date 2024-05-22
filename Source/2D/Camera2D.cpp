@@ -16,7 +16,7 @@ Mat4x4f Camera2D::GetViewMatrix()
 
 void Camera2D::Update() {}
 
-void Camera2D::Draw(Shader& shader, Vec2f position)
+void Camera2D::Draw(Shader& shader, const Vec2f& position)
 {
 	Mat4x4f positionMatrix = mat4x4::Identity<float>;
 	positionMatrix(3, 0) = position.x;

@@ -4,6 +4,11 @@
 Level::Level()
 {
 	gameObjects.push_back(GameObject());
+
+	for(auto& gameObject : gameObjects)
+	{
+		gameObject.Initialize();
+	}
 }
 
 Level::~Level()
