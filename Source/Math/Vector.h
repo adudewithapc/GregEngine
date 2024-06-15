@@ -30,6 +30,28 @@ TypeT struct Vec2
 		return Vec3<T>(x, y, 0);
 	}
 
+	Vec2<T> operator +(const Vec2<T>& other) const
+	{
+		return Vec2<T>(x + other.x, y + other.y);
+	}
+	Vec2<T>& operator +=(const Vec2<T>& other)
+	{
+		x += other.x;
+		y += other.y;
+		return *this;
+	}
+
+	Vec2<T> operator -(const Vec2<T>& other) const
+	{
+		return Vec2<T>(x - other.x, y - other.y);
+	}
+	Vec2<T>& operator -=(const Vec2<T>& other)
+	{
+		x -= other.x;
+		y -= other.y;
+		return *this;
+	}
+
 	Vec2<T> operator *(const T scalar) const
 	{
 		return Vec2<T>(x * scalar, y * scalar);
@@ -41,6 +63,11 @@ TypeT struct Vec2
 		return *this;
 	}
 
+	Vec2<T> operator *(const Vec2<T> other) const
+	{
+		return Vec2<T>(x * other.x, y * other.y);
+	}
+
 	Vec2<T> operator /(const T denominator) const
 	{
 		return Vec2<T>(x / denominator, y / denominator);
@@ -49,17 +76,6 @@ TypeT struct Vec2
 	{
 		x /= denominator;
 		y /= denominator;
-		return *this;
-	}
-
-	Vec2<T> operator +(const Vec2<T>& other) const
-	{
-		return Vec2<T>(x + other.x, y + other.y);
-	}
-	Vec2<T>& operator +=(const Vec2<T>& other)
-	{
-		x += other.x;
-		y += other.y;
 		return *this;
 	}
 

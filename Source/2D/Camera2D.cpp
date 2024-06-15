@@ -6,7 +6,7 @@ Camera2D::Camera2D()
 		Instance = std::shared_ptr<Camera2D>(this);
 }
 
-Mat4x4f Camera2D::GetViewMatrix()
+Mat4x4f Camera2D::GetViewMatrix() const
 {
 	Mat4x4f view = mat4x4::Identity<float>;
 	view(3, 0) = Position.x;

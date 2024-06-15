@@ -3,8 +3,7 @@
 #include <stb_image.h>
 #include <string>
 #include <memory>
-#include "../Math/Vector.h"
-#include "../Component.h"
+#include "../../GameObject.h"
 
 class Shader;
 
@@ -12,7 +11,6 @@ class Sprite : public Component
 {
 public:
 	Sprite(GameObject* owner, const std::string& textureLocation);
-	~Sprite() override;
 
 	virtual void Draw() override;
 private:

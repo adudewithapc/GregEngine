@@ -8,7 +8,7 @@ class Component
 {
 public:
 	Component(GameObject* owner);
-	virtual ~Component();
+	virtual ~Component() = default;
 
 	virtual void Update();
 	virtual void Draw();

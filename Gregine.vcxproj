@@ -135,7 +135,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Component.cpp" />
+    <ClCompile Include="Source\Component\ConstantMovement.cpp" />
+    <ClCompile Include="Source\2D\Physics2D.cpp" />
+    <ClCompile Include="Source\Component\2D\BoxCollider2D.cpp" />
+    <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\2D\Camera2D.cpp" />
@@ -150,10 +153,13 @@
     <ClCompile Include="Source\Window.cpp" />
     <ClCompile Include="Source\Time.cpp" />
     <ClCompile Include="Source\Math\Trigonometry.cpp" />
-    <ClCompile Include="Source\2D\Sprite.cpp" />
+    <ClCompile Include="Source\Component\2D\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Component.h" />
+    <ClInclude Include="Source\Component\ConstantMovement.h" />
+    <ClInclude Include="Source\2D\Physics2D.h" />
+    <ClInclude Include="Source\Component\2D\BoxCollider2D.h" />
+    <ClInclude Include="Source\Component\Component.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Level.h" />
     <ClInclude Include="Source\2D\Camera2D.h" />
@@ -181,7 +187,7 @@
     <ClInclude Include="Source\Math\Vector.h" />
     <ClInclude Include="Source\Time.h" />
     <ClInclude Include="Source\Math\Trigonometry.h" />
-    <ClInclude Include="Source\2D\Sprite.h" />
+    <ClInclude Include="Source\Component\2D\Sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Grengine.rc" />
@@ -189,6 +195,9 @@
   <ItemGroup>
     <Image Include="Textures\container2.png" />
     <Image Include="Textures\container2_specular.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

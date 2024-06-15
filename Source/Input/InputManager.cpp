@@ -22,7 +22,7 @@ bool InputManager::RegisterInputDevices()
 	static bool devicesRegistered = false;
 	if(devicesRegistered)
 	{
-		std::cout << "Tried to register input devices when they've already been registered" << std::endl;
+		std::cerr << "Tried to register input devices when they've already been registered" << std::endl;
 		return false;
 	}
 
@@ -54,7 +54,7 @@ bool InputManager::RegisterInputDevices()
 
 	if(!RegisterRawInputDevices(inputDevices, 4, sizeof(inputDevices[0])))
 	{
-		std::cout << "Error " << GetLastError() << " while registering input devices." << std::endl;
+		std::cerr << "Error " << GetLastError() << " while registering input devices." << std::endl;
 		return false;
 	}
 

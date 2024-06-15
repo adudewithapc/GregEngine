@@ -14,12 +14,12 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "Camera.h"
-#include "2D/Sprite.h"
+#include "Component/2D/Sprite.h"
 #include "2D/Camera2D.h"
 #include "Level.h"
 
-#define USE_WIREFRAMES 0;
-#define PRINT_FRAMERATE 0;
+#define USE_WIREFRAMES 0
+#define PRINT_FRAMERATE 0
 
 const float triangle1[] = {
 	//Positions        //Colors

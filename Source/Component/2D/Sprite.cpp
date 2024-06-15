@@ -1,18 +1,8 @@
 #include "Sprite.h"
 #include <glad/glad.h>
-#include "../Rendering/Shader.h"
-#include "../Math/Matrix/Mat4x4.h"
-#include "Camera2D.h"
-#include "../Window.h"
-#include "../GameObject.h"
-
-const float quad[] = {
-	//Pos      //Texture coordinates
-	0.9975f,   0.99667, 0, 1, 1, //Top right
-	0.9975f,  -0.99667, 0, 1, 0, //Bottom right
-	-0.9975f, -0.99667, 0, 0, 0, //Bottom left
-	-0.9975f,  0.99667, 0, 0, 1  //Top left
-};
+#include "../../GameObject.h"
+#include "../../2D/Camera2D.h"
+#include "../../Window.h"
 
 const unsigned int indices[] = {
 	0, 1, 3,
@@ -39,6 +29,11 @@ Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Componen
 
 	int vertexElements;
 	proportions = GetScreenProportions(width, height, vertexElements);
+
+	for(int i = 0; i < vertexElements; i += 5)
+	{
+		std::cout << proportions[i] << ", " << proportions[i + 1] << "\n";
+	}
 
 	glGenVertexArrays(1, &quadVAO);
 	glBindVertexArray(quadVAO);
@@ -67,11 +62,6 @@ Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Componen
 	glUniform1i(glGetUniformLocation(SpriteShader->programID, "texture1"), 0);
 }
 
-Sprite::~Sprite()
-{
-	
-}
-
 void Sprite::Draw()
 {
 	SpriteShader->Use();
@@ -81,7 +71,7 @@ void Sprite::Draw()
 
 	glBindVertexArray(quadVAO);
 
-	Camera2D::Get()->Draw(*SpriteShader, gameObject->Position);
+	Camera2D::Get()->Draw(*SpriteShader, Window::PixelToView(gameObject->Position));
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

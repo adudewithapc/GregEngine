@@ -11,7 +11,7 @@ public:
 	Camera2D(Camera2D&) = delete;
 	void operator=(const Camera2D&) = delete;
 
-	Mat4x4f GetViewMatrix();
+	Mat4x4f GetViewMatrix() const;
 	void Update();
 	void Draw(Shader& shader, const Vec2f& position);
 

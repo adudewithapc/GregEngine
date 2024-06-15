@@ -12,6 +12,6 @@ public:
 	void Update();
 	void Draw();
 private:
-	std::vector<GameObject> gameObjects;
+	std::vector<std::unique_ptr<GameObject>> gameObjects;
 };
 
