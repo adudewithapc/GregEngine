@@ -14,7 +14,7 @@ return *this;
 template<typename T, size_t R, size_t C> requires number<T>
 struct Matrix
 {
-	const unsigned int SIZE = C * R;
+	const size_t SIZE = C * R;
 
 	Matrix<T, R, C>()
 	{
@@ -80,22 +80,22 @@ struct Matrix
 
 	void Empty()
 	{
-		for(int i = 0; i < SIZE; i++)
+		for(size_t i = 0; i < SIZE; i++)
 		{
 			elements[i] = 0;
 		}
 	}
 
-	T& operator[](const int index)
+	T& operator[](const size_t index)
 	{
 		return elements[index];
 	}
-	const T& operator[](const int index) const
+	const T& operator[](const size_t index) const
 	{
 		return elements[index];
 	}
 
-	T& operator()(const int column, const int row)
+	T& operator()(const size_t column, const size_t row)
 	{
 		if(C < R)
 		{
@@ -108,7 +108,7 @@ struct Matrix
 	//Matrix = Matrix
 	Matrix<T, R, C>& operator =(Matrix<T, C, R> other)
 	{
-		for(int i = 0; i < SIZE; i++)
+		for(size_t i = 0; i < SIZE; i++)
 		{
 			elements[i] = other.elements[i];
 		}
@@ -151,7 +151,7 @@ struct Matrix
 	{
 		Matrix<T, R, C> output;
 
-		for(int i = 0; i < SIZE; i++)
+		for(size_t i = 0; i < SIZE; i++)
 		{
 			output[i] = elements[i] + right[i];
 		}
@@ -181,18 +181,19 @@ struct Matrix
 	}
 
 	//Matrix * Matrix
+	//Multiplying matrices is difficult :(
 	template<size_t C2>
 	Matrix<T, R, C2> operator *(const Matrix<T, R, C2>& right)
 	{
 		Matrix<T, R, C2> output;
 
-		for(int i = 0; i < R; i++)
+		for(size_t i = 0; i < R; i++)
 		{
-			for(int j = 0; j < C2; j++)
+			for(size_t j = 0; j < C2; j++)
 			{
-				for(int k = 0; k < R; k++)
+				for(size_t k = 0; k < R; k++)
 				{
-					output[j + C2 * i] += elements[i * R + k] * right[k * C2 + j];
+					output[C2 * i + j] += elements[i * R + k] * right[k * C2 + j];
 				}
 			}
 		}
