@@ -1,27 +1,19 @@
 #include "GameObject.h"
 #include "Time.h"
 #include "Input/Keyboard.h"
+#include <iostream>
+#include "Component/2D/BoxCollider2D.h"
+#include "Component/2D/Sprite.h"
 
-GameObject::GameObject() : Position(Vec2f(0.0f, 0.0f))//, test(0)
-{
-	
-}
-
-void GameObject::Initialize()
+GameObject::GameObject()
 {
 	components.push_back(std::make_unique<Sprite>(this, "Textures/awesomeface.png"));
+	components.push_back(std::make_unique<BoxCollider2D>(this, Vec2f(512, 512)));
 }
 
 void GameObject::Update()
 {
-	float horizontal = Keyboard::IsKeyDown(Key::D) - Keyboard::IsKeyDown(Key::A);
-	float vertical = Keyboard::IsKeyDown(Key::W) - Keyboard::IsKeyDown(Key::S);
-
-	Vec2f movement(horizontal, vertical);
-	
-	Position += movement * Time::GetDeltaTime();
-
-	for(const auto&  component : components)
+	for(const auto& component : components)
 	{
 		component->Update();
 	}
