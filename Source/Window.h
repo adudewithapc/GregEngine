@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include "Input/InputManager.h"
+#include "Math/Vector.h"
 
 class Window
 {
@@ -15,6 +16,8 @@ public:
 	bool ProcessMessages();
 	void SwapBuffers();
 
+	static Vec2f ViewToPixel(const Vec2f& view);
+	static Vec2f PixelToView(const Vec2f& pixel);
 	static void ResizeViewport(int width, int height);
 
 	constexpr static int WindowWidth = 800;

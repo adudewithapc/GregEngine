@@ -115,6 +115,16 @@ void Window::SwapBuffers()
 	wglSwapLayerBuffers(hdc, WGL_SWAP_MAIN_PLANE);
 }
 
+Vec2f Window::ViewToPixel(const Vec2f& view)
+{
+	return Vec2f(view.x * WindowWidth, view.y * WindowHeight);
+}
+
+Vec2f Window::PixelToView(const Vec2f& pixel)
+{
+	return Vec2f(pixel.x / WindowWidth, pixel.y / WindowHeight);
+}
+
 void Window::ResizeViewport(int width, int height)
 {
 	glViewport(0, 0, width, height);
