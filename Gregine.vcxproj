@@ -125,6 +125,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\C++\Grengine\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,7 +152,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\GregorianEngine.cpp" />
-    <ClCompile Include="Source\Component\ConstantMovement.cpp" />
     <ClCompile Include="Source\2D\Physics2D.cpp" />
     <ClCompile Include="Source\Component\2D\BoxCollider2D.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
@@ -173,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GregorianEngine.h" />
-    <ClInclude Include="Source\Component\ConstantMovement.h" />
     <ClInclude Include="Source\2D\Physics2D.h" />
     <ClInclude Include="Source\Component\2D\BoxCollider2D.h" />
     <ClInclude Include="Source\Component\Component.h" />
@@ -212,9 +211,6 @@
   <ItemGroup>
     <Image Include="Textures\container2.png" />
     <Image Include="Textures\container2_specular.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

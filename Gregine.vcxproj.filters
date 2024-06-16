@@ -78,9 +78,6 @@
     <ClCompile Include="Source\2D\Physics2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ConstantMovement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GregorianEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -179,9 +176,6 @@
     <ClInclude Include="Source\2D\Physics2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\ConstantMovement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GregorianEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -198,8 +192,5 @@
     <Image Include="Textures\container2_specular.png">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
