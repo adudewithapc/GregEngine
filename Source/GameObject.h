@@ -4,12 +4,14 @@
 #include <vector>
 #include "Component/Component.h"
 #include "Math/Vector.h"
-#include <iostream>
 
 class GameObject
 {
 public:
 	GameObject() = default;
+
+	GameObject(const GameObject&) = delete;
+	GameObject& operator=(const GameObject&) = delete;
 
 	void Update();
 	void Draw();

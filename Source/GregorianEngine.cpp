@@ -1,3 +1,6 @@
+#include <stb_image.h>
+#define STB_IMAGE_IMPLEMENTATION
+
 #include "GregorianEngine.h"
 #include <chrono>
 #include "Window.h"
@@ -37,6 +40,9 @@ int GregorianEngine::Start()
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		currentLevel.Update();
+		currentLevel.Draw();
+
 		window.SwapBuffers();
 
 		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
@@ -44,9 +50,17 @@ int GregorianEngine::Start()
 
 		previousTime = currentTime;
 	}
+
+	return 0;
 }
 
 void GregorianEngine::Shutdown()
 {
 	running = false;
+}
+
+Level& GregorianEngine::MakeLevel()
+{
+	new (&currentLevel) Level();
+	return currentLevel;
 }

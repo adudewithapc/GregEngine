@@ -1,32 +1,26 @@
 #include "Level.h"
 #include <iostream>
 #include "2D/Physics2D.h"
-#include "Component/ConstantMovement.h"
-
-Level::Level()
-{
-	
-}
-
-Level::~Level()
-{
-	gameObjects.clear();
-}
 
 void Level::Update()
 {
 	Physics2D::Tick();
 
-	for(auto& gameObject : gameObjects)
+	for(GameObject& gameObject : gameObjects)
 	{
-		gameObject->Update();
+		gameObject.Update();
 	}
 }
 
 void Level::Draw()
 {
-	for(auto& gameObject : gameObjects)
+	for(GameObject& gameObject : gameObjects)
 	{
-		gameObject->Draw();
+		gameObject.Draw();
 	}
+}
+
+GameObject& Level::CreateObject()
+{
+	return gameObjects.emplace_back();
 }

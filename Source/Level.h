@@ -6,12 +6,17 @@
 class Level
 {
 public:
-	Level();
-	~Level();
+	Level() = default;
+	virtual ~Level() = default;
+
+	Level(const Level&) = delete;
+	Level& operator =(const Level&) = delete;
 
 	void Update();
 	void Draw();
+
+	GameObject& CreateObject();
 private:
-	std::vector<std::unique_ptr<GameObject>> gameObjects;
+	std::vector<GameObject> gameObjects;
 };
 
