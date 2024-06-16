@@ -1,11 +1,11 @@
 #include "GregorianEngine.h"
 #include <chrono>
-#include "Source/Window.h"
+#include "Window.h"
 #include <glad/glad.h>
 #include <iostream>
-#include "Source/Time.h"
-#include "Source/Input/Keyboard.h"
-#include "Source/Input/Keyboard.h"
+#include "Time.h"
+#include "Input/Keyboard.h"
+#include "Input/Keyboard.h"
 
 int GregorianEngine::Start()
 {
@@ -27,7 +27,7 @@ int GregorianEngine::Start()
 	Time time;
 	std::chrono::time_point previousTime = std::chrono::high_resolution_clock::now();
 
-	bool running = true;
+	running = true;
 	while(running)
 	{
 		std::chrono::time_point currentTime = std::chrono::high_resolution_clock::now();
@@ -44,4 +44,9 @@ int GregorianEngine::Start()
 
 		previousTime = currentTime;
 	}
+}
+
+void GregorianEngine::Shutdown()
+{
+	running = false;
 }

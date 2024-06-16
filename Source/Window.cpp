@@ -74,9 +74,9 @@ Window::~Window()
 
 void Window::CaptureCursor(bool capture)
 {
-	SetCapture(capture ? hWnd : nullptr);
 	if(capture)
 	{
+		SetCapture(hWnd);
 		RECT clipRect;
 		clipRect.left = WindowX;
 		clipRect.top = WindowY;
@@ -86,6 +86,7 @@ void Window::CaptureCursor(bool capture)
 	}
 	else
 	{
+		ReleaseCapture();
 		ClipCursor(nullptr);
 	}
 	

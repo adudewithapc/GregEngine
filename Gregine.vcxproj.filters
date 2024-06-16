@@ -81,7 +81,7 @@
     <ClCompile Include="Source\Component\ConstantMovement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GregorianEngine.cpp">
+    <ClCompile Include="Source\GregorianEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -182,7 +182,7 @@
     <ClInclude Include="Source\Component\ConstantMovement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GregorianEngine.h">
+    <ClInclude Include="Source\GregorianEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

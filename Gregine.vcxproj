@@ -123,6 +123,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -142,9 +145,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GregorianEngine.cpp" />
+    <ClCompile Include="Source\GregorianEngine.cpp" />
     <ClCompile Include="Source\Component\ConstantMovement.cpp" />
     <ClCompile Include="Source\2D\Physics2D.cpp" />
     <ClCompile Include="Source\Component\2D\BoxCollider2D.cpp" />
@@ -166,7 +172,7 @@
     <ClCompile Include="Source\Component\2D\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GregorianEngine.h" />
+    <ClInclude Include="Source\GregorianEngine.h" />
     <ClInclude Include="Source\Component\ConstantMovement.h" />
     <ClInclude Include="Source\2D\Physics2D.h" />
     <ClInclude Include="Source\Component\2D\BoxCollider2D.h" />
