@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gregine", "Gregine.vcxproj", "{03D1D27F-C18A-49F8-909D-AC7DA6E202FB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Grengine", "Gregine.vcxproj", "{03D1D27F-C18A-49F8-909D-AC7DA6E202FB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BasketMan", "..\BasketMan\BasketMan.vcxproj", "{0E3D3830-4236-476B-B301-10438A62101F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{03D1D27F-C18A-49F8-909D-AC7DA6E202FB} = {03D1D27F-C18A-49F8-909D-AC7DA6E202FB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,14 @@ Global
 		{03D1D27F-C18A-49F8-909D-AC7DA6E202FB}.Release|x64.Build.0 = Release|x64
 		{03D1D27F-C18A-49F8-909D-AC7DA6E202FB}.Release|x86.ActiveCfg = Release|Win32
 		{03D1D27F-C18A-49F8-909D-AC7DA6E202FB}.Release|x86.Build.0 = Release|Win32
+		{0E3D3830-4236-476B-B301-10438A62101F}.Debug|x64.ActiveCfg = Debug|x64
+		{0E3D3830-4236-476B-B301-10438A62101F}.Debug|x64.Build.0 = Debug|x64
+		{0E3D3830-4236-476B-B301-10438A62101F}.Debug|x86.ActiveCfg = Debug|Win32
+		{0E3D3830-4236-476B-B301-10438A62101F}.Debug|x86.Build.0 = Debug|Win32
+		{0E3D3830-4236-476B-B301-10438A62101F}.Release|x64.ActiveCfg = Release|x64
+		{0E3D3830-4236-476B-B301-10438A62101F}.Release|x64.Build.0 = Release|x64
+		{0E3D3830-4236-476B-B301-10438A62101F}.Release|x86.ActiveCfg = Release|Win32
+		{0E3D3830-4236-476B-B301-10438A62101F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
