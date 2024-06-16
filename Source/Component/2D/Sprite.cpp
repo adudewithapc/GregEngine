@@ -84,10 +84,11 @@ float* Sprite::GetScreenProportions(const float textureWidth, const float textur
 	const float widthOnWindow = textureWidth / Window::WindowWidth;
 	const float heightOnWindow = textureHeight / Window::WindowHeight;
 	float* proportions = new float[elements] {
-		widthOnWindow,   heightOnWindow, 0, 1, 1,
-		widthOnWindow,  -heightOnWindow, 0, 1, 0,
-		-widthOnWindow, -heightOnWindow, 0, 0, 0,
-		-widthOnWindow,  heightOnWindow, 0, 0, 1
+		//x              y               z tx ty
+		widthOnWindow,   heightOnWindow, 0, 1, 0, //Top right
+		widthOnWindow,  -heightOnWindow, 0, 1, 1, //Bottom right
+		-widthOnWindow, -heightOnWindow, 0, 0, 1, //Bottom left
+		-widthOnWindow,  heightOnWindow, 0, 0, 0  //Top left
 	};
 	return proportions;
 }
