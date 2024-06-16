@@ -5,15 +5,7 @@
 
 Level::Level()
 {
-	std::unique_ptr<GameObject> leftSmiley = std::make_unique<GameObject>();
-	//leftSmiley->Position.x = -512;
-
-	/*std::unique_ptr<GameObject> rightSmiley = std::make_unique<GameObject>();
-	rightSmiley->Position.y = 512;
-	ConstantMovement* newComponent = rightSmiley->AddComponent<ConstantMovement>(Vec2f(300, 0));*/
-
-	gameObjects.push_back(std::move(leftSmiley));
-	//gameObjects.push_back(std::move(rightSmiley));
+	
 }
 
 Level::~Level()

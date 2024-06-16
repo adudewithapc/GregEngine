@@ -9,7 +9,7 @@
 class GameObject
 {
 public:
-	GameObject();
+	GameObject() = default;
 
 	void Update();
 	void Draw();
