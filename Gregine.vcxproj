@@ -165,7 +165,6 @@
     <ClCompile Include="Source\Input\Keyboard.cpp" />
     <ClCompile Include="Source\Input\Mouse.cpp" />
     <ClCompile Include="lib\glad.c" />
-    <ClCompile Include="Source\Program.cpp" />
     <ClCompile Include="Source\Window.cpp" />
     <ClCompile Include="Source\Time.cpp" />
     <ClCompile Include="Source\Math\Trigonometry.cpp" />

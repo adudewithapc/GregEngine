@@ -1,5 +1,3 @@
-#include <stb_image.h>
-#define STB_IMAGE_IMPLEMENTATION
 
 #include "GregorianEngine.h"
 #include <chrono>
@@ -10,18 +8,18 @@
 #include "Input/Keyboard.h"
 #include "Input/Keyboard.h"
 
+GregorianEngine::GregorianEngine()
+{
+	if (!gladLoadGL())
+	{
+		throw std::system_error(std::error_code(), "Failed to load OpenGL");
+	}
+}
+
 int GregorianEngine::Start()
 {
 	using namespace std::chrono;
 	using FloatingSeconds = std::chrono::duration<float>;
-
-	Window window;
-
-	if(!gladLoadGL())
-	{
-		std::cerr << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
 
 	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
 
@@ -40,6 +38,7 @@ int GregorianEngine::Start()
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		camera.Update();
 		currentLevel->Update();
 		currentLevel->Draw();
 

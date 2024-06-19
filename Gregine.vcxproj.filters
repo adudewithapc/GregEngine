@@ -27,9 +27,6 @@
     <ClCompile Include="lib\glad.c">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Program.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
