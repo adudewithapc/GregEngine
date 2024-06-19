@@ -40,8 +40,8 @@ int GregorianEngine::Start()
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		currentLevel.Update();
-		currentLevel.Draw();
+		currentLevel->Update();
+		currentLevel->Draw();
 
 		window.SwapBuffers();
 
@@ -59,8 +59,8 @@ void GregorianEngine::Shutdown()
 	running = false;
 }
 
-Level& GregorianEngine::MakeLevel()
+std::unique_ptr<Level>& GregorianEngine::MakeLevel()
 {
-	new (&currentLevel) Level();
+	currentLevel = std::make_unique<Level>();
 	return currentLevel;
 }

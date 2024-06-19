@@ -2,25 +2,30 @@
 #include <iostream>
 #include "2D/Physics2D.h"
 
+Level::Level() : gameObjects(std::vector<std::unique_ptr<GameObject>>())
+{
+}
+
 void Level::Update()
 {
 	Physics2D::Tick();
 
-	for(GameObject& gameObject : gameObjects)
+	for(auto& gameObject : gameObjects)
 	{
-		gameObject.Update();
+		gameObject->Update();
 	}
 }
 
 void Level::Draw()
 {
-	for(GameObject& gameObject : gameObjects)
+	for(auto& gameObject : gameObjects)
 	{
-		gameObject.Draw();
+		gameObject->Draw();
 	}
 }
 
-GameObject& Level::CreateObject()
+GameObject* Level::CreateObject()
 {
-	return gameObjects.emplace_back();
+	gameObjects.push_back(std::make_unique<GameObject>());
+	return gameObjects.back().get();
 }

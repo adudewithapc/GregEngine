@@ -9,9 +9,9 @@ public:
 	int Start();
 	void Shutdown();
 
-	Level& MakeLevel();
+	std::unique_ptr<Level>& MakeLevel();
 
 private:
 	bool running = false;
-	Level currentLevel;
+	std::unique_ptr<Level> currentLevel;
 };
