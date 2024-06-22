@@ -12,17 +12,17 @@ void Level::Update()
 	Physics2D::Tick();
 	Camera2D::Get().Update();
 
-	for(auto& gameObject : gameObjects)
+	for(int i = gameObjects.size() - 1; i >= 0; i--)
 	{
-		gameObject->Update();
+		gameObjects[i]->Update();
 	}
 }
 
 void Level::Draw()
 {
-	for(auto& gameObject : gameObjects)
+	for(int i = gameObjects.size() - 1; i >= 0; i--)
 	{
-		gameObject->Draw();
+		gameObjects[i]->Draw();
 	}
 }
 

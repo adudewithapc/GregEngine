@@ -2,16 +2,16 @@
 
 void GameObject::Update()
 {
-	for(const auto& component : components)
+	for(int i = components.size() - 1; i >= 0; i--)
 	{
-		component->Update();
+		components[i]->Update();
 	}
 }
 
 void GameObject::Draw()
 {
-	for(const auto& component : components)
+	for (int i = components.size() - 1; i >= 0; i--)
 	{
-		component->Draw();
+		components[i]->Draw();
 	}
 }
