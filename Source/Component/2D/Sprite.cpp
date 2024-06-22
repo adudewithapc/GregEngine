@@ -28,11 +28,12 @@ Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Componen
 	stbi_image_free(data);
 
 	int vertexElements;
-	proportions = GetScreenProportions(width, height, vertexElements);
+	const std::unique_ptr<float> proportions = GetScreenProportions(width, height, vertexElements);
+	const float* const proportionsPointer = proportions.get();
 
 	for(int i = 0; i < vertexElements; i += 5)
 	{
-		std::cout << proportions[i] << ", " << proportions[i + 1] << "\n";
+		std::cout << proportionsPointer[i] << ", " << proportionsPointer[i + 1] << "\n";
 	}
 
 	glGenVertexArrays(1, &quadVAO);
@@ -40,7 +41,7 @@ Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Componen
 
 	glGenBuffers(1, &quadVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(proportions) * vertexElements, proportions, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(proportionsPointer) * vertexElements, proportionsPointer, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &quadEBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadEBO);
@@ -71,14 +72,14 @@ void Sprite::Draw()
 
 	glBindVertexArray(quadVAO);
 
-	Camera2D::Get()->Draw(*SpriteShader, Window::PixelToView(gameObject->Position));
+	Camera2D::Get().Draw(*SpriteShader, GetOwner()->GetTransform().PixelToViewMatrix());
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 }
 
-float* Sprite::GetScreenProportions(const float textureWidth, const float textureHeight, int& elements) const
+std::unique_ptr<float> Sprite::GetScreenProportions(const float textureWidth, const float textureHeight, int& elements) const
 {
 	elements = 20;
 	const float widthOnWindow = textureWidth / Window::WindowWidth;
@@ -90,7 +91,8 @@ float* Sprite::GetScreenProportions(const float textureWidth, const float textur
 		-widthOnWindow, -heightOnWindow, 0, 0, 1, //Bottom left
 		-widthOnWindow,  heightOnWindow, 0, 0, 0  //Top left
 	};
-	return proportions;
+	std::unique_ptr<float> ret(proportions);
+	return std::move(ret);
 }
 
 
