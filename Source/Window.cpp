@@ -208,7 +208,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 
 		if(GetRawInputData((HRAWINPUT)lParam, RID_INPUT, rawData, &dataSize, sizeof(RAWINPUTHEADER)) != dataSize)
 		{
-			std::cout << "GetRawInputData returns incorrect size!" << std::endl;
+			std::cerr << "GetRawInputData returns incorrect size!" << std::endl;
 		}
 
 		RAWINPUT* rawInput = (RAWINPUT*)rawData;
