@@ -11,17 +11,20 @@
 }\
 return *this;
 
-template<typename T, size_t R, size_t C> requires number<T>
+template<typename T, size_t C, size_t R> requires number<T>
 struct Matrix
 {
-	const size_t SIZE = C * R;
+private:
+	T elements[R * C];
+public:
+	const size_t SIZE = R * C;
 
-	Matrix<T, R, C>()
+	Matrix<T, C, R>()
 	{
 		Empty();
 	}
 
-	Matrix<T, R, C>(const T elements[C * R])
+	Matrix<T, C, R>(const T elements[R * C])
 	{
 		for(int i = 0; i < SIZE; i++)
 		{
@@ -29,7 +32,7 @@ struct Matrix
 		}
 	}
 
-	Matrix<T, R, C>(const std::initializer_list<T>& list)
+	Matrix<T, C, R>(const std::initializer_list<T>& list)
 	{
 		if(list.size() != SIZE)
 		{
@@ -45,7 +48,7 @@ struct Matrix
 		}
 	}
 
-	Matrix<T, R, C>(Vec2<T> vec)
+	Matrix<T, C, R>(Vec2<T> vec)
 	{
 		static_assert(R == 2, "Wrong dimensions specified. Must contain 2 rows to create matrix from 2d vector.");
 
@@ -55,7 +58,7 @@ struct Matrix
 		elements[C + 1] = vec.y;
 	}
 
-	Matrix<T, R, C>(Vec3<T> vec)
+	Matrix<T, C, R>(Vec3<T> vec)
 	{
 		static_assert(R == 3, "Wrong dimensions specified. Must contain 3 rows to create matrix from 3d vector.");
 
@@ -66,7 +69,7 @@ struct Matrix
 		elements[C * 2 + 2] = vec.z;
 	}
 
-	Matrix<T, R, C>(Vec4<T> vec)
+	Matrix<T, C, R>(Vec4<T> vec)
 	{
 		static_assert(R == 4, "Wrong dimensions specified. Must contain 4 rows to create matrix from 4d vector.");
 
@@ -97,16 +100,16 @@ struct Matrix
 
 	T& operator()(const size_t column, const size_t row)
 	{
-		if(C < R)
-		{
-			return elements[row * R + column];
-		}
+		return elements[row * C + column];
+	}
 
-		return elements[column * C + row];
+	const T& operator()(const size_t column, const size_t row) const
+	{
+		return elements[row * C + column];
 	}
 
 	//Matrix = Matrix
-	Matrix<T, R, C>& operator =(Matrix<T, C, R> other)
+	Matrix<T, C, R>& operator =(Matrix<T, R, C> other)
 	{
 		for(size_t i = 0; i < SIZE; i++)
 		{
@@ -117,39 +120,39 @@ struct Matrix
 	}
 
 	//Matrix + Scalar
-	Matrix<T, R, C>& operator +(const T scalar)
+	Matrix<T, C, R>& operator +(const T scalar)
 	{
 		ScalarOperator(+)
 	}
-	Matrix<T, R, C>& operator +=(const T scalar)
+	Matrix<T, C, R>& operator +=(const T scalar)
 	{
 		return *this + scalar;
 	}
 
 	//Matrix - Scalar
-	Matrix<T, R, C>& operator -(const T scalar)
+	Matrix<T, C, R>& operator -(const T scalar)
 	{
 		ScalarOperator(-)
 	}
-	Matrix<T, R, C>& operator -=(const T scalar)
+	Matrix<T, C, R>& operator -=(const T scalar)
 	{
 		return *this - scalar;
 	}
 
 	//Matrix * Scalar
-	Matrix<T, R, C>& operator *(const T scalar)
+	Matrix<T, C, R>& operator *(const T scalar)
 	{
 		ScalarOperator(*)
 	}
-	Matrix<T, R, C>& operator *=(const T scalar)
+	Matrix<T, C, R>& operator *=(const T scalar)
 	{
 		return *this * scalar;
 	}
 
 	//Matrix + Matrix
-	Matrix<T, R, C>& operator +(const Matrix<T, R, C>& right)
+	Matrix<T, C, R>& operator +(const Matrix<T, C, R>& right)
 	{
-		Matrix<T, R, C> output;
+		Matrix<T, C, R> output;
 
 		for(size_t i = 0; i < SIZE; i++)
 		{
@@ -158,13 +161,13 @@ struct Matrix
 
 		return output;
 	}
-	Matrix<T, R, C>& operator +=(const Matrix<T, R, C>& right)
+	Matrix<T, C, R>& operator +=(const Matrix<T, C, R>& right)
 	{
 		return *this = *this + right;
 	}
 
 	//Matrix - Matrix
-	Matrix<T, R, C>& operator -(const Matrix<T, R, C>& right)
+	Matrix<T, C, R>& operator -(const Matrix<T, C, R>& right)
 	{
 		Matrix<T, R, C> output;
 
@@ -175,35 +178,51 @@ struct Matrix
 
 		return output;
 	}
-	Matrix<T, R, C>& operator -=(const Matrix<T, R, C>& right)
+	Matrix<T, C, R>& operator -=(const Matrix<T, C, R>& right)
 	{
 		return *this = *this - right;
 	}
 
 	//Matrix * Matrix
-	//Multiplying matrices is difficult :(
 	template<size_t C2>
-	Matrix<T, R, C2> operator *(const Matrix<T, R, C2>& right)
+	Matrix<T, C2, R> operator *(const Matrix<T, C2, R>& right)
 	{
-		Matrix<T, R, C2> output;
+		Matrix<T, C2, R> output;
 
-		for(size_t i = 0; i < R; i++)
+		/*As an example of what the below for loop does, here is how one 3x2 matrix and one 2x3 matrix get multiplied together
+		output(0, 0) = left(0, 0) * right(0, 0) +
+					   left(1, 0) * right(0, 1) +
+					   left(2, 0) * right(0, 2);
+
+		output(1, 0) = left(0, 0) * right(1, 0) +
+					   left(1, 0) * right(1, 1) +
+					   left(2, 0) * right(1, 2);
+
+		output(0, 1) = left(0, 1) * right(0, 0) +
+					   left(1, 1) * right(0, 1) +
+					   left(2, 1) * right(0, 2);
+
+		output(1, 1) = left(0, 1) * right(1, 0) +
+					   left(1, 1) * right(1, 1) +
+					   left(2, 1) * right(1, 2); */
+
+		for (size_t leftRow = 0; leftRow < C; leftRow++)
 		{
-			for(size_t j = 0; j < C2; j++)
+			for (size_t rightColumn = 0; rightColumn < C2; rightColumn++)
 			{
-				for(size_t k = 0; k < R; k++)
+				for (size_t leftColumnRightRow = 0; leftColumnRightRow < R; leftColumnRightRow++)
 				{
-					output[C2 * i + j] += elements[i * R + k] * right[k * C2 + j];
+					output[rightColumn + leftRow * C2] += elements[leftColumnRightRow + leftRow * R] * right[rightColumn + leftColumnRightRow * C2];
 				}
 			}
 		}
 
 		return output;
 	}
-	template<size_t C2>
-	Matrix<T, 4, 4>& operator *=(const Matrix<T, R, C2>& left)
+	//We can't change the dimensions of "this", so right must have the same dimensions
+	Matrix<T, C, R>& operator *=(const Matrix<T, C, R>& right)
 	{
-		return *this = left * *this;
+		return *this = *this * right;
 	}
 
 	//Matrix * Vector
@@ -266,13 +285,10 @@ struct Matrix
 	{
 		return elements;
 	}
-
-private:
-	T elements[C * R];
 };
 
-template<typename T, size_t R, size_t C> requires number<T>
-std::ostream& operator <<(std::ostream& stream, Matrix<T, R, C> mat)
+template<typename T, size_t C, size_t R> requires number<T>
+std::ostream& operator <<(std::ostream& stream, Matrix<T, C, R> mat)
 {
 	stream << "[";
 

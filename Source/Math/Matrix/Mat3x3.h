@@ -10,7 +10,7 @@ using Mat3x3 = Matrix<T, 3, 3>;
 namespace mat3x3
 {
 	template<typename T>
-	inline static Mat3x3<T> identity = Mat3x3<T>({1, 0, 0
-												  0, 1, 0
+	inline static Mat3x3<T> identity = Mat3x3<T>({1, 0, 0,
+												  0, 1, 0,
 												  0, 0, 1});
 }
