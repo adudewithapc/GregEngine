@@ -10,9 +10,10 @@ Mat4x4f Camera2D::GetViewMatrix() const
 
 void Camera2D::Update() {}
 
-void Camera2D::Draw(Shader& shader, const Mat4x4f& modelMatrix)
+void Camera2D::Draw(Shader& shader, const Vec2f& position)
 {
-	glUniformMatrix4fv(glGetUniformLocation(shader.programID, "model"), 1, GL_TRUE, modelMatrix.ToArray());
+	Mat4x4f positionMatrix = mat4x4::Identity<float>.Translate(position);
+	glUniformMatrix4fv(glGetUniformLocation(shader.programID, "model"), 1, GL_TRUE, positionMatrix.ToArray());
 	glUniformMatrix4fv(glGetUniformLocation(shader.programID, "view"), 1, GL_TRUE, GetViewMatrix().ToArray());
 	glUniformMatrix4fv(glGetUniformLocation(shader.programID, "projection"), 1, GL_TRUE, mat4x4::Identity<float>.ToArray());
 }

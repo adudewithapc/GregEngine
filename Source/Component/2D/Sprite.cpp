@@ -72,7 +72,7 @@ void Sprite::Draw()
 
 	glBindVertexArray(quadVAO);
 
-	Camera2D::Get().Draw(*SpriteShader, GetOwner()->GetTransform().PixelToViewMatrix());
+	Camera2D::Get().Draw(*SpriteShader, GetOwner()->Position);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

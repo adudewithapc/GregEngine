@@ -17,7 +17,7 @@ public:
 
 	Mat4x4f GetViewMatrix() const;
 	void Update();
-	void Draw(Shader& shader, const Mat4x4f& modelMatrix);
+	void Draw(Shader& shader, const Vec2f& modelMatrix);
 
 	static Camera2D& Get();
 private:
