@@ -62,3 +62,14 @@ std::unique_ptr<Level>& GregorianEngine::MakeLevel()
 	currentLevel = std::make_unique<Level>();
 	return currentLevel;
 }
+
+Level* GregorianEngine::GetCurrentLevel() const
+{
+	return currentLevel.get();
+}
+
+GregorianEngine& GregorianEngine::Get()
+{
+	static GregorianEngine engine;
+	return engine;
+}

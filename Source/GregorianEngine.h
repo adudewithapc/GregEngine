@@ -13,10 +13,21 @@ class GregorianEngine
 public:
 	GregorianEngine();
 
+	GregorianEngine(const GregorianEngine&) = delete;
+	GregorianEngine& operator =(const GregorianEngine&) = delete;
+
+	GregorianEngine(GregorianEngine&&) = delete;
+	GregorianEngine operator =(GregorianEngine&&) = delete;
+
 	int Start();
 	void Shutdown();
 
 	std::unique_ptr<Level>& MakeLevel();
+
+	Level* GetCurrentLevel() const;
+
+public:
+	static GregorianEngine& Get();
 
 private:
 	bool running = false;
