@@ -31,11 +31,6 @@ Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Componen
 	const std::unique_ptr<float> proportions = GetScreenProportions(width, height, vertexElements);
 	const float* const proportionsPointer = proportions.get();
 
-	for(int i = 0; i < vertexElements; i += 5)
-	{
-		std::cout << proportionsPointer[i] << ", " << proportionsPointer[i + 1] << "\n";
-	}
-
 	glGenVertexArrays(1, &quadVAO);
 	glBindVertexArray(quadVAO);
 
