@@ -24,9 +24,9 @@ void BoxCollider2D::CollisionExited(BoxCollider2D* other)
 
 bool BoxCollider2D::Intersects(BoxCollider2D* other)
 {
-	Vec2f& position = gameObject->Position;
+	Vec2f& position = GetOwner()->Position;
 	
-	Vec2f& otherPosition = other->gameObject->Position;
+	Vec2f& otherPosition = other->GetOwner()->Position;
 	Vec2f& otherSize = other->Size;
 
 	float left = position.x - Size.x;
@@ -38,10 +38,6 @@ bool BoxCollider2D::Intersects(BoxCollider2D* other)
 	float otherRight = otherPosition.x + otherSize.x;
 	float otherUp = otherPosition.y + otherSize.y;
 	float otherDown = otherPosition.y - otherSize.y;
-
-	/*std::cout << "\t" << up << "\t\t\t\t" << otherUp << "\n";
-	std::cout << left << "\t\t" << right << "\t\t" << otherLeft << "\t\t" << otherRight << "\n";
-	std::cout << "\t" << down << "\t\t\t\t" << otherDown << "\n";*/
 
 	if(left < otherRight &&
 		right > otherLeft &&

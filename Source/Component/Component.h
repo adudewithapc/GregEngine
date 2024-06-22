@@ -13,6 +13,8 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
-	GameObject* gameObject;
+	GameObject* GetOwner() const;
+private:
+	GameObject* owner;
 };
 
