@@ -1,6 +1,7 @@
 #include "Level.h"
 #include <iostream>
 #include "2D/Physics2D.h"
+#include "2D/Camera2D.h"
 
 Level::Level() : gameObjects(std::vector<std::unique_ptr<GameObject>>())
 {
@@ -9,6 +10,7 @@ Level::Level() : gameObjects(std::vector<std::unique_ptr<GameObject>>())
 void Level::Update()
 {
 	Physics2D::Tick();
+	Camera2D::Get().Update();
 
 	for(auto& gameObject : gameObjects)
 	{

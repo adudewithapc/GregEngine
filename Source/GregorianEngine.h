@@ -23,5 +23,4 @@ private:
 	std::unique_ptr<Level> currentLevel;
 
 	Window window;
-	Camera2D camera;
 };

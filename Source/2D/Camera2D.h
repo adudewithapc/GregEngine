@@ -7,19 +7,22 @@
 class Camera2D
 {
 public:
-	Camera2D();
+	Camera2D() = default;
+	
 	Camera2D(Camera2D&) = delete;
-	void operator=(const Camera2D&) = delete;
+	Camera2D& operator=(const Camera2D&) = delete;
+
+	Camera2D(Camera2D&&) = delete;
+	Camera2D& operator=(Camera2D&&) = delete;
 
 	Mat4x4f GetViewMatrix() const;
 	void Update();
-	void Draw(Shader& shader, const Vec2f& position);
+	void Draw(Shader& shader, const Mat4x4f& modelMatrix);
 
-	static std::shared_ptr<Camera2D> Get();
+	static Camera2D& Get();
 private:
 	Vec2f Position;
 
-	static std::shared_ptr<Camera2D> Instance;
 	static inline Mat4x4f ProjectionMatrix = mat4x4::OrthographicView(0, 800, 600, 0, 1, 100);
 };
 
