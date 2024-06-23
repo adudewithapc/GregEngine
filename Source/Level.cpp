@@ -28,6 +28,16 @@ void Level::Draw()
 
 GameObject* Level::CreateObject()
 {
-	gameObjects.push_back(std::make_unique<GameObject>());
+	gameObjects.push_back(std::make_unique<GameObject>(gameObjects.size()));
 	return gameObjects.back().get();
 }
+
+void Level::DestroyObject(int objectIndex)
+{
+	gameObjects[objectIndex] = std::move(gameObjects[gameObjects.size() - 1]);
+	//This is needed since the object index is actually its current position in the gameObjects list
+	//This should probably be reworked in the future
+	gameObjects[objectIndex]->SetIndex(objectIndex);
+	gameObjects.erase(gameObjects.end() - 1);
+}
+

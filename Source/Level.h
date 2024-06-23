@@ -13,6 +13,7 @@ public:
 	void Draw();
 
 	GameObject* CreateObject();
+	void DestroyObject(int objectIndex);
 private:
 	std::vector<std::unique_ptr<GameObject>> gameObjects;
 };

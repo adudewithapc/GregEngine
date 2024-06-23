@@ -174,6 +174,9 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 		//Quit application
 		PostQuitMessage(0);
 		return 0;
+	//Window is forced out of focus
+	case WM_CANCELMODE:
+		return 0;
 	case WM_SIZE:
 	{
 		int newWidth = LOWORD(lParam);

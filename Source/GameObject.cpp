@@ -1,8 +1,13 @@
 #include "GameObject.h"
+#include "GregorianEngine.h"
+
+GameObject::GameObject(int index) : index(index), isDestroyed(false)
+{
+}
 
 void GameObject::Update()
 {
-	for(int i = components.size() - 1; i >= 0; i--)
+	for(int i = components.size() - 1; i >= 0 && !isDestroyed; i--)
 	{
 		components[i]->Update();
 	}
@@ -14,4 +19,20 @@ void GameObject::Draw()
 	{
 		components[i]->Draw();
 	}
+}
+
+void GameObject::Destroy()
+{
+	GregorianEngine::Get().GetCurrentLevel()->DestroyObject(index);
+	isDestroyed = true;
+}
+
+const bool GameObject::IsDestroyed() const
+{
+	return isDestroyed;
+}
+
+void GameObject::SetIndex(int newIndex)
+{
+	index = newIndex;
 }

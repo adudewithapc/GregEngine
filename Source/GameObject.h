@@ -8,7 +8,7 @@
 class GameObject
 {
 public:
-	GameObject() = default;
+	GameObject(int index);
 
 	GameObject(const GameObject&) = delete;
 	GameObject& operator=(const GameObject&) = delete;
@@ -28,7 +28,13 @@ public:
 		return componentPointer;
 	}
 
+	void Destroy();
+	const bool IsDestroyed() const;
+	void SetIndex(int newIndex);
+
 	Vec2f Position;
 private:
 	std::vector<std::unique_ptr<Component>> components;
+	int index;
+	bool isDestroyed = false;
 };
