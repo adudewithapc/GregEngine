@@ -8,10 +8,11 @@ class BoxCollider2D : public Component
 {
 public:
 	BoxCollider2D(GameObject* gameObject, const Vec2f& size);
+	virtual ~BoxCollider2D() override;
 
 	virtual void Draw() override;
-	void CollisionEntered(BoxCollider2D* other);
-	void CollisionExited(BoxCollider2D* other);
+	void StartCollision(BoxCollider2D* other);
+	void EndCollision(BoxCollider2D* other);
 	bool Intersects(BoxCollider2D* other);
 
 	Vec2f Size;

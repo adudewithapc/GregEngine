@@ -13,6 +13,14 @@ void Component::Draw()
 {
 }
 
+void Component::CollisionEntered(GameObject* other)
+{
+}
+
+void Component::CollisionExited(GameObject* other)
+{
+}
+
 GameObject* Component::GetOwner() const
 {
     return owner;

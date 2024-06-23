@@ -16,6 +16,14 @@ public:
 	void Update();
 	void Draw();
 
+	void CollisionEntered(GameObject* other);
+	void CollisionExited(GameObject* other);
+
+	void Destroy();
+	const bool IsDestroyed() const;
+
+	void SetIndex(int newIndex);
+
 	//Implemented in header due to templated arguments
 	template<typename T, typename... Args>
 	T* AddComponent(Args&&... args)
@@ -27,10 +35,6 @@ public:
 		components.push_back(std::move(newComponent));
 		return componentPointer;
 	}
-
-	void Destroy();
-	const bool IsDestroyed() const;
-	void SetIndex(int newIndex);
 
 	Vec2f Position;
 private:

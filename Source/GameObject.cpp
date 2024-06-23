@@ -21,6 +21,22 @@ void GameObject::Draw()
 	}
 }
 
+void GameObject::CollisionEntered(GameObject* other)
+{
+	for (int i = components.size() - 1; i >= 0 && !isDestroyed; i--)
+	{
+		components[i]->CollisionEntered(other);
+	}
+}
+
+void GameObject::CollisionExited(GameObject* other)
+{
+	for (int i = components.size() - 1; i >= 0 && !isDestroyed; i--)
+	{
+		components[i]->CollisionExited(other);
+	}
+}
+
 void GameObject::Destroy()
 {
 	GregorianEngine::Get().GetCurrentLevel()->DestroyObject(index);

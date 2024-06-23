@@ -13,6 +13,9 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
+	virtual void CollisionEntered(GameObject* other);
+	virtual void CollisionExited(GameObject* other);
+
 	GameObject* GetOwner() const;
 private:
 	GameObject* owner;

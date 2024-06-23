@@ -8,18 +8,23 @@ BoxCollider2D::BoxCollider2D(GameObject* gameObject, const Vec2f& size) : Compon
 	Physics2D::AddCollider(this);
 }
 
+BoxCollider2D::~BoxCollider2D()
+{
+	Physics2D::RemoveCollider(this);
+}
+
 void BoxCollider2D::Draw()
 {
 }
 
-void BoxCollider2D::CollisionEntered(BoxCollider2D* other)
+void BoxCollider2D::StartCollision(BoxCollider2D* other)
 {
-	std::cout << "Collision entered\n";
+	GetOwner()->CollisionEntered(other->GetOwner());
 }
 
-void BoxCollider2D::CollisionExited(BoxCollider2D* other)
+void BoxCollider2D::EndCollision(BoxCollider2D* other)
 {
-	std::cout << "Collision exited\n";
+	GetOwner()->CollisionExited(other->GetOwner());
 }
 
 bool BoxCollider2D::Intersects(BoxCollider2D* other)

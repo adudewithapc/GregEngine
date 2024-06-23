@@ -1,8 +1,20 @@
 #include "Physics2D.h"
+#include <iostream>
 
 void Physics2D::AddCollider(BoxCollider2D* collider)
 {
 	colliders.push_back(collider);
+}
+
+void Physics2D::RemoveCollider(BoxCollider2D* collider)
+{
+	auto removedCollider = std::find(colliders.begin(), colliders.end(), collider);
+
+	if (removedCollider == colliders.end())
+		return;
+
+	colliders[removedCollider - colliders.begin()] = colliders.back();
+	colliders.erase(colliders.end() - 1);
 }
 
 void Physics2D::Tick()
@@ -13,7 +25,7 @@ void Physics2D::Tick()
 	}
 	for(int i = 0; i < colliders.size() - 1; i++)
 	{
-		for(int j = i + 1; j < colliders.size(); j++)
+		for(int j = i + 1; j < colliders.size() - 1; j++)
 		{
 			BoxCollider2D* collider1 = colliders[i];
 			BoxCollider2D* collider2 = colliders[j];
@@ -22,9 +34,11 @@ void Physics2D::Tick()
 			{
 				if(std::find(currentCollisions.begin(), currentCollisions.end(), pair) == currentCollisions.end())
 				{
-					collider1->CollisionEntered(collider2);
-					collider2->CollisionEntered(collider1);
-					currentCollisions.push_back(CollisionPair(collider1, collider2));
+					collider1->StartCollision(collider2);
+					collider2->StartCollision(collider1);
+
+					if(!collider1->GetOwner()->IsDestroyed() && !collider1->GetOwner()->IsDestroyed())
+						currentCollisions.push_back(CollisionPair(collider1, collider2));
 				}
 			}
 			else
@@ -32,8 +46,8 @@ void Physics2D::Tick()
 				std::vector<CollisionPair>::iterator iterator = std::find(currentCollisions.begin(), currentCollisions.end(), pair);
 				if(iterator != currentCollisions.end())
 				{
-					collider1->CollisionExited(collider2);
-					collider2->CollisionExited(collider1);
+					collider1->EndCollision(collider2);
+					collider2->EndCollision(collider1);
 					currentCollisions.erase(iterator);
 				}
 			}

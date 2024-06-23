@@ -21,6 +21,7 @@ public:
 	Physics2D& operator =(const Physics2D&) = delete;
 
 	static void AddCollider(BoxCollider2D* collider);
+	static void RemoveCollider(BoxCollider2D* collider);
 	static void Tick();
 
 private:
