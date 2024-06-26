@@ -3,8 +3,7 @@
 #include <glad/glad.h>
 #include "Math/Vector.h"
 
-//Window class name
-static const wchar_t* CLASS_NAME = L"Gregine Example 8)";
+static const wchar_t* CLASS_NAME = L"Greg Engine";
 
 static InputManager* input;
 
@@ -34,14 +33,15 @@ Window::Window() :
 	LastWidth = WindowWidth;
 	LastHeight = WindowHeight;
 
+
 	//Make the window dimensions define the actual canvas, as opposed to the decorations (like the title bar)
 	AdjustWindowRect(&rect, style, false);
 
 	//Settings for window
-	hWnd = CreateWindowEx(
+	windowHandle = CreateWindowEx(
 		0,						//Dialog style (N/A)
 		CLASS_NAME,				//Class name
-		L"Greg Title 8)",		//Window title
+		L"Greg Engine",			//Window title
 		style,					//Decorations
 		rect.left,				//Left position
 		rect.top,				//Top position
@@ -56,7 +56,7 @@ Window::Window() :
 	input = new InputManager();
 	input->RegisterInputDevices();
 
-	ShowWindow(hWnd, SW_SHOW);
+	ShowWindow(windowHandle, SW_SHOW);
 	CaptureCursor(true);
 	SetCursorPos(MouseStartingX, MouseStartingY);
 	input->MoveWindowMouse(0, WindowWidth / 2, WindowHeight / 2);
@@ -76,7 +76,7 @@ void Window::CaptureCursor(bool capture)
 {
 	if(capture)
 	{
-		SetCapture(hWnd);
+		SetCapture(windowHandle);
 		RECT clipRect;
 		clipRect.left = WindowX;
 		clipRect.top = WindowY;
@@ -114,6 +114,14 @@ bool Window::ProcessMessages()
 void Window::SwapBuffers()
 {
 	wglSwapLayerBuffers(hdc, WGL_SWAP_MAIN_PLANE);
+}
+
+void Window::SetTitle(const std::string& windowTitle)
+{
+	if(!SetWindowTextA(windowHandle, windowTitle.c_str()))
+	{
+		std::cerr << "Error while trying to set window title to \"" << windowTitle << "\". Error: " << GetLastError() << std::endl;
+	}
 }
 
 Vec2f Window::ViewToPixel(const Vec2f& view)
@@ -155,7 +163,7 @@ void Window::CreateGLContext()
 		0, 0, 0
 	};
 
-	hdc = GetDC(hWnd);
+	hdc = GetDC(windowHandle);
 	int pixelFormat = ChoosePixelFormat(hdc, &pfd);
 	SetPixelFormat(hdc, pixelFormat, &pfd);
 
@@ -199,7 +207,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 			break;
 		}
 
-		UINT dataSize;
+		UINT dataSize = 0;
 
 		//RID_INPUT gives us identifying data (i.e are we on keyboard?), while RID_HEADER just gives raw binary
 		GetRawInputData((HRAWINPUT)lParam, RID_INPUT, nullptr, &dataSize, sizeof(RAWINPUTHEADER));

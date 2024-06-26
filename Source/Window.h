@@ -15,7 +15,9 @@ public:
 	void CaptureCursor(bool capture);
 	bool ProcessMessages();
 	void SwapBuffers();
+	void SetTitle(const std::string& windowTitle);
 
+public:
 	static Vec2f ViewToPixel(const Vec2f& view);
 	static Vec2f PixelToView(const Vec2f& pixel);
 	static void ResizeViewport(int width, int height);
@@ -39,7 +41,7 @@ private:
 	);
 
 	HINSTANCE hInstance;
-	HWND hWnd;
+	HWND windowHandle;
 	HGLRC glContext;
 	HDC hdc;
 

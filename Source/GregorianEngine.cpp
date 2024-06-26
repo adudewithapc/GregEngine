@@ -16,11 +16,12 @@ GregorianEngine::GregorianEngine()
 	}
 }
 
-int GregorianEngine::Start()
+int GregorianEngine::Start(const std::string& windowTitle)
 {
 	using namespace std::chrono;
 	using FloatingSeconds = std::chrono::duration<float>;
 
+	window.SetTitle(windowTitle);
 	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
 
 	glEnable(GL_DEPTH_TEST);
