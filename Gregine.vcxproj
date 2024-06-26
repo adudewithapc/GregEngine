@@ -74,12 +74,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>D:\C++\Gregine\Includes;$(IncludePath)</IncludePath>
     <LibraryPath>D:\C++\Gregine\lib;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)Builds\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>Builds\$(Platform)\Intermediate\$(Configuration)\</IntDir>
+    <OutDir>Binaries\$(Configuration)\</OutDir>
+    <IntDir>Binaries\$(Configuration)\Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)Builds\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>Builds\$(Platform)\Intermediate\$(Configuration)\</IntDir>
+    <OutDir>Binaries\$(Configuration)\</OutDir>
+    <IntDir>Binaries\$(Configuration)\Intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
