@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stb_image.h>
 #include <string>
 #include <memory>
 #include "../../GameObject.h"

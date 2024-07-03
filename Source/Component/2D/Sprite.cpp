@@ -4,6 +4,9 @@
 #include "../../2D/Camera2D.h"
 #include "../../Window.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 const unsigned int indices[] = {
 	0, 1, 3,
 	1, 2, 3

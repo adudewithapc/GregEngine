@@ -1,8 +1,5 @@
 #pragma once
 
-#include <stb_image.h>
-#define STB_IMAGE_IMPLEMENTATION
-
 #define WIN32_LEAN_AND_MEAN
 #include "Level.h"
 #include "Window.h"

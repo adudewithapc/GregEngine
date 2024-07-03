@@ -4,7 +4,7 @@
 #include "Window.h"
 #include <glad/glad.h>
 #include <iostream>
-#include "Time.h"
+#include "GregTime.h"
 #include "Input/Keyboard.h"
 #include "Input/Keyboard.h"
 

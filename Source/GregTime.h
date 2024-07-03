@@ -1,4 +1,5 @@
 #pragma once
+
 class Time
 {
 public:
@@ -11,4 +12,3 @@ private:
 	static float deltaTime;
 	inline static float timeSinceStartup = 0;
 };
-

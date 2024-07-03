@@ -1,4 +1,4 @@
-#include "Time.h"
+#include "GregTime.h"
 
 float Time::GetDeltaTime()
 {

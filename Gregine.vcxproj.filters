@@ -45,7 +45,7 @@
     <ClCompile Include="Source\Rendering\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Time.cpp">
+    <ClCompile Include="Source\GregTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Math\Trigonometry.cpp">
@@ -143,7 +143,7 @@
     <ClInclude Include="Source\Math\Matrix\Mat1x4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Time.h">
+    <ClInclude Include="Source\GregTime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Math\Trigonometry.h">

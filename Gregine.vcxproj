@@ -116,7 +116,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\C++\Grengine\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Includes\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,7 +137,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\C++\Grengine\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Includes\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,7 +166,7 @@
     <ClCompile Include="Source\Input\Mouse.cpp" />
     <ClCompile Include="lib\glad.c" />
     <ClCompile Include="Source\Window.cpp" />
-    <ClCompile Include="Source\Time.cpp" />
+    <ClCompile Include="Source\GregTime.cpp" />
     <ClCompile Include="Source\Math\Trigonometry.cpp" />
     <ClCompile Include="Source\Component\2D\Sprite.cpp" />
   </ItemGroup>
@@ -200,7 +200,7 @@
     <ClInclude Include="Source\Input\Mouse.h" />
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Math\Vector.h" />
-    <ClInclude Include="Source\Time.h" />
+    <ClInclude Include="Source\GregTime.h" />
     <ClInclude Include="Source\Math\Trigonometry.h" />
     <ClInclude Include="Source\Component\2D\Sprite.h" />
   </ItemGroup>
