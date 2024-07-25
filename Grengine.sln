@@ -5,7 +5,9 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Grengine", "Gregine.vcxproj", "{03D1D27F-C18A-49F8-909D-AC7DA6E202FB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BasketMan", "..\BasketMan\BasketMan.vcxproj", "{1B72AA5E-229C-4747-8D4C-5CA3A4900BEB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BasketMan", "ExampleGames\BasketMan\BasketMan.vcxproj", "{1B72AA5E-229C-4747-8D4C-5CA3A4900BEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example Games", "Example Games", "{3A744530-E31E-4E7D-BF51-79889CE508B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +36,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1B72AA5E-229C-4747-8D4C-5CA3A4900BEB} = {3A744530-E31E-4E7D-BF51-79889CE508B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8071B42E-5607-44AC-9D89-F94CC39C6014}
