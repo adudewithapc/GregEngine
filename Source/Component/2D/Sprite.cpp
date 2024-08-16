@@ -7,6 +7,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+#include "../../Image.h"
+
 const unsigned int indices[] = {
 	0, 1, 3,
 	1, 2, 3
@@ -24,11 +26,22 @@ Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Componen
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	int width, height, channels;
-	unsigned char* data = stbi_load(textureLocation.c_str(), &width, &height, &channels, 0);
+	unsigned char* data = nullptr;
+	if(textureLocation != "basket_man.bmp")
+	{
+		data = stbi_load(textureLocation.c_str(), &width, &height, &channels, 0);
+	}
+	else
+	{
+		data = greg::image::LoadBMP(textureLocation, width, height, channels);
+		if(data == nullptr)
+			std::cerr << "Failed to load BMP\n";
+	}
 
 	glTexImage2D(GL_TEXTURE_2D, 0, channels == 4 ? GL_RGBA : GL_RGB, width, height, 0, channels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	stbi_image_free(data);
+	if(textureLocation != "basket_man.bmp")
+		stbi_image_free(data);
 
 	int vertexElements;
 	const std::unique_ptr<float> proportions = GetScreenProportions(width, height, vertexElements);
