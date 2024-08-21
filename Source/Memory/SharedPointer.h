@@ -1,23 +1,21 @@
 ﻿#pragma once
+#include "RefCounter.h"
 
 template<typename T>
 class SharedPointer
 {
 public:
     SharedPointer(T* pointer)
-        : referenceCounter(new int),
+        : referenceCounter(new RefCounter),
           pointer(pointer)
     {
-        *referenceCounter = 1;
-        PrintCount();
     }
 
     SharedPointer(const SharedPointer& other)
     {
         pointer = other.pointer;
         referenceCounter = other.referenceCounter;
-        *referenceCounter += 1;
-        PrintCount();
+        referenceCounter->IncreaseSharedCounter();
     }
     SharedPointer& operator =(const SharedPointer& other)
     {
@@ -25,9 +23,8 @@ public:
         {
             pointer = other.pointer;
             referenceCounter = other.referenceCounter;
-            *referenceCounter += 1;
+            referenceCounter->IncreaseSharedCounter();
         }
-        PrintCount();
         return *this;
     }
 
@@ -37,7 +34,6 @@ public:
         referenceCounter = other.referenceCounter;
         other.pointer = nullptr;
         other.referenceCounter = nullptr;
-        PrintCount();
         return *this;
     }
 
@@ -47,20 +43,22 @@ public:
         referenceCounter = other.referenceCounter;
         other.pointer = nullptr;
         other.referenceCounter = nullptr;
-        PrintCount();
         return *this;
     }
 
     ~SharedPointer()
     {
-        int& references = *referenceCounter;
-        references--;
-        PrintCount();
-        if(references <= 0)
+        referenceCounter->DecreaseWeakCounter();
+        if(referenceCounter->GetWeakCounter() == 0)
         {
-            delete pointer;
             delete referenceCounter;
+            delete pointer; 
         }
+    }
+
+    size_t GetReferenceCount() const
+    {
+        return referenceCounter->GetSharedCounter();
     }
 
     T* operator ->()
@@ -68,11 +66,12 @@ public:
         return pointer;
     }
 
-    void PrintCount()
+    T* Get() const
     {
-        std::cout << "References: " << *referenceCounter << std::endl;
+        return pointer;
     }
+
 private:
-    int* referenceCounter;
+    RefCounter* referenceCounter;
     T* pointer;
 };
