@@ -2,7 +2,10 @@
 
 #include <iostream>
 #include <ostream>
-#include <winsock.h>
+#include <Winsock2.h>
+#include <ws2tcpip.h>
+
+#define DEFAULT_PORT "643610"
 
 Network::Network()
 {
@@ -21,28 +24,40 @@ Network::~Network()
 
 void Network::Server()
 {
-    unsigned long long serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    struct addrinfo *result = nullptr, *ptr = nullptr, hints;
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    int addressResult = getaddrinfo(nullptr, DEFAULT_PORT, &hints, &result);
+
+    if(addressResult != 0)
+    {
+        std::cerr << "Failed to fetch address info. Error code: " << addressResult << std::endl;
+        WSACleanup();
+        return;
+    }
+    
+    SOCKET serverSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 
     if(serverSocket == INVALID_SOCKET)
     {
         std::cerr << "Socket creation failed. Error code: " << WSAGetLastError() << std::endl;
+        freeaddrinfo(result);
         Cleanup(serverSocket);
         return;
     }
-
-    sockaddr_in server;
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons(27015);
-
-    if(bind(serverSocket, (struct sockaddr*) &server, sizeof(server)) == SOCKET_ERROR)
+    
+    if(bind(serverSocket, result->ai_addr, result->ai_addrlen) == SOCKET_ERROR)
     {
         std::cerr << "Socket bind failed. Error code:" << WSAGetLastError() << std::endl;
+        freeaddrinfo(result);
         Cleanup(serverSocket);
         return;
     }
 
-    if(listen(serverSocket, 1) == -1)
+    if(listen(serverSocket, 1) == SOCKET_ERROR)
     {
         std::cerr << "Listening on socket failed. Error code: " << WSAGetLastError() << std::endl;
         return;
@@ -50,37 +65,51 @@ void Network::Server()
 
     std::cout << "Listening on server..." << std::endl;
     
-    unsigned long long clientSocket = accept(serverSocket, nullptr, nullptr);
+    SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
     char buffer[1024];
 
-    while(true)
+    if(true)
     {
         memset(buffer, 0, sizeof(buffer));
         recv(clientSocket, buffer, sizeof(buffer), 0);
         std::cout << "Message from client: " << buffer << "\n";
-        if(strcmp(buffer, "exit\n") == 0)
-            break;
+        //if(strcmp(buffer, "exit\n") == 0)
+            //break;
     }
 
+    freeaddrinfo(result);
     Cleanup(serverSocket);
 }
 
 void Network::Client()
 {
-    unsigned long long clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if(clientSocket == INVALID_SOCKET)
+    struct addrinfo *result = nullptr, *ptr = nullptr, hints;
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    int addrInfoResult = getaddrinfo("127.0.0.1", DEFAULT_PORT, &hints, &result);
+
+    if(addrInfoResult != 0)
     {
-        std::cerr << "Error creating client socket. Error code: " << WSAGetLastError() << std::endl;
-        Cleanup(clientSocket);
+        std::cerr << "Failed to fetch address info. Error code: " << addrInfoResult << std::endl;
+        WSACleanup();
         return;
     }
 
-    sockaddr_in serverAddress;
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = INADDR_ANY;
-    serverAddress.sin_port = htons(27015);
+    ptr = result;
 
-    int connectionResult = connect(clientSocket, (struct sockaddr*) &serverAddress, sizeof(serverAddress));
+    SOCKET clientSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
+
+    if(clientSocket == INVALID_SOCKET)
+    {
+        std::cerr << "Creating client socket failed. Error code: " << WSAGetLastError() << std::endl;
+        WSACleanup();
+        return;
+    }
+
+    int connectionResult = connect(clientSocket, ptr->ai_addr, ptr->ai_addrlen);
     if(connectionResult == SOCKET_ERROR)
     {
         std::cerr << "Client connection failed. Error code: " << WSAGetLastError() << std::endl;
