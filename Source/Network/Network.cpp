@@ -68,13 +68,13 @@ void Network::Server()
     SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
     char buffer[1024];
 
-    if(true)
+    while(true)
     {
         memset(buffer, 0, sizeof(buffer));
         recv(clientSocket, buffer, sizeof(buffer), 0);
-        std::cout << "Message from client: " << buffer << "\n";
-        //if(strcmp(buffer, "exit\n") == 0)
-            //break;
+        std::cout << "Message from client: " << buffer << std::endl;
+        if(strcmp(buffer, "exit") == 0)
+            break;
     }
 
     freeaddrinfo(result);
@@ -121,9 +121,9 @@ void Network::Client()
     while(true)
     {
         std::cout << "Enter the message to send: ";
-        std::cin >> message;
+        std::cin.getline(message, 1024);
         send(clientSocket, message, sizeof(message), 0);
-        if(strcmp(message, "exit\n"))
+        if(strcmp(message, "exit\n") == 0)
             break;
         memset(message, 0, sizeof(message));
     }
