@@ -11,17 +11,17 @@ public:
     NetworkServer(const NetworkServer&) = delete;
     NetworkServer operator =(const NetworkServer&) = delete;
 
-    NetworkServer(NetworkServer&&) = default;
-    NetworkServer& operator =(NetworkServer&&) = default;
+    NetworkServer(NetworkServer&& other);
+    NetworkServer& operator =(NetworkServer&& other);
 
     void Listen();
-    bool IsValid() const;
+    bool IsOpen() const;
 
     ~NetworkServer();
 private:
-    // Use CreateServer to make a connection
+    // Use Create to start
     NetworkServer(std::string_view port);
     
-    bool isValid = false;
+    bool isOpen = false;
     SOCKET socket = INVALID_SOCKET;
 };

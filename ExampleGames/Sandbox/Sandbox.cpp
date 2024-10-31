@@ -1,15 +1,15 @@
 #include <iostream>
-#include <Network/NetworkPrototype.h>
 
+#include "Network/NetworkClient.h"
 #include "Network/NetworkServer.h"
 
 void Server();
+void Client();
 
 int main(int argc, char* argv[])
 {
-    NetworkPrototype network;
     if(argc > 1 && strcmp(argv[1], "-client") == 0)
-        network.Client();
+        Client();
     else
         Server();
 }
@@ -17,9 +17,21 @@ int main(int argc, char* argv[])
 void Server()
 {
     std::optional<NetworkServer> server = NetworkServer::Create("643610");
+    
     if(!server)
         return;
 
     server->Listen();
+    std::cout << "Finished!" << std::endl;
+}
+
+void Client()
+{
+    std::optional<NetworkClient> client = NetworkClient::Connect("127.0.0.1", "643610");
+
+    if(!client)
+        return;
+
+    client->Send();
     std::cout << "Finished!" << std::endl;
 }

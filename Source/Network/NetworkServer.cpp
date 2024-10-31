@@ -8,7 +8,7 @@ std::optional<NetworkServer> NetworkServer::Create(std::string_view port)
 {
     NetworkServer server(port);
 
-    if(!server.IsValid())
+    if(!server.IsOpen())
         return {};
 
     return std::move(server);
@@ -52,7 +52,7 @@ NetworkServer::NetworkServer(std::string_view port)
         return;
     }
 
-    isValid = true;
+    isOpen = true;
 
     //freeaddrinfo(result);
     
@@ -62,29 +62,73 @@ NetworkServer::NetworkServer(std::string_view port)
     // out of scope, close connection
 }
 
+NetworkServer::NetworkServer(NetworkServer&& other)
+{
+    isOpen = other.isOpen;
+    socket = other.socket;
+
+    other.isOpen = false;
+    other.socket = INVALID_SOCKET;
+}
+
+NetworkServer& NetworkServer::operator=(NetworkServer&& other)
+{
+    isOpen = other.isOpen;
+    socket = other.socket;
+
+    other.isOpen = false;
+    other.socket = INVALID_SOCKET;
+
+    return *this;
+}
+
 void NetworkServer::Listen()
 {
+    if(listen(socket, 2) == SOCKET_ERROR)
+    {
+        std::cerr << "Listening on socket failed. Error code: " << WSAGetLastError() << std::endl;
+        return;
+    }
+    
     SOCKET clientSocket = accept(socket, nullptr, nullptr);
+
+    if(clientSocket == INVALID_SOCKET)
+    {
+        std::cerr << "Client failed to connect. Error code: " << WSAGetLastError() << std::endl;
+        return;
+    }
+    
+    std::cout << "Connected!" << std::endl;
+    
     char buffer[1024];
     std::cout << "Listening..." << std::endl;
     
     while(true)
     {
         memset(buffer, 0, sizeof(buffer));
-        recv(clientSocket, buffer, sizeof(buffer), 0);
+        if(recv(clientSocket, buffer, sizeof(buffer), 0) == SOCKET_ERROR)
+        {
+            std::cerr << "Error when receiving data. Error code: " << WSAGetLastError() << std::endl;
+            break;
+        }
+
+        std::cout << "Received: " << buffer << std::endl;
+        
         if(strcmp(buffer, "exit") == 0)
             break;
     }
 }
 
-bool NetworkServer::IsValid() const
+bool NetworkServer::IsOpen() const
 {
-    return isValid;
+    return isOpen;
 }
 
 NetworkServer::~NetworkServer()
 {
-    if(socket != INVALID_SOCKET)
-        closesocket(socket);
+    if(socket == INVALID_SOCKET)
+        return;
+    
+    closesocket(socket);
     WSACleanup();
 }
