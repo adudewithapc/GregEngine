@@ -159,7 +159,8 @@
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\2D\Camera2D.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
-    <ClCompile Include="Source\Network\Network.cpp" />
+    <ClCompile Include="Source\Network\NetworkPrototype.cpp" />
+    <ClCompile Include="Source\Network\NetworkServer.cpp" />
     <ClCompile Include="Source\Rendering\Shader.cpp" />
     <ClCompile Include="Source\Rendering\TriangleRenderer.cpp" />
     <ClCompile Include="Source\Input\InputManager.cpp" />
@@ -194,7 +195,8 @@
     <ClInclude Include="Source\Math\Matrix\Mat4x4.h" />
     <ClInclude Include="Source\Math\Matrix\Matrix.h" />
     <ClInclude Include="Source\Math\Number.h" />
-    <ClInclude Include="Source\Network\Network.h" />
+    <ClInclude Include="Source\Network\NetworkPrototype.h" />
+    <ClInclude Include="Source\Network\NetworkServer.h" />
     <ClInclude Include="Source\Rendering\Shader.h" />
     <ClInclude Include="Source\Rendering\TriangleRenderer.h" />
     <ClInclude Include="Source\Input\InputManager.h" />

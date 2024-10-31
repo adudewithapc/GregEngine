@@ -1,10 +1,10 @@
 #pragma once
 
-class Network
+class NetworkPrototype
 {
 public:
-    Network();
-    ~Network();
+    NetworkPrototype();
+    ~NetworkPrototype();
     
     void Server();
     void Client();

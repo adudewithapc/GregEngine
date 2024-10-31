@@ -1,4 +1,4 @@
-#include "Network.h"
+#include "NetworkPrototype.h"
 
 #include <iostream>
 #include <ostream>
@@ -7,7 +7,7 @@
 
 #define DEFAULT_PORT "643610"
 
-Network::Network()
+NetworkPrototype::NetworkPrototype()
 {
     WORD wVersionRequested = MAKEWORD(2, 2);
     WSADATA wsaData;
@@ -17,12 +17,12 @@ Network::Network()
     }
 }
 
-Network::~Network()
+NetworkPrototype::~NetworkPrototype()
 {
     WSACleanup();
 }
 
-void Network::Server()
+void NetworkPrototype::Server()
 {
     struct addrinfo *result = nullptr, *ptr = nullptr, hints;
     ZeroMemory(&hints, sizeof(hints));
@@ -81,7 +81,7 @@ void Network::Server()
     Cleanup(serverSocket);
 }
 
-void Network::Client()
+void NetworkPrototype::Client()
 {
     struct addrinfo *result = nullptr, *ptr = nullptr, hints;
     ZeroMemory(&hints, sizeof(hints));
@@ -130,7 +130,7 @@ void Network::Client()
     closesocket(clientSocket);
 }
 
-void Network::Cleanup(unsigned long long socket)
+void NetworkPrototype::Cleanup(unsigned long long socket)
 {
     closesocket(socket);
     WSACleanup();
