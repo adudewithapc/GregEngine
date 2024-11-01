@@ -62,7 +62,7 @@ NetworkServer::NetworkServer(std::string_view port)
     // out of scope, close connection
 }
 
-NetworkServer::NetworkServer(NetworkServer&& other)
+NetworkServer::NetworkServer(NetworkServer&& other) noexcept
 {
     isOpen = other.isOpen;
     socket = other.socket;
@@ -71,7 +71,7 @@ NetworkServer::NetworkServer(NetworkServer&& other)
     other.socket = INVALID_SOCKET;
 }
 
-NetworkServer& NetworkServer::operator=(NetworkServer&& other)
+NetworkServer& NetworkServer::operator=(NetworkServer&& other) noexcept
 {
     isOpen = other.isOpen;
     socket = other.socket;
@@ -80,56 +80,6 @@ NetworkServer& NetworkServer::operator=(NetworkServer&& other)
     other.socket = INVALID_SOCKET;
 
     return *this;
-}
-
-void NetworkServer::ListenForStuff()
-{
-    std::cout << "Waiting for client 1..." << std::endl;
-    SOCKET senderSocket = WaitForConnection();
-    if(senderSocket == INVALID_SOCKET)
-    {
-        std::cerr << "Client 1 failed to connect. Error code: " << WSAGetLastError() << std::endl;
-        return;
-    }
-    
-    std::cout << "Client 1 connected!" << std::endl;
-
-    std::cout << "Waiting for client 2..." << std::endl;
-    SOCKET receiverSocket = WaitForConnection();
-    if(receiverSocket == INVALID_SOCKET)
-    {
-        std::cerr << "Client 2 failed to connect. Error code: " << WSAGetLastError() << std::endl;
-        return;
-    }
-
-    std::cout << "Client 2 connected!" << std::endl;
-
-    if(!Send(senderSocket, "sender", 1024) || !Send(receiverSocket, "receiver", 1024))
-    {
-        std::cerr << "Could not send stuff :(" << std::endl;
-        return;
-    }
-    
-    std::cout << "Listening..." << std::endl;
-    while(true)
-    {
-        char buffer[1024];
-        memset(buffer, 0, sizeof(buffer));
-        if(!Receive(senderSocket, buffer, 1024))
-        {
-            break;
-        }
-
-        if(!Send(receiverSocket, buffer, 1024))
-        {
-            break;
-        }
-
-        std::cout << "Received and sent: " << buffer << std::endl;
-        
-        if(strcmp(buffer, "exit") == 0)
-            break;
-    }
 }
 
 bool NetworkServer::IsOpen() const

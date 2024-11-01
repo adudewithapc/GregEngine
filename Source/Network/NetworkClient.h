@@ -15,10 +15,7 @@ public:
     NetworkClient(NetworkClient&& other) noexcept;
     NetworkClient& operator=(NetworkClient&& other) noexcept;
 
-    //Temp functions
-    void SendStuff();
-    void ReceiveStuff();
-
+    bool Send(const char* data, int size);
     bool Receive(char* data, int size);
     
     bool IsConnected() const;

@@ -111,6 +111,23 @@ void NetworkClient::ReceiveStuff()
     }
 }
 
+bool NetworkClient::Send(const char* data, int size)
+{
+    if(!isConnected)
+    {
+        std::cerr << "Tried to send data when the client is not connected!" << std::endl;
+        return false;
+    }
+
+    if(send(socket, data, size, 0) == SOCKET_ERROR)
+    {
+        std::cerr << "Failed to send data. Error code: " << WSAGetLastError() << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 bool NetworkClient::Receive(char* data, int size)
 {
     if(!isConnected)
