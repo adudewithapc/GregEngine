@@ -86,7 +86,7 @@ void NetworkClient::SendStuff()
         std::cin.getline(message, 1024);
         send(socket, message, sizeof(message), 0);
 
-        if(strcmp(message, "exit\n") == 0)
+        if(strcmp(message, "exit") == 0)
             break;
 
         memset(message, 0, sizeof(message));

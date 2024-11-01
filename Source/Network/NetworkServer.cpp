@@ -115,15 +115,13 @@ void NetworkServer::ListenForStuff()
     {
         char buffer[1024];
         memset(buffer, 0, sizeof(buffer));
-        if(recv(senderSocket, buffer, sizeof(buffer), 0) == SOCKET_ERROR)
+        if(!Receive(senderSocket, buffer, 1024))
         {
-            std::cerr << "Error when receiving data. Error code: " << WSAGetLastError() << std::endl;
             break;
         }
 
         if(!Send(receiverSocket, buffer, 1024))
         {
-            std::cerr << "Error when sending data. Error code: " << WSAGetLastError() << std::endl;
             break;
         }
 
@@ -150,6 +148,23 @@ bool NetworkServer::Send(SOCKET receiver, const char* data, int size)
     if(send(receiver, data, size, 0) == SOCKET_ERROR)
     {
         std::cerr << "Failed to send data. Error code: " << WSAGetLastError() << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool NetworkServer::Receive(SOCKET sender, char* data, int size)
+{
+    if(!isOpen)
+    {
+        std::cerr << "Tried tor receive data when the server is not open!" << std::endl;
+        return false;
+    }
+
+    if(recv(sender, data, size, 0) == SOCKET_ERROR)
+    {
+        std::cerr << "Failed to receive data. Error code: " << WSAGetLastError() << std::endl;
         return false;
     }
 

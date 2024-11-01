@@ -17,10 +17,11 @@ public:
     //Temp function
     void ListenForStuff();
     
-    bool IsOpen() const;
-
     bool Send(SOCKET receiver, const char* data, int size);
+    bool Receive(SOCKET sender, char* data, int size);
 
+    bool IsOpen() const;
+    
     ~NetworkServer();
 private:
     // Use Create to start
