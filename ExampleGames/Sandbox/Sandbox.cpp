@@ -21,7 +21,7 @@ void Server()
     if(!server)
         return;
 
-    server->Listen();
+    server->ListenForStuff();
     std::cout << "Finished!" << std::endl;
 }
 
@@ -32,6 +32,16 @@ void Client()
     if(!client)
         return;
 
-    client->Send();
+    char* data = new char[1024];
+    if(!client->Receive(data, 1024))
+        return;
+    
+    if(strcmp("sender", data) == 0)
+        client->SendStuff();
+    else if(strcmp("receiver", data) == 0)
+        client->ReceiveStuff();
+    else
+        std::cerr << "Received neither \"sender\" nor \"receiver\". Instead received " << data << std::endl;
+    
     std::cout << "Finished!" << std::endl;
 }

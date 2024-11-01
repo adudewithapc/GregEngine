@@ -77,7 +77,7 @@ NetworkClient& NetworkClient::operator=(NetworkClient&& other) noexcept
     return *this;
 }
 
-void NetworkClient::Send()
+void NetworkClient::SendStuff()
 {
     char message[1024];
     while(true)
@@ -91,6 +91,41 @@ void NetworkClient::Send()
 
         memset(message, 0, sizeof(message));
     }
+}
+
+void NetworkClient::ReceiveStuff()
+{
+    while(true)
+    {
+        char data[1024];
+        if(!Receive(data, 1024))
+        {
+            std::cerr << "Couldn't receive data :( Error code: " << WSAGetLastError() << std::endl; 
+            return;
+        }
+
+        std::cout << "Person 1: " << data << std::endl;
+
+        if(strcmp(data, "exit") == 0)
+            break;
+    }
+}
+
+bool NetworkClient::Receive(char* data, int size)
+{
+    if(!isConnected)
+    {
+        std::cerr << "Cannot receive data when the client is not connected!" << std::endl;
+        return false;
+    }
+
+    if(recv(socket, data, size, 0) == SOCKET_ERROR)
+    {
+        std::cerr << "Receiving data failed. Error code: " << WSAGetLastError() << std::endl;
+        return false;
+    }
+
+    return true;
 }
 
 bool NetworkClient::IsConnected() const

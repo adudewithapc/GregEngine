@@ -82,37 +82,52 @@ NetworkServer& NetworkServer::operator=(NetworkServer&& other)
     return *this;
 }
 
-void NetworkServer::Listen()
+void NetworkServer::ListenForStuff()
 {
-    if(listen(socket, 2) == SOCKET_ERROR)
+    std::cout << "Waiting for client 1..." << std::endl;
+    SOCKET senderSocket = WaitForConnection();
+    if(senderSocket == INVALID_SOCKET)
     {
-        std::cerr << "Listening on socket failed. Error code: " << WSAGetLastError() << std::endl;
+        std::cerr << "Client 1 failed to connect. Error code: " << WSAGetLastError() << std::endl;
         return;
     }
     
-    SOCKET clientSocket = accept(socket, nullptr, nullptr);
+    std::cout << "Client 1 connected!" << std::endl;
 
-    if(clientSocket == INVALID_SOCKET)
+    std::cout << "Waiting for client 2..." << std::endl;
+    SOCKET receiverSocket = WaitForConnection();
+    if(receiverSocket == INVALID_SOCKET)
     {
-        std::cerr << "Client failed to connect. Error code: " << WSAGetLastError() << std::endl;
+        std::cerr << "Client 2 failed to connect. Error code: " << WSAGetLastError() << std::endl;
+        return;
+    }
+
+    std::cout << "Client 2 connected!" << std::endl;
+
+    if(!Send(senderSocket, "sender", 1024) || !Send(receiverSocket, "receiver", 1024))
+    {
+        std::cerr << "Could not send stuff :(" << std::endl;
         return;
     }
     
-    std::cout << "Connected!" << std::endl;
-    
-    char buffer[1024];
     std::cout << "Listening..." << std::endl;
-    
     while(true)
     {
+        char buffer[1024];
         memset(buffer, 0, sizeof(buffer));
-        if(recv(clientSocket, buffer, sizeof(buffer), 0) == SOCKET_ERROR)
+        if(recv(senderSocket, buffer, sizeof(buffer), 0) == SOCKET_ERROR)
         {
             std::cerr << "Error when receiving data. Error code: " << WSAGetLastError() << std::endl;
             break;
         }
 
-        std::cout << "Received: " << buffer << std::endl;
+        if(!Send(receiverSocket, buffer, 1024))
+        {
+            std::cerr << "Error when sending data. Error code: " << WSAGetLastError() << std::endl;
+            break;
+        }
+
+        std::cout << "Received and sent: " << buffer << std::endl;
         
         if(strcmp(buffer, "exit") == 0)
             break;
@@ -122,6 +137,34 @@ void NetworkServer::Listen()
 bool NetworkServer::IsOpen() const
 {
     return isOpen;
+}
+
+bool NetworkServer::Send(SOCKET receiver, const char* data, int size)
+{
+    if(!isOpen)
+    {
+        std::cerr << "Tried to send data when the server is not open!" << std::endl;
+        return false;
+    }
+    
+    if(send(receiver, data, size, 0) == SOCKET_ERROR)
+    {
+        std::cerr << "Failed to send data. Error code: " << WSAGetLastError() << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+SOCKET NetworkServer::WaitForConnection()
+{
+    if(listen(socket, 1) == SOCKET_ERROR)
+    {
+        std::cerr << "Listening on socket failed. Error code: " << WSAGetLastError() << std::endl;
+        return INVALID_SOCKET;
+    }
+    
+    return accept(socket, nullptr, nullptr);
 }
 
 NetworkServer::~NetworkServer()

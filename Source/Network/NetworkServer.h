@@ -14,13 +14,19 @@ public:
     NetworkServer(NetworkServer&& other);
     NetworkServer& operator =(NetworkServer&& other);
 
-    void Listen();
+    //Temp function
+    void ListenForStuff();
+    
     bool IsOpen() const;
+
+    bool Send(SOCKET receiver, const char* data, int size);
 
     ~NetworkServer();
 private:
     // Use Create to start
     NetworkServer(std::string_view port);
+
+    SOCKET WaitForConnection();
     
     bool isOpen = false;
     SOCKET socket = INVALID_SOCKET;
