@@ -1,7 +1,10 @@
 #pragma once
 #include <optional>
 #include <string_view>
+#include <vector>
 #include <Winsock2.h>
+
+class ClientConnection;
 
 // https://learn.microsoft.com/en-us/windows/win32/winsock/getting-started-with-winsock
 class NetworkServer
@@ -15,18 +18,21 @@ public:
     NetworkServer(NetworkServer&& other) noexcept;
     NetworkServer& operator =(NetworkServer&& other) noexcept;
     
-    bool Send(SOCKET receiver, const char* data, int size);
-    bool Receive(SOCKET sender, char* data, int size);
+    bool Send(SOCKET receiverConnection, const char* data, int size);
+    bool Receive(SOCKET senderConnection, char* data, int size);
 
-    SOCKET WaitForConnection();
+    int WaitForConnection();
 
     bool IsOpen() const;
     
     ~NetworkServer();
+
+    friend class ClientConnection;
 private:
     // Use Create to start
     NetworkServer(std::string_view port);
-    
+
+    std::vector<ClientConnection> connections;
     bool isOpen = false;
     SOCKET socket = INVALID_SOCKET;
 };

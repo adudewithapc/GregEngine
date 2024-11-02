@@ -159,6 +159,7 @@
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\2D\Camera2D.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Network\ClientConnection.cpp" />
     <ClCompile Include="Source\Network\NetworkClient.cpp" />
     <ClCompile Include="Source\Network\NetworkServer.cpp" />
     <ClCompile Include="Source\Rendering\Shader.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Source\Math\Matrix\Mat4x4.h" />
     <ClInclude Include="Source\Math\Matrix\Matrix.h" />
     <ClInclude Include="Source\Math\Number.h" />
+    <ClInclude Include="Source\Network\ClientConnection.h" />
     <ClInclude Include="Source\Network\NetworkClient.h" />
     <ClInclude Include="Source\Network\NetworkServer.h" />
     <ClInclude Include="Source\Rendering\Shader.h" />

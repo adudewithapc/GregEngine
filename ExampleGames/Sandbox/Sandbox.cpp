@@ -54,8 +54,8 @@ void Client()
 void DistributeStuff(NetworkServer& server)
 {
     std::cout << "Waiting for client 1..." << std::endl;
-    SOCKET senderSocket = server.WaitForConnection();
-    if(senderSocket == INVALID_SOCKET)
+    int senderConnection = server.WaitForConnection();
+    if(senderConnection == -1)
     {
         std::cerr << "Client 1 failed to connect. Error code: " << WSAGetLastError() << std::endl;
         return;
@@ -63,8 +63,8 @@ void DistributeStuff(NetworkServer& server)
 
     std::cout << "Client 1 connected!\nWaiting for client 2..." << std::endl;
 
-    SOCKET receiverSocket = server.WaitForConnection();
-    if(receiverSocket == INVALID_SOCKET)
+    int receiverConnection = server.WaitForConnection();
+    if(receiverConnection == -1)
     {
         std::cerr << "Client 2 failed to connect. Error code: " << WSAGetLastError() << std::endl;
         return;
@@ -72,7 +72,7 @@ void DistributeStuff(NetworkServer& server)
 
     std::cout << "Client 2 connected!" << std::endl;
 
-    if(!server.Send(senderSocket, "sender", 1024) || !server.Send(receiverSocket, "receiver", 1024))
+    if(!server.Send(senderConnection, "sender", 1024) || !server.Send(receiverConnection, "receiver", 1024))
     {
         std::cerr << "Could not send sender or receiver flags." << std::endl;
         return;
@@ -83,12 +83,12 @@ void DistributeStuff(NetworkServer& server)
     {
         char buffer[1024];
         memset(buffer, 0, sizeof(buffer));
-        if(!server.Receive(senderSocket, buffer, 1024))
+        if(!server.Receive(senderConnection, buffer, 1024))
         {
             break;
         }
 
-        if(!server.Send(receiverSocket, buffer, 1024))
+        if(!server.Send(receiverConnection, buffer, 1024))
         {
             break;
         }

@@ -11,7 +11,7 @@ std::optional<NetworkClient> NetworkClient::Connect(std::string_view serverIP, s
     if(!client.IsConnected())
         return {};
 
-    return std::move(client);
+    return client;
 }
 
 NetworkClient::NetworkClient(std::string_view serverIP, std::string_view port)
@@ -75,40 +75,6 @@ NetworkClient& NetworkClient::operator=(NetworkClient&& other) noexcept
     other.socket = INVALID_SOCKET;
 
     return *this;
-}
-
-void NetworkClient::SendStuff()
-{
-    char message[1024];
-    while(true)
-    {
-        std::cout << "Enter the message to send: ";
-        std::cin.getline(message, 1024);
-        send(socket, message, sizeof(message), 0);
-
-        if(strcmp(message, "exit") == 0)
-            break;
-
-        memset(message, 0, sizeof(message));
-    }
-}
-
-void NetworkClient::ReceiveStuff()
-{
-    while(true)
-    {
-        char data[1024];
-        if(!Receive(data, 1024))
-        {
-            std::cerr << "Couldn't receive data :( Error code: " << WSAGetLastError() << std::endl; 
-            return;
-        }
-
-        std::cout << "Person 1: " << data << std::endl;
-
-        if(strcmp(data, "exit") == 0)
-            break;
-    }
 }
 
 bool NetworkClient::Send(const char* data, int size)
