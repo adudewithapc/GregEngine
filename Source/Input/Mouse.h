@@ -24,7 +24,7 @@ public:
 	bool operator =(const Mouse&) = delete;
 	//~Mouse();
 
-	void SetPosition(const WPARAM& pressedButtons, const int x, const int y);
+	void SetPosition(const int x, const int y);
 	void MoveRawPosition(const int xMovement, const int yMovement);
 
 	static Vec2i& GetPosition();

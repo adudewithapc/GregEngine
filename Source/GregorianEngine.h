@@ -1,6 +1,5 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
 #include "Level.h"
 #include "Window.h"
 #include "2D/Camera2D.h"
@@ -8,8 +7,6 @@
 class GregorianEngine
 {
 public:
-	GregorianEngine();
-
 	GregorianEngine(const GregorianEngine&) = delete;
 	GregorianEngine& operator =(const GregorianEngine&) = delete;
 
@@ -27,6 +24,8 @@ public:
 	static GregorianEngine& Get();
 
 private:
+	GregorianEngine();
+	
 	bool running = false;
 	std::unique_ptr<Level> currentLevel;
 

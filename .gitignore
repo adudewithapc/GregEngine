@@ -395,4 +395,13 @@ FodyWeavers.xsd
 *.msp
 
 # JetBrains Rider
+.idea/
 *.sln.iml
+
+# Project specific
+Binaries/*
+*/Binaries/*
+*.exe*
+!Programs/ThirdParty/premake/Windows/premake5.exe
+*.sln
+*.vcxproj

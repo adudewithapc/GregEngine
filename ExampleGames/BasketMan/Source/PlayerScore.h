@@ -15,6 +15,6 @@ public:
 
 private:
 	std::vector<GameObject*> applesToDestroy;
-	int score;
+	int score = 0;
 };
 

@@ -1,5 +1,5 @@
 #include "Sprite.h"
-#include <glad/glad.h>
+#include <glad.h>
 #include "../../GameObject.h"
 #include "../../2D/Camera2D.h"
 #include "../../Window.h"

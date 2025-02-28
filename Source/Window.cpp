@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Window.h"
-#include <glad/glad.h>
+#include <glad.h>
+#include "Input/InputManager.h"
 #include "Math/Vector.h"
 
 static const wchar_t* CLASS_NAME = L"Greg Engine";
@@ -59,7 +60,7 @@ Window::Window() :
 	ShowWindow(windowHandle, SW_SHOW);
 	CaptureCursor(true);
 	SetCursorPos(MouseStartingX, MouseStartingY);
-	input->MoveWindowMouse(0, WindowWidth / 2, WindowHeight / 2);
+	input->MoveWindowMouse(WindowWidth / 2, WindowHeight / 2);
 
 	CreateGLContext();
 }
@@ -95,7 +96,7 @@ void Window::CaptureCursor(bool capture)
 
 bool Window::ProcessMessages()
 {
-	MSG message = {};
+	MSG message;
 
 	while(PeekMessage(&message, nullptr, 0u, 0u, PM_REMOVE))
 	{

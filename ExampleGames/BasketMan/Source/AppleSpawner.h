@@ -4,8 +4,7 @@ class AppleSpawner : public Component
 {
 public:
 	AppleSpawner(GameObject* owner, size_t width, float topOffset);
-
-
+	
 	virtual void Update() override;
 private:
 	void CreateApple();

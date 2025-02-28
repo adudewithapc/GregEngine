@@ -2,7 +2,7 @@
 #include "GregorianEngine.h"
 #include <chrono>
 #include "Window.h"
-#include <glad/glad.h>
+#include <glad.h>
 #include <iostream>
 #include "GregTime.h"
 #include "Input/Keyboard.h"
@@ -18,7 +18,6 @@ GregorianEngine::GregorianEngine()
 
 int GregorianEngine::Start(const std::string& windowTitle)
 {
-	using namespace std::chrono;
 	using FloatingSeconds = std::chrono::duration<float>;
 
 	window.SetTitle(windowTitle);

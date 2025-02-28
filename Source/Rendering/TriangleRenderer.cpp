@@ -1,5 +1,5 @@
 #include "TriangleRenderer.h"
-#include <glad/glad.h>
+#include <glad.h>
 #include "Shader.h"
 #include <stb_image.h>
 #include "../Input/Keyboard.h"

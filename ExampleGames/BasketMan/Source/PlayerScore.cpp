@@ -10,7 +10,7 @@ void PlayerScore::CollisionEntered(GameObject* other)
 {
 	applesToDestroy.push_back(other);
 	system("cls");
-	std::cout << ++score << "\n";
+	std::cout << ++score << std::flush;
 }
 
 void PlayerScore::Update()

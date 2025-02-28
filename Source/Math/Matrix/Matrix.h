@@ -5,12 +5,6 @@
 #include <iostream>
 #include <format>
 
-#define ScalarOperator(op) for(int i = 0; i < SIZE; i++)\
-{\
-		elements[i] op= scalar;\
-}\
-return *this;
-
 template<typename T, size_t C, size_t R> requires number<T>
 struct Matrix
 {
@@ -122,7 +116,11 @@ public:
 	//Matrix + Scalar
 	Matrix<T, C, R>& operator +(const T scalar)
 	{
-		ScalarOperator(+)
+		for(int i = 0; i < SIZE; i++)
+		{
+			elements[i] += scalar;
+		}
+		return *this;
 	}
 	Matrix<T, C, R>& operator +=(const T scalar)
 	{
@@ -132,7 +130,11 @@ public:
 	//Matrix - Scalar
 	Matrix<T, C, R>& operator -(const T scalar)
 	{
-		ScalarOperator(-)
+		for(int i = 0; i < SIZE; i++)
+		{
+			elements[i] -= scalar;
+		}
+		return *this;
 	}
 	Matrix<T, C, R>& operator -=(const T scalar)
 	{
@@ -142,7 +144,11 @@ public:
 	//Matrix * Scalar
 	Matrix<T, C, R>& operator *(const T scalar)
 	{
-		ScalarOperator(*)
+		for(int i = 0; i < SIZE; i++)
+		{
+			elements[i] *= scalar;
+		}
+		return *this;
 	}
 	Matrix<T, C, R>& operator *=(const T scalar)
 	{
@@ -317,5 +323,3 @@ std::ostream& operator <<(std::ostream& stream, Matrix<T, C, R> mat)
 
 	return stream;
 }
-
-#undef ScalarOperator

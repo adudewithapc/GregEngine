@@ -9,7 +9,7 @@ Mouse::Mouse()
 	RawPosition = Vec2i(screenPos.x, screenPos.y);
 }
 
-void Mouse::SetPosition(const WPARAM& pressedButtons, int x, int y)
+void Mouse::SetPosition(int x, int y)
 {
 	LastPosition = Position;
 	Position = Vec2i(0, 0) + Vec2i(x, y);
