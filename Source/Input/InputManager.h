@@ -2,9 +2,8 @@
 
 #include <memory>
 #include <Windows.h>
-
-class Keyboard;
-class Mouse;
+#include "Keyboard.h"
+#include "Mouse.h"
 
 class InputManager
 {

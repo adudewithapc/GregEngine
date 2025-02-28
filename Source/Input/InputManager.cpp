@@ -67,7 +67,7 @@ void InputManager::ReceiveKeyboardInput(const RAWKEYBOARD& keyboardInput)
 //Coordinates are local to canvas
 void InputManager::MoveWindowMouse(const int x, const int y)
 {
-	mouse->SetPosition(virtualKeys, x, y);
+	mouse->SetPosition(x, y);
 }
 
 void InputManager::MoveScreenMouse(const int xMovement, const int yMovement)
