@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <Windows.h>
 
 class Keyboard;
@@ -9,17 +10,17 @@ class InputManager
 {
 public:
 	InputManager();
+	
 	InputManager(const InputManager&) = delete;
 	bool operator =(const InputManager&) = delete;
-	~InputManager();
 	
 	bool RegisterInputDevices();
 
 	void ReceiveKeyboardInput(const RAWKEYBOARD& keyboardInput);
-	void MoveWindowMouse(const WPARAM& virtualKeys, const int x, const int y);
+	void MoveWindowMouse(const int x, const int y);
 	void MoveScreenMouse(const int xMovement, const int yMovement);
 
 private:
-	Keyboard* keyboard;
-	Mouse* mouse;
+	std::unique_ptr<Keyboard> keyboard;
+	std::unique_ptr<Mouse> mouse;
 };

@@ -249,7 +249,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 		int x = LOWORD(lParam);
 		int y = HIWORD(lParam);
 
-		input->MoveWindowMouse(wParam, x, y);
+		input->MoveWindowMouse(x, y);
 		break;
 	}
 	case WM_SETFOCUS:

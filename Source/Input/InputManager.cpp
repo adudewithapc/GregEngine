@@ -7,13 +7,8 @@
 
 InputManager::InputManager()
 {
-	keyboard = new Keyboard();
-	mouse = new Mouse();
-}
-
-InputManager::~InputManager()
-{
-	delete keyboard;
+	keyboard = std::make_unique<Keyboard>();
+	mouse = std::make_unique<Mouse>();
 }
 
 //Taken from https://learn.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
@@ -70,7 +65,7 @@ void InputManager::ReceiveKeyboardInput(const RAWKEYBOARD& keyboardInput)
 
 //https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
 //Coordinates are local to canvas
-void InputManager::MoveWindowMouse(const WPARAM& virtualKeys, const int x, const int y)
+void InputManager::MoveWindowMouse(const int x, const int y)
 {
 	mouse->SetPosition(virtualKeys, x, y);
 }
