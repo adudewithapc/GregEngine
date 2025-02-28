@@ -37,7 +37,7 @@ void Physics2D::Tick()
 					collider1->StartCollision(collider2);
 					collider2->StartCollision(collider1);
 
-					if(!collider1->GetOwner()->IsDestroyed() && !collider1->GetOwner()->IsDestroyed())
+					if(!collider1->GetOwner()->IsDestroyed() && !collider2->GetOwner()->IsDestroyed())
 						currentCollisions.push_back(CollisionPair(collider1, collider2));
 				}
 			}

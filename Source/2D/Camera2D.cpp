@@ -1,4 +1,5 @@
 #include "Camera2D.h"
+#include <glad.h>
 
 Mat4x4f Camera2D::GetViewMatrix() const
 {

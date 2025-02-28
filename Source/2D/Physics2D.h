@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <memory>
 #include "../Component/2D/BoxCollider2D.h"
 
 struct CollisionPair
@@ -16,9 +15,12 @@ class Physics2D
 {
 public:
 	Physics2D() = delete;
+	
 	Physics2D(const Physics2D&) = delete;
-	Physics2D(Physics2D&&) = delete;
 	Physics2D& operator =(const Physics2D&) = delete;
+	
+	Physics2D(Physics2D&&) = delete;
+	Physics2D& operator =(Physics2D&&) = delete;
 
 	static void AddCollider(BoxCollider2D* collider);
 	static void RemoveCollider(BoxCollider2D* collider);

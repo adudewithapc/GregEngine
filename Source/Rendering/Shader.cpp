@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <glad.h>
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {

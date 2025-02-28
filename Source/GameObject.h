@@ -24,7 +24,6 @@ public:
 
 	void SetIndex(int newIndex);
 
-	//Implemented in header due to templated arguments
 	template<typename T, typename... Args>
 	T* AddComponent(Args&&... args)
 	{
@@ -40,5 +39,5 @@ public:
 private:
 	std::vector<std::unique_ptr<Component>> components;
 	int index;
-	bool isDestroyed = false;
+	bool isDestroyed;
 };

@@ -1,6 +1,6 @@
 #include "Mouse.h"
 #include "../Math/Vector.h"
-#include <iostream>
+#include <Windows.h>
 
 Mouse::Mouse()
 {
@@ -34,14 +34,3 @@ Vec2i Mouse::GetRawPosition()
 {
 	return RawPosition;
 }
-
-/*bool Mouse::IsButtonDown(const MouseButton& button)
-{
-	return pressedButtons[button];
-}
-
-bool Mouse::IsButtonUp(const MouseButton& button)
-{
-	return !pressedButtons;
-}
-*/

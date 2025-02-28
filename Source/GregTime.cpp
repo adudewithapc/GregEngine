@@ -15,5 +15,3 @@ void Time::Tick(float inDeltaTime)
     deltaTime = inDeltaTime;
     timeSinceStartup += deltaTime;
 }
-
-float Time::deltaTime = 0;

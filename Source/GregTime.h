@@ -9,6 +9,6 @@ public:
 	void Tick(float deltaTime);
 
 private:
-	static float deltaTime;
+	inline static float deltaTime = 0;
 	inline static float timeSinceStartup = 0;
 };
