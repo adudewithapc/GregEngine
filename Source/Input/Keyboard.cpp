@@ -34,8 +34,7 @@ Keyboard::~Keyboard()
 	*/
 void Keyboard::PressKey(const RAWKEYBOARD& keyboard)
 {
-	//According to tests, casting a USHORT to int is safe
-	int keyID = (int)keyboard.VKey;
+	int keyID = keyboard.VKey;
 
 	//Remove if we are not skipping registering all keys, which we should do
 	if(!KeyIsRegistered(keyID))
@@ -43,7 +42,7 @@ void Keyboard::PressKey(const RAWKEYBOARD& keyboard)
 		return;
 	}
 
-	Key key = (Key)keyID;
+	Key key = static_cast<Key>(keyID);
 
 	//Reverse expression, see function comment
 	pressedKeys[key] = !keyboard.Flags;
@@ -60,7 +59,7 @@ bool Keyboard::IsKeyUp(const Key& key)
 }
 
 
-bool Keyboard::KeyIsRegistered(const int keyID)
+bool Keyboard::KeyIsRegistered(const int keyID) const
 {
 	return std::find(keys.begin(), keys.end(), keyID) != keys.end();
 }

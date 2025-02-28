@@ -19,8 +19,10 @@ class Keyboard
 {
 public:
 	Keyboard();
+	
 	Keyboard(const Keyboard&) = delete;
 	bool operator =(const Keyboard&) = delete;
+	
 	~Keyboard();
 
 	void PressKey(const RAWKEYBOARD& keyboard);
@@ -30,8 +32,8 @@ public:
 
 private:
 	//I'm too lazy to handle all possible keys
-	//Definitely remove this if laziness dissappears
-	bool KeyIsRegistered(const int keyID);
+	//Definitely remove this if laziness disappears
+	bool KeyIsRegistered(const int keyID) const;
 
 	inline static std::map<Key, bool> pressedKeys;
 	inline static std::vector<Key> keys = { Esc, Space, LeftControl, A, D, S, W };
