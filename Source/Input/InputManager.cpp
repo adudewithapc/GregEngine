@@ -1,9 +1,15 @@
 #include "InputManager.h"
+
+#include <format>
 #include <iostream>
 #include <hidusage.h>
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "../Window.h"
+#include "../Debugging/Log.h"
+
+//Naming conflict with windows
+#undef ERROR
 
 InputManager::InputManager()
 {
@@ -17,7 +23,7 @@ bool InputManager::RegisterInputDevices()
 	static bool devicesRegistered = false;
 	if(devicesRegistered)
 	{
-		std::cerr << "Tried to register input devices when they've already been registered" << std::endl;
+		greg::log::Error("Input", "Tried to register input devices when they've already been registered");
 		return false;
 	}
 
@@ -49,7 +55,7 @@ bool InputManager::RegisterInputDevices()
 
 	if(!RegisterRawInputDevices(inputDevices, 4, sizeof(inputDevices[0])))
 	{
-		std::cerr << "Error " << GetLastError() << " while registering input devices." << std::endl;
+		greg::log::Fatal("InputManager", std::format("Error {} while registering input devices.", GetLastError()));
 		return false;
 	}
 

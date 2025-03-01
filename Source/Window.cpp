@@ -1,6 +1,10 @@
 #include <iostream>
 #include "Window.h"
+
+#include <format>
 #include <glad.h>
+
+#include "Debugging/Log.h"
 #include "Input/InputManager.h"
 #include "Math/Vector.h"
 
@@ -121,7 +125,7 @@ void Window::SetTitle(const std::string& windowTitle)
 {
 	if(!SetWindowTextA(windowHandle, windowTitle.c_str()))
 	{
-		std::cerr << "Error while trying to set window title to \"" << windowTitle << "\". Error: " << GetLastError() << std::endl;
+		greg::log::Fatal("Window", std::format("Error while trying to set window title to \"{}\". Error: {}", windowTitle, GetLastError()));
 	}
 }
 
@@ -220,7 +224,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 
 		if(GetRawInputData((HRAWINPUT)lParam, RID_INPUT, rawData, &dataSize, sizeof(RAWINPUTHEADER)) != dataSize)
 		{
-			std::cerr << "GetRawInputData returns incorrect size!" << std::endl;
+			greg::log::Error("Window", "GetRawInputData returns incorrect size!");
 		}
 
 		RAWINPUT* rawInput = (RAWINPUT*)rawData;

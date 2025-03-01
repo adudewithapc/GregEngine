@@ -5,6 +5,8 @@
 #include <iostream>
 #include <format>
 
+#include "../../Debugging/Log.h"
+
 template<typename T, size_t C, size_t R> requires number<T>
 struct Matrix
 {
@@ -30,7 +32,7 @@ public:
 	{
 		if(list.size() != SIZE)
 		{
-			std::cerr << std::format("Initializer list is wrong size. It is {} when it should be {}", list.size(), SIZE) << std::endl;
+			greg::log::Log("Matrix", std::format("Initializer list is wrong size. It is {} when it should be {}", list.size(), SIZE), greg::log::ERROR);
 			throw std::out_of_range("initializer_list_size");
 		}
 

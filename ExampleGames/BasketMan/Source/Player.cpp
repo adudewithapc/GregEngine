@@ -1,5 +1,4 @@
 #include "Player.h"
-#include <iostream>
 #include <GameObject.h>
 #include <Input/Keyboard.h>
 #include <GregTime.h>

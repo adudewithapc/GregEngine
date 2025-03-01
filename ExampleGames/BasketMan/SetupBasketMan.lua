@@ -23,6 +23,11 @@ project "BasketMan"
 	filter "system:windows"
 		systemversion "latest"
 		buildoptions {"/utf-8"}
+		postbuildcommands
+		{
+			'{COPY} "Shader/*" "%{cfg.targetdir}/Shader"',
+			'{COPY} "Textures/*" "%{cfg.targetdir}/Textures"'
+		}
 	
 	filter "configurations:Debug"
 		defines {"_DEBUG", "_CONSOLE"}

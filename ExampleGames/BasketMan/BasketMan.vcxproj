@@ -91,6 +91,10 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "Shader\*"\ (xcopy /Q /E /Y /I "Shader\*" "Binaries\Debug-windows\Shader" &gt; nul) ELSE (xcopy /Q /Y /I "Shader\*" "Binaries\Debug-windows\Shader" &gt; nul)
+IF EXIST "Textures\*"\ (xcopy /Q /E /Y /I "Textures\*" "Binaries\Debug-windows\Textures" &gt; nul) ELSE (xcopy /Q /Y /I "Textures\*" "Binaries\Debug-windows\Textures" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -115,6 +119,10 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "Shader\*"\ (xcopy /Q /E /Y /I "Shader\*" "Binaries\Release-windows\Shader" &gt; nul) ELSE (xcopy /Q /Y /I "Shader\*" "Binaries\Release-windows\Shader" &gt; nul)
+IF EXIST "Textures\*"\ (xcopy /Q /E /Y /I "Textures\*" "Binaries\Release-windows\Textures" &gt; nul) ELSE (xcopy /Q /Y /I "Textures\*" "Binaries\Release-windows\Textures" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Shipping|x64'">
     <ClCompile>
@@ -139,6 +147,10 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "Shader\*"\ (xcopy /Q /E /Y /I "Shader\*" "Binaries\Shipping-windows\Shader" &gt; nul) ELSE (xcopy /Q /Y /I "Shader\*" "Binaries\Shipping-windows\Shader" &gt; nul)
+IF EXIST "Textures\*"\ (xcopy /Q /E /Y /I "Textures\*" "Binaries\Shipping-windows\Textures" &gt; nul) ELSE (xcopy /Q /Y /I "Textures\*" "Binaries\Shipping-windows\Textures" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Source\Apple.h" />

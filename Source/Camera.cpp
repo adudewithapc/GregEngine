@@ -2,10 +2,8 @@
 #include <algorithm>
 #include "GregTime.h"
 #include "Input/Mouse.h"
-#include "Input/Mouse.h"
 #include "Math/Trigonometry.h"
 #include "Input/Keyboard.h"
-#include <glad.h>
 
 static constexpr bool USE_FPS_CAMERA = 0;
 
