@@ -1,11 +1,10 @@
 #include "InputManager.h"
 
 #include <format>
-#include <iostream>
 #include <hidusage.h>
 #include "Keyboard.h"
 #include "Mouse.h"
-#include "../Window.h"
+#include "../Rendering/Window.h"
 #include "../Debugging/Log.h"
 
 //Naming conflict with windows

@@ -2,7 +2,7 @@
 #include <glad.h>
 #include "../../GameObject.h"
 #include "../../2D/Camera2D.h"
-#include "../../Window.h"
+#include "../../Rendering/Window.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>

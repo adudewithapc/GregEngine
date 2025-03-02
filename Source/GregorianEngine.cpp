@@ -1,29 +1,19 @@
 
 #include "GregorianEngine.h"
 #include <chrono>
-#include "Window.h"
 #include <glad.h>
 #include "GregTime.h"
 #include "Debugging/Log.h"
 #include "Input/Keyboard.h"
-
-GregorianEngine::GregorianEngine()
-{
-	if (!gladLoadGL())
-	{
-		throw std::system_error(std::error_code(), "Failed to load OpenGL");
-	}
-}
+#include "Rendering/Window.h"
 
 int GregorianEngine::Start(const std::string& windowTitle)
 {
 	greg::log::SetLevel(greg::log::Level::INFO);
 	using FloatingSeconds = std::chrono::duration<float>;
 
-	window.SetTitle(windowTitle);
-	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
-
-	glEnable(GL_DEPTH_TEST);
+	window->SetTitle(windowTitle);
+	window->ResizeViewport(Window::WindowWidth, Window::WindowHeight);
 
 	Time time;
 	std::chrono::time_point previousTime = std::chrono::high_resolution_clock::now();
@@ -35,15 +25,14 @@ int GregorianEngine::Start(const std::string& windowTitle)
 		float deltaTime = std::chrono::duration_cast<FloatingSeconds>(currentTime - previousTime).count();
 		time.Tick(deltaTime);
 
-		glClearColor(0, 0, 0, 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		window->GetRenderer().Clear(Vec4f(0, 0, 0, 1));
 
 		currentLevel->Update();
 		currentLevel->Draw();
 
-		window.SwapBuffers();
+		window->GetRenderer().SwapBuffers();
 
-		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
+		if(!window->ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
 			running = false;
 
 		previousTime = currentTime;

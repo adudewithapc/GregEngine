@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Level.h"
-#include "Window.h"
+#include "Rendering/Window.h"
 #include "2D/Camera2D.h"
 
 class GregorianEngine
@@ -24,10 +24,10 @@ public:
 	static GregorianEngine& Get();
 
 private:
-	GregorianEngine();
+	GregorianEngine() = default;
 	
 	bool running = false;
 	std::unique_ptr<Level> currentLevel;
 
-	Window window;
+	std::unique_ptr<Window> window = std::make_unique<Window>();
 };

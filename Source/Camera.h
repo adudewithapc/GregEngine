@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Math/Vector.h"
-#include "Window.h"
+#include "Rendering/Window.h"
 #include "Math/Matrix/Mat4x4.h"
 
 //Only allow a single camera for now
