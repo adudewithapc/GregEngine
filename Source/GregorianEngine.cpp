@@ -1,7 +1,6 @@
 
 #include "GregorianEngine.h"
 #include <chrono>
-#include <glad.h>
 #include "GregTime.h"
 #include "Debugging/Log.h"
 #include "Input/Keyboard.h"
@@ -28,7 +27,7 @@ int GregorianEngine::Start(const std::string& windowTitle)
 		window->GetRenderer().Clear(Vec4f(0, 0, 0, 1));
 
 		currentLevel->Update();
-		currentLevel->Draw();
+		currentLevel->Draw(*window);
 
 		window->GetRenderer().SwapBuffers();
 
@@ -55,6 +54,11 @@ std::unique_ptr<Level>& GregorianEngine::MakeLevel()
 Level* GregorianEngine::GetCurrentLevel() const
 {
 	return currentLevel.get();
+}
+
+RenderTarget& GregorianEngine::GetRenderTarget() const
+{
+	return *window;
 }
 
 GregorianEngine& GregorianEngine::Get()

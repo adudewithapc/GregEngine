@@ -10,7 +10,7 @@ public:
 	virtual ~Level() = default;
 
 	void Update();
-	void Draw();
+	void Draw(RenderTarget& target);
 
 	GameObject* CreateObject();
 	void DestroyObject(int objectIndex);

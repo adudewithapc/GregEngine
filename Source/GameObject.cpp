@@ -13,11 +13,11 @@ void GameObject::Update()
 	}
 }
 
-void GameObject::Draw()
+void GameObject::Draw(RenderTarget& target)
 {
 	for (int i = components.size() - 1; i >= 0; i--)
 	{
-		components[i]->Draw();
+		components[i]->Draw(target);
 	}
 }
 

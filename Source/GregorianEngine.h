@@ -17,8 +17,9 @@ public:
 	void Shutdown();
 
 	std::unique_ptr<Level>& MakeLevel();
-
 	Level* GetCurrentLevel() const;
+
+	RenderTarget& GetRenderTarget() const;
 
 public:
 	static GregorianEngine& Get();

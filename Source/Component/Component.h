@@ -1,4 +1,5 @@
 #pragma once
+#include "../Rendering/RenderTarget.h"
 
 class GameObject;
 
@@ -10,7 +11,7 @@ public:
 	virtual ~Component() = default;
 
 	virtual void Update();
-	virtual void Draw();
+	virtual void Draw(RenderTarget& target);
 
 	virtual void CollisionEntered(GameObject* other);
 	virtual void CollisionExited(GameObject* other);

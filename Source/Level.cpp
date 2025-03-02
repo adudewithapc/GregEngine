@@ -17,11 +17,11 @@ void Level::Update()
 	}
 }
 
-void Level::Draw()
+void Level::Draw(RenderTarget& target)
 {
 	for(int i = gameObjects.size() - 1; i >= 0; i--)
 	{
-		gameObjects[i]->Draw();
+		gameObjects[i]->Draw(target);
 	}
 }
 

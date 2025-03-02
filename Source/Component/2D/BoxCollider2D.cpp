@@ -13,10 +13,6 @@ BoxCollider2D::~BoxCollider2D()
 	Physics2D::RemoveCollider(this);
 }
 
-void BoxCollider2D::Draw()
-{
-}
-
 void BoxCollider2D::StartCollision(BoxCollider2D* other)
 {
 	GetOwner()->CollisionEntered(other->GetOwner());

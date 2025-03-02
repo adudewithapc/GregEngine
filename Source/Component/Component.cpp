@@ -9,7 +9,7 @@ void Component::Update()
 {
 }
 
-void Component::Draw()
+void Component::Draw(RenderTarget& target)
 {
 }
 
