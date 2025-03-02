@@ -13,7 +13,7 @@ public:
     MP3AudioFile(MP3AudioFile&&) = default;
     MP3AudioFile& operator=(MP3AudioFile&&) = default;
 
-    ~MP3AudioFile();
+    virtual ~MP3AudioFile();
     
     void Play() override;
     void Stop() override;

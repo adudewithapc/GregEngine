@@ -21,5 +21,6 @@ public:
     void Resume();
     void Stop();
 private:
-    std::unique_ptr<AudioFile> audioFile;
+    
+    std::unique_ptr<AudioFile> audioFile = nullptr;
 };

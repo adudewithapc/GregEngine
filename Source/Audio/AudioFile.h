@@ -8,5 +8,4 @@ public:
     virtual void Stop() = 0;
     virtual void Pause() = 0;
     virtual void Resume() = 0;
-    virtual void SetLooping() = 0;
 };

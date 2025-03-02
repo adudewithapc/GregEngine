@@ -14,7 +14,7 @@ MP3AudioFile::MP3AudioFile(const std::wstring& fileName)
     {
         std::string narrowFileName;
         narrowFileName.assign(fileName.begin(), fileName.end());
-        greg::log::Error("Audio", std::format("Failed to load audio file\"{}\"!", narrowFileName));
+        greg::log::Error("Audio", std::format("Failed to load audio file \"{}\"!", narrowFileName));
     }
 }
 MP3AudioFile::~MP3AudioFile()
