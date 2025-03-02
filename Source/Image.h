@@ -1,4 +1,6 @@
 ﻿#pragma once
+//Not properly implemented
+
 #include <fstream>
 #include <iostream>
 

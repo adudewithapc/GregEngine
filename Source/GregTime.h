@@ -1,3 +1,4 @@
+//Named GregTime due to conflict with c-standard library "time.h"
 #pragma once
 
 class Time

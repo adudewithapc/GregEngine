@@ -13,7 +13,7 @@ void AppleSpawner::CreateApple()
 {
 	GameObject* apple = GregorianEngine::Get().GetCurrentLevel()->CreateObject();
 	
-	apple->AddComponent<Sprite>("Textures/apple.png");
+	apple->AddComponent<Sprite>("Resources/Textures/apple.png");
 	
 	apple->AddComponent<Apple>();
 	apple->Position = Vec2f(-width + rand() % (width * 2), topOffset);

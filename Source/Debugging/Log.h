@@ -8,6 +8,7 @@ namespace greg
 {
 namespace log
 {
+
 enum Level : uint8_t
 {
     DEBUG = 0,
@@ -16,6 +17,7 @@ enum Level : uint8_t
     ERROR,
     FATAL
 };
+
 void Log(const std::string_view tag, const std::string& message, Level level = INFO);
 
 void Debug(const std::string_view tag, const std::string& message);

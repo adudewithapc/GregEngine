@@ -1,5 +1,5 @@
 #include <GregorianEngine.h>
-#include "Player.h"
+#include "PlayerMovement.h"
 #include <Component/2D/Sprite.h>
 #include <Math/Matrix/Mat3x3.h>
 #include "AppleSpawner.h"
@@ -13,7 +13,7 @@ int main()
 	GameObject* player = level->CreateObject();
 	
 	player->AddComponent<PlayerMovement>();
-	player->AddComponent<Sprite>("Textures/basket_man.png");
+	player->AddComponent<Sprite>("Resources/Textures/basket_man.png");
 	player->Position = Vec2f(0, -389);
 
 	player->AddComponent<BoxCollider2D>(Vec2f(115, 222));

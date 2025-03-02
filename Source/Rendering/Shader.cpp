@@ -35,7 +35,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	}
 	catch(std::ifstream::failure e)
 	{
-		greg::log::Fatal("Shader", std::format("Failed to read shader file {}!", e.what()));
+		greg::log::Fatal("Shader", std::format("Failed to read shader file! Error: {}", e.what()));
 	}
 
 	const char* vShaderCode = vertexCode.c_str();

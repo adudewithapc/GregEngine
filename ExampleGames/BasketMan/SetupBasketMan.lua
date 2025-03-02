@@ -25,8 +25,7 @@ project "BasketMan"
 		buildoptions {"/utf-8"}
 		postbuildcommands
 		{
-			'{COPY} "Shader/*" "%{cfg.targetdir}/Shader"',
-			'{COPY} "Textures/*" "%{cfg.targetdir}/Textures"'
+			'{COPYDIR} "Resources" "%{cfg.targetdir}/Resources"',
 		}
 	
 	filter "configurations:Debug"
