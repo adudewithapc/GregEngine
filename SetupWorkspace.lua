@@ -12,5 +12,4 @@ include "SetupGregEngine.lua"
 
 group "ExampleGames"
 	include "ExampleGames/BasketMan/SetupBasketMan.lua"
-	include "ExampleGames/Sandbox/SetupSandbox.lua"
 group ""
