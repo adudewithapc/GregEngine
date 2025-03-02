@@ -15,7 +15,8 @@ project "GregEngine"
 	links
 	{
 		"opengl32",
-		"Ws2_32"
+		"Ws2_32",
+		"Winmm"
 	}
 	
 	targetdir ("Binaries/" .. outputdir)

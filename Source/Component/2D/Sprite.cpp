@@ -27,6 +27,7 @@ Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Componen
 
 	int width, height, channels;
 	unsigned char* data = nullptr;
+	//Testing with custom file reading
 	if(textureLocation != "basket_man.bmp")
 	{
 		data = stbi_load(textureLocation.c_str(), &width, &height, &channels, 0);
@@ -67,7 +68,7 @@ Sprite::Sprite(GameObject* owner, const std::string& textureLocation) : Componen
 	glBindVertexArray(0);
 
 	if(!SpriteShader)
-		SpriteShader = std::make_unique<Shader>("Shader/vertex.shader", "Shader/fragment.shader");
+		SpriteShader = std::make_unique<Shader>("Resources/Shader/vertex.shader", "Resources/Shader/fragment.shader");
 
 	SpriteShader->Use();
 

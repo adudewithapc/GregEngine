@@ -2,7 +2,9 @@
 #include <GameObject.h>
 #include <iostream>
 
-PlayerScore::PlayerScore(GameObject* owner) : Component(owner)
+PlayerScore::PlayerScore(GameObject* owner)
+: Component(owner),
+  collectAudio("Resources/Audio/collect.mp3")
 {
 }
 
@@ -11,11 +13,12 @@ void PlayerScore::CollisionEntered(GameObject* other)
 	applesToDestroy.push_back(other);
 	system("cls");
 	std::cout << ++score << std::flush;
+	collectAudio.Play();
 }
 
 void PlayerScore::Update()
 {
-	if (applesToDestroy.size() == 0)
+	if (applesToDestroy.empty())
 		return;
 
 	for (GameObject* apple : applesToDestroy)
