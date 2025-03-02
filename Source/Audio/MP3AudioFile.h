@@ -16,6 +16,7 @@ public:
     virtual ~MP3AudioFile();
     
     void Play() override;
+    void PlayLooping() override;
     void Stop() override;
     void Pause() override;
     void Resume() override;
