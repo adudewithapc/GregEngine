@@ -11,6 +11,8 @@
 
 #define USE_WIREFRAMES 0
 
+//This is used for documentation purposes and is not meant to be used in actual code
+
 TriangleRenderer::TriangleRenderer(const float inVertices[32], const unsigned int inIndices[6])
 {
 	glGenTextures(1, &texture1);

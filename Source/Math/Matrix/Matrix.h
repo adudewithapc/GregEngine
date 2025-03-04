@@ -32,7 +32,7 @@ public:
 	{
 		if(list.size() != SIZE)
 		{
-			greg::log::Log("Matrix", std::format("Initializer list is wrong size. It is {} when it should be {}", list.size(), SIZE), greg::log::ERROR);
+			greg::log::Fatal("Matrix", std::format("Initializer list is wrong size. It is {} when it should be {}", list.size(), SIZE));
 			throw std::out_of_range("initializer_list_size");
 		}
 

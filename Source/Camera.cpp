@@ -55,21 +55,21 @@ Mat4x4f Camera::GetViewMatrix()
 	{
 		// Flying movement
 		//Forward/back
-		position += front * speed * (Keyboard::IsKeyDown(W) - Keyboard::IsKeyDown(S));
+		position += front * speed * (Keyboard::IsKeyDown(Key::W) - Keyboard::IsKeyDown(Key::S));
 
 		//Left/right
-		position += front.Cross(up).Normalize() * speed * (Keyboard::IsKeyDown(D) - Keyboard::IsKeyDown(A));
+		position += front.Cross(up).Normalize() * speed * (Keyboard::IsKeyDown(Key::D) - Keyboard::IsKeyDown(Key::A));
 
 		//Up/down
-		position += Vec3f(0, -1, 0) * speed * (Keyboard::IsKeyDown(Space) - Keyboard::IsKeyDown(LeftControl));
+		position += Vec3f(0, -1, 0) * speed * (Keyboard::IsKeyDown(Key::Space) - Keyboard::IsKeyDown(Key::LeftControl));
 	}
 	else
 	{
 		Vec3f lastPos = position;
 
 		Vec3f groundedFront = Vec3f(front.x, 0, front.z).Normalize();
-		position += groundedFront * speed * (Keyboard::IsKeyDown(W) - Keyboard::IsKeyDown(S));
-		position += groundedFront.Cross(up).Normalize() * speed * (Keyboard::IsKeyDown(D) - Keyboard::IsKeyDown(A));
+		position += groundedFront * speed * (Keyboard::IsKeyDown(Key::W) - Keyboard::IsKeyDown(Key::S));
+		position += groundedFront.Cross(up).Normalize() * speed * (Keyboard::IsKeyDown(Key::D) - Keyboard::IsKeyDown(Key::A));
 
 		Vec3f movement = position - lastPos;
 

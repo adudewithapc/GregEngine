@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-enum Key : int
+enum class Key : int
 {
 	Esc = VK_ESCAPE,
 	Space = VK_SPACE,
@@ -33,8 +33,8 @@ public:
 private:
 	//I'm too lazy to handle all possible keys
 	//Definitely remove this if laziness disappears
-	bool KeyIsRegistered(const int keyID) const;
+	bool KeyIsRegistered(const Key keyID) const;
 
 	inline static std::map<Key, bool> pressedKeys;
-	inline static std::vector<Key> keys = { Esc, Space, LeftControl, A, D, S, W };
+	inline static std::vector<Key> keys = { Key::Esc, Key::Space, Key::LeftControl, Key::A, Key::D, Key::S, Key::W };
 };

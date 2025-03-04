@@ -9,7 +9,7 @@ namespace greg
 namespace log
 {
 
-enum Level : uint8_t
+enum class Level : uint8_t
 {
     DEBUG = 0,
     INFO,
@@ -18,7 +18,7 @@ enum Level : uint8_t
     FATAL
 };
 
-void Log(const std::string_view tag, const std::string& message, Level level = INFO);
+void Log(const std::string_view tag, const std::string& message, Level level = Level::INFO);
 
 void Debug(const std::string_view tag, const std::string& message);
 void Info(const std::string_view tag, const std::string& message);

@@ -70,6 +70,8 @@ void SpritePrimitive::Draw(const Vec2f& position)
 
     glBindVertexArray(spriteVAO);
 
+    //TODO: Tie this into the rendering system, rather than using a hard coded render target
+    //Requires the rendering system to be more complete
     Camera2D::Get().Draw(*shaderInstance, Window::PixelToView(position));
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

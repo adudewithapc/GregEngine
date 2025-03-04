@@ -28,21 +28,19 @@ Keyboard::~Keyboard()
 	* -----------------------------
 	*
 	* -----------------------------
-	* ÅÄÖ is variations of VK_OEM_#
+	* Swedish letters are variations of VK_OEM_#
 	* -----------------------------
 	*
 	*/
 void Keyboard::PressKey(const RAWKEYBOARD& keyboard)
 {
-	int keyID = keyboard.VKey;
+	Key key = static_cast<Key>(keyboard.VKey);
 
 	//Remove if we are not skipping registering all keys, which we should do
-	if(!KeyIsRegistered(keyID))
+	if(!KeyIsRegistered(key))
 	{
 		return;
 	}
-
-	Key key = static_cast<Key>(keyID);
 
 	//Reverse expression, see function comment
 	pressedKeys[key] = !keyboard.Flags;
@@ -59,7 +57,7 @@ bool Keyboard::IsKeyUp(const Key& key)
 }
 
 
-bool Keyboard::KeyIsRegistered(const int keyID) const
+bool Keyboard::KeyIsRegistered(const Key keyID) const
 {
 	return std::find(keys.begin(), keys.end(), keyID) != keys.end();
 }
