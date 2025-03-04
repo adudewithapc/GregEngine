@@ -4,6 +4,7 @@
 #include <Math/Matrix/Mat3x3.h>
 #include "AppleSpawner.h"
 #include <Component/2D/BoxCollider2D.h>
+
 #include "PlayerScore.h"
 
 int main()
@@ -17,11 +18,10 @@ int main()
 	player->Position = Vec2f(0, -389);
 
 	player->AddComponent<BoxCollider2D>(Vec2f(115, 222));
-
 	player->AddComponent<PlayerScore>();
 
 	GameObject* appleSpawner = level->CreateObject();
 	appleSpawner->AddComponent<AppleSpawner>(800, 600);
 
-	return GregorianEngine::Get().Start("Basket Man");
+	GregorianEngine::Get().Run("Basket Man");
 }

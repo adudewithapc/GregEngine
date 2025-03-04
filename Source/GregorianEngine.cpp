@@ -6,7 +6,7 @@
 #include "Input/Keyboard.h"
 #include "Rendering/Window.h"
 
-int GregorianEngine::Start(const std::string& windowTitle)
+void GregorianEngine::Run(const std::string& windowTitle)
 {
 	greg::log::SetLevel(greg::log::Level::INFO);
 	using FloatingSeconds = std::chrono::duration<float>;
@@ -36,8 +36,6 @@ int GregorianEngine::Start(const std::string& windowTitle)
 
 		previousTime = currentTime;
 	}
-
-	return 0;
 }
 
 void GregorianEngine::Shutdown()

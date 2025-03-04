@@ -13,7 +13,7 @@ public:
 	GregorianEngine(GregorianEngine&&) = delete;
 	GregorianEngine operator =(GregorianEngine&&) = delete;
 
-	int Start(const std::string& windowTitle);
+	void Run(const std::string& windowTitle);
 	void Shutdown();
 
 	std::unique_ptr<Level>& MakeLevel();
