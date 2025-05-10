@@ -39,7 +39,12 @@ void GameObject::CollisionExited(GameObject* other)
 
 void GameObject::Destroy()
 {
-	GregorianEngine::Get().GetCurrentLevel()->DestroyObject(index);
+	std::shared_ptr<Level> currentLevel = GregorianEngine::Get().GetCurrentLevel().lock();
+
+	if(!currentLevel)
+		return;
+	
+	currentLevel->DestroyObject(index);
 	isDestroyed = true;
 }
 

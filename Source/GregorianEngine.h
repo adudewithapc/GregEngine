@@ -16,8 +16,8 @@ public:
 	void Run(const std::string& windowTitle);
 	void Shutdown();
 
-	std::unique_ptr<Level>& MakeLevel();
-	Level* GetCurrentLevel() const;
+	std::shared_ptr<Level> MakeLevel();
+	std::weak_ptr<Level> GetCurrentLevel() const;
 
 	RenderTarget& GetRenderTarget() const;
 
@@ -28,7 +28,7 @@ private:
 	GregorianEngine() = default;
 	
 	bool running = false;
-	std::unique_ptr<Level> currentLevel;
+	std::shared_ptr<Level> currentLevel;
 
 	std::unique_ptr<Window> window = std::make_unique<Window>();
 };

@@ -43,15 +43,15 @@ void GregorianEngine::Shutdown()
 	running = false;
 }
 
-std::unique_ptr<Level>& GregorianEngine::MakeLevel()
+std::shared_ptr<Level> GregorianEngine::MakeLevel()
 {
-	currentLevel = std::make_unique<Level>();
+	currentLevel = std::make_shared<Level>();
 	return currentLevel;
 }
 
-Level* GregorianEngine::GetCurrentLevel() const
+std::weak_ptr<Level> GregorianEngine::GetCurrentLevel() const
 {
-	return currentLevel.get();
+	return std::weak_ptr(currentLevel);
 }
 
 RenderTarget& GregorianEngine::GetRenderTarget() const

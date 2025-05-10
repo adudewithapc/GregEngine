@@ -9,6 +9,12 @@ public:
 	Level();
 	virtual ~Level() = default;
 
+	Level(const Level&) = delete;
+	Level& operator=(const Level&) = delete;
+
+	Level(Level&&) = default;
+	Level& operator=(Level&&) = default;
+
 	void Update();
 	void Draw(RenderTarget& target);
 

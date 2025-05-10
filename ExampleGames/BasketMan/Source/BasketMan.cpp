@@ -9,7 +9,7 @@
 
 int main()
 {
-	std::unique_ptr<Level>& level = GregorianEngine::Get().MakeLevel();
+	std::shared_ptr<Level> level = GregorianEngine::Get().MakeLevel();
 
 	GameObject* player = level->CreateObject();
 	
