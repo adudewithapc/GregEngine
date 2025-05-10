@@ -11,7 +11,12 @@ AppleSpawner::AppleSpawner(GameObject* owner, size_t width, float topOffset) : C
 
 void AppleSpawner::CreateApple()
 {
-	GameObject* apple = GregorianEngine::Get().GetCurrentLevel()->CreateObject();
+	std::shared_ptr<Level> currentLevel = GregorianEngine::Get().GetCurrentLevel().lock();
+
+	if(currentLevel == nullptr)
+		return;
+	
+	GameObject* apple = currentLevel->CreateObject();
 	
 	apple->AddComponent<Sprite>("Resources/Textures/apple.png");
 	

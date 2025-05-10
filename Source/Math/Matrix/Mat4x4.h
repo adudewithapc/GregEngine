@@ -25,6 +25,7 @@ namespace mat4x4
 		output(3, 1) = -(top + bottom) / (top - bottom);
 		output(2, 2) = -2.0f / (farPlane - nearPlane);
 		output(3, 2) = -(farPlane - nearPlane) / (farPlane - nearPlane);
+		output(3, 3) = 1;
 
 		return output;
 	}

@@ -11,12 +11,11 @@ Mat4x4f Camera2D::GetViewMatrix() const
 
 void Camera2D::Update() {}
 
-void Camera2D::Draw(Shader& shader, const Vec2f& position)
+void Camera2D::Draw(Shader& shader, const Mat4x4f& modelMatrix)
 {
-	Mat4x4f positionMatrix = mat4x4::Identity<float>.Translate(position);
-	shader.SetMatrix4x4("model", positionMatrix);
+	shader.SetMatrix4x4("model", modelMatrix);
 	shader.SetMatrix4x4("view", GetViewMatrix());
-	shader.SetMatrix4x4("projection", mat4x4::Identity<float>);
+    shader.SetMatrix4x4("projection", ProjectionMatrix);
 }
 
 Camera2D& Camera2D::Get()

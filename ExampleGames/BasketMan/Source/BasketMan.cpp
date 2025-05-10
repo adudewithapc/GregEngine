@@ -15,7 +15,7 @@ int main()
 	
 	player->AddComponent<PlayerMovement>();
 	player->AddComponent<Sprite>("Resources/Textures/basket_man.png");
-	player->Position = Vec2f(0, -389);
+	player->Position = Vec2f(350, 111);
 
 	player->AddComponent<BoxCollider2D>(Vec2f(115, 222));
 	player->AddComponent<PlayerScore>();

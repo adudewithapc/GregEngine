@@ -4,14 +4,22 @@
 
 #include "Window.h"
 #include "../2D/Camera2D.h"
-#include "../Textures/Image.h"
 
 static const unsigned int spriteIndices[] = {
     0, 1, 3,
     1, 2, 3
 };
 
+static const float spriteVertices[] = {
+//   x       y     z     tx    ty
+     0.5f,   0.5f, 0.0f, 1.0f, 0.0f, //Top right
+     0.5f,  -0.5f, 0.0f, 1.0f, 1.0f, //Bottom right
+    -0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, //Bottom left
+    -0.5f,   0.5f, 0.0f, 0.0f, 0.0f  //Top left
+};
+
 SpritePrimitive::SpritePrimitive(const std::string& textureLocation)
+    : image(textureLocation)
 {
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
@@ -22,14 +30,8 @@ SpritePrimitive::SpritePrimitive(const std::string& textureLocation)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    Image image(textureLocation);
-
     glTexImage2D(GL_TEXTURE_2D, 0, image.GetChannels() == 4 ? GL_RGBA : GL_RGB, image.GetWidth(), image.GetHeight(), 0, image.GetChannels() == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, image.GetData());
     glGenerateMipmap(GL_TEXTURE_2D);
-
-    int vertexElements;
-    const std::unique_ptr<float> coordinates = GetWindowCoordinates(image.GetWidth(), image.GetHeight(), vertexElements);
-    const float* const coordinatesPointer = coordinates.get();
 
     glGenVertexArrays(1, &spriteVAO);
     glBindVertexArray(spriteVAO);
@@ -37,7 +39,7 @@ SpritePrimitive::SpritePrimitive(const std::string& textureLocation)
     unsigned int spriteVBO;
     glGenBuffers(1, &spriteVBO);
     glBindBuffer(GL_ARRAY_BUFFER, spriteVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(coordinatesPointer) * vertexElements, coordinatesPointer, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(spriteVertices), spriteVertices, GL_STATIC_DRAW);
 
     unsigned int spriteEBO;
     glGenBuffers(1, &spriteEBO);
@@ -53,7 +55,7 @@ SpritePrimitive::SpritePrimitive(const std::string& textureLocation)
     glBindVertexArray(0);
 
     if(!SpriteShader)
-        SpriteShader = std::make_shared<Shader>("Resources/Shader/vertex.shader", "Resources/Shader/fragment.shader");
+        SpriteShader = std::make_shared<Shader>("Resources/Shader/sprite_vertex.shader", "Resources/Shader/sprite_fragment.shader");
     
     shaderInstance = SpriteShader;
     shaderInstance->Use();
@@ -72,24 +74,9 @@ void SpritePrimitive::Draw(const Vec2f& position)
 
     //TODO: Tie this into the rendering system, rather than using a hard coded render target
     //Requires the rendering system to be more complete
-    Camera2D::Get().Draw(*shaderInstance, Window::PixelToView(position));
+    Mat4x4f modelMatrix = mat4x4::Identity<float>.Translate(position).Scale(Vec3f(image.GetWidth(), image.GetHeight(), 1));
+    Camera2D::Get().Draw(*shaderInstance, modelMatrix);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-}
-
-std::unique_ptr<float> SpritePrimitive::GetWindowCoordinates(int textureWidth, int textureHeight, int& elements) const
-{
-    elements = 20;
-    const float widthOnWindow = static_cast<float>(textureWidth) / Window::WindowWidth;
-    const float heightOnWindow = static_cast<float>(textureHeight) / Window::WindowHeight;
-    float* coordinatesRelativeToWindow = new float[elements] {
-        //x              y               z tx ty
-        widthOnWindow,   heightOnWindow, 0, 1, 0, //Top right
-        widthOnWindow,  -heightOnWindow, 0, 1, 1, //Bottom right
-        -widthOnWindow, -heightOnWindow, 0, 0, 1, //Bottom left
-        -widthOnWindow,  heightOnWindow, 0, 0, 0  //Top left
-    };
-    std::unique_ptr<float> ret(coordinatesRelativeToWindow);
-    return std::move(ret);
 }

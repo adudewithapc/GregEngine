@@ -17,12 +17,12 @@ public:
 
 	Mat4x4f GetViewMatrix() const;
 	void Update();
-	void Draw(Shader& shader, const Vec2f& modelMatrix);
+	void Draw(Shader& shader, const Mat4x4f& modelMatrix);
 
 	static Camera2D& Get();
 private:
 	Vec2f Position;
 
-	static inline Mat4x4f ProjectionMatrix = mat4x4::OrthographicView(0, 800, 600, 0, 1, 100);
+	static inline Mat4x4f ProjectionMatrix = mat4x4::OrthographicView(0, 800, 0, 600, 1, 100);
 };
 

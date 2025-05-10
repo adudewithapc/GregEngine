@@ -1,6 +1,8 @@
 ﻿#pragma once
+
 #include "Primitive.h"
 #include "Shader.h"
+#include "../Textures/Image.h"
 
 class SpritePrimitive : public Primitive
 {
@@ -20,4 +22,6 @@ private:
 
     //We only want to load this shader once
     inline static std::shared_ptr<Shader> SpriteShader = nullptr;
+
+    Image image;
 };
