@@ -16,6 +16,8 @@ public:
 	void Run(const std::string& windowTitle);
 	void Shutdown();
 
+	void SetLogFrameTime(bool logFrameTime);
+
 	std::shared_ptr<Level> MakeLevel();
 	std::weak_ptr<Level> GetCurrentLevel() const;
 
@@ -28,6 +30,7 @@ private:
 	GregorianEngine() = default;
 	
 	bool running = false;
+	bool logFrameTime = false;
 	std::shared_ptr<Level> currentLevel;
 
 	Window window;

@@ -23,6 +23,9 @@ void GregorianEngine::Run(const std::string& windowTitle)
 		std::chrono::time_point currentTime = std::chrono::high_resolution_clock::now();
 		float deltaTime = std::chrono::duration_cast<FloatingSeconds>(currentTime - previousTime).count();
 		time.Tick(deltaTime);
+
+		if(logFrameTime)
+			greg::log::Info("Frame Time", std::format("{}ms", deltaTime * 1000.f));
 		
 		currentLevel->Update();
 		
@@ -32,7 +35,6 @@ void GregorianEngine::Run(const std::string& windowTitle)
 
 		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
 			running = false;
-
 		previousTime = currentTime;
 	}
 }
@@ -40,6 +42,11 @@ void GregorianEngine::Run(const std::string& windowTitle)
 void GregorianEngine::Shutdown()
 {
 	running = false;
+}
+
+void GregorianEngine::SetLogFrameTime(bool logFrameTime)
+{
+	this->logFrameTime = logFrameTime;
 }
 
 std::shared_ptr<Level> GregorianEngine::MakeLevel()
