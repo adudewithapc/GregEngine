@@ -19,7 +19,7 @@ public:
 	std::shared_ptr<Level> MakeLevel();
 	std::weak_ptr<Level> GetCurrentLevel() const;
 
-	RenderTarget& GetRenderTarget() const;
+	RenderTarget& GetRenderTarget();
 
 public:
 	static GregorianEngine& Get();
@@ -30,5 +30,5 @@ private:
 	bool running = false;
 	std::shared_ptr<Level> currentLevel;
 
-	std::unique_ptr<Window> window = std::make_unique<Window>();
+	Window window;
 };

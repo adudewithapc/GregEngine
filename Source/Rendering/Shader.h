@@ -4,6 +4,8 @@
 #include "../Math/Vector.h"
 #include "../Math/Matrix/Mat4x4.h"
 
+struct Color;
+
 class Shader
 {
 public:
@@ -21,6 +23,7 @@ public:
 	void SetVec3(const std::string& name, const float x, const float y, const float z) const;
 
 	void SetVec4(const std::string& name, const Vec4f& value) const;
+	void SetColor(const std::string& name, const Color& value) const;
 	
 	void SetMatrix4x4(const std::string& name, const Mat4x4f& matrix) const;
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "Component/Component.h"
-#include "Rendering/PixelPrimitive.h"
+#include "Component.h"
+#include "../Rendering/PixelPrimitive.h"
 
 struct Color;
 

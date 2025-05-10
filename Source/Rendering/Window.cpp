@@ -177,99 +177,99 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 {
 	switch(message)
 	{
-	case WM_CLOSE:
-		DestroyWindow(hWnd);
-		break;
-	case WM_DESTROY:
-		//Quit application
-		PostQuitMessage(0);
-		return 0;
-	//Window is forced out of focus
-	case WM_CANCELMODE:
-		return 0;
-	case WM_SIZE:
-	{
-		int newWidth = LOWORD(lParam);
-		int newHeight = HIWORD(lParam);
-
-		if(newWidth == LastWidth && newHeight == LastHeight)
-		{
+		case WM_CLOSE:
+			DestroyWindow(hWnd);
 			break;
-		}
-
-		Window::ResizeViewport(newWidth, newHeight);
-		break;
-	}
-	//Input code taken from https://learn.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
-	case WM_INPUT:
-	{
-		//Returns 0 if window is focused, 1 if unfocused
-		if(GET_RAWINPUT_CODE_WPARAM(wParam))
-		{
-			break;
-		}
-
-		UINT dataSize = 0;
-
-		//RID_INPUT gives us identifying data (i.e are we on keyboard?), while RID_HEADER just gives raw binary
-		GetRawInputData((HRAWINPUT)lParam, RID_INPUT, nullptr, &dataSize, sizeof(RAWINPUTHEADER));
-		LPBYTE rawData = new BYTE[dataSize];
-		if(rawData == nullptr)
-		{
+		case WM_DESTROY:
+			//Quit application
+			PostQuitMessage(0);
 			return 0;
-		}
-
-		if(GetRawInputData((HRAWINPUT)lParam, RID_INPUT, rawData, &dataSize, sizeof(RAWINPUTHEADER)) != dataSize)
+		//Window is forced out of focus
+		case WM_CANCELMODE:
+			return 0;
+		case WM_SIZE:
 		{
-			greg::log::Error("Window", "GetRawInputData returns incorrect size!");
+			int newWidth = LOWORD(lParam);
+			int newHeight = HIWORD(lParam);
+
+			if(newWidth == LastWidth && newHeight == LastHeight)
+			{
+				break;
+			}
+
+			Window::ResizeViewport(newWidth, newHeight);
+			break;
 		}
-
-		RAWINPUT* rawInput = (RAWINPUT*)rawData;
-
-		//Keyboard input?
-		if(rawInput->header.dwType == RIM_TYPEKEYBOARD)
+		//Input code taken from https://learn.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
+		case WM_INPUT:
 		{
-			input->ReceiveKeyboardInput(rawInput->data.keyboard);
-		}
+			//Returns 0 if window is focused, 1 if unfocused
+			if(GET_RAWINPUT_CODE_WPARAM(wParam))
+			{
+				break;
+			}
 
-		//Mouse input?
-		if(rawInput->header.dwType == RIM_TYPEMOUSE)
+			UINT dataSize = 0;
+
+			//RID_INPUT gives us identifying data (i.e are we on keyboard?), while RID_HEADER just gives raw binary
+			GetRawInputData((HRAWINPUT)lParam, RID_INPUT, nullptr, &dataSize, sizeof(RAWINPUTHEADER));
+			LPBYTE rawData = new BYTE[dataSize];
+			if(rawData == nullptr)
+			{
+				return 0;
+			}
+
+			if(GetRawInputData((HRAWINPUT)lParam, RID_INPUT, rawData, &dataSize, sizeof(RAWINPUTHEADER)) != dataSize)
+			{
+				greg::log::Error("Window", "GetRawInputData returns incorrect size!");
+			}
+
+			RAWINPUT* rawInput = (RAWINPUT*)rawData;
+
+			//Keyboard input?
+			if(rawInput->header.dwType == RIM_TYPEKEYBOARD)
+			{
+				input->ReceiveKeyboardInput(rawInput->data.keyboard);
+			}
+
+			//Mouse input?
+			if(rawInput->header.dwType == RIM_TYPEMOUSE)
+			{
+				int deltaX = rawInput->data.mouse.lLastX;
+				int deltaY = rawInput->data.mouse.lLastY;
+
+				input->MoveScreenMouse(deltaX, deltaY);
+			}
+
+			delete[] rawData;
+			break;
+		}
+		case WM_MOUSEMOVE:
 		{
-			int deltaX = rawInput->data.mouse.lLastX;
-			int deltaY = rawInput->data.mouse.lLastY;
+			//Coordinates are local to canvas
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
 
-			input->MoveScreenMouse(deltaX, deltaY);
+			input->MoveWindowMouse(x, y);
+			break;
 		}
-
-		delete[] rawData;
-		break;
-	}
-	case WM_MOUSEMOVE:
-	{
-		//Coordinates are local to canvas
-		int x = LOWORD(lParam);
-		int y = HIWORD(lParam);
-
-		input->MoveWindowMouse(x, y);
-		break;
-	}
-	case WM_SETFOCUS:
-	{
-		SetCapture(hWnd);
-		RECT clipRect;
-		clipRect.left = WindowX;
-		clipRect.top = WindowY;
-		clipRect.right = clipRect.left + WindowWidth;
-		clipRect.bottom = clipRect.top + WindowHeight;
-		ClipCursor(&clipRect);
-		break;
-	}
-	case WM_KILLFOCUS:
-	{
-		ReleaseCapture();
-		ClipCursor(nullptr);
-		break;
-	}
+		case WM_SETFOCUS:
+		{
+			SetCapture(hWnd);
+			RECT clipRect;
+			clipRect.left = WindowX;
+			clipRect.top = WindowY;
+			clipRect.right = clipRect.left + WindowWidth;
+			clipRect.bottom = clipRect.top + WindowHeight;
+			ClipCursor(&clipRect);
+			break;
+		}
+		case WM_KILLFOCUS:
+		{
+			ReleaseCapture();
+			ClipCursor(nullptr);
+			break;
+		}
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);

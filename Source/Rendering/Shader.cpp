@@ -6,6 +6,7 @@
 #include <glad.h>
 
 #include "../Debugging/Log.h"
+#include "../Math/Color.h"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
@@ -123,6 +124,12 @@ void Shader::SetVec3(const std::string& name, const float x, const float y, cons
 void Shader::SetVec4(const std::string& name, const Vec4<float>& value) const
 {
 	float vec4[] = { value.x, value.y, value.z, value.w };
+	glUniform4fv(glGetUniformLocation(programID, name.c_str()), 1, &vec4[0]);
+}
+
+void Shader::SetColor(const std::string& name, const Color& value) const
+{
+	float vec4[] = { value.r, value.g, value.b, value.a };
 	glUniform4fv(glGetUniformLocation(programID, name.c_str()), 1, &vec4[0]);
 }
 

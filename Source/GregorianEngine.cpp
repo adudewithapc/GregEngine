@@ -11,8 +11,8 @@ void GregorianEngine::Run(const std::string& windowTitle)
 	greg::log::SetLevel(greg::log::Level::INFO);
 	using FloatingSeconds = std::chrono::duration<float>;
 
-	window->SetTitle(windowTitle);
-	window->ResizeViewport(Window::WindowWidth, Window::WindowHeight);
+	window.SetTitle(windowTitle);
+	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
 
 	Time time;
 	std::chrono::time_point previousTime = std::chrono::high_resolution_clock::now();
@@ -23,15 +23,14 @@ void GregorianEngine::Run(const std::string& windowTitle)
 		std::chrono::time_point currentTime = std::chrono::high_resolution_clock::now();
 		float deltaTime = std::chrono::duration_cast<FloatingSeconds>(currentTime - previousTime).count();
 		time.Tick(deltaTime);
-
-		window->GetRenderer().Clear(Vec4f(0, 0, 0, 1));
-
+		
 		currentLevel->Update();
-		currentLevel->Draw(*window);
+		
+		window.GetRenderer().Clear(Vec4f(0, 0, 0, 1));
+		currentLevel->Draw(window);
+		window.GetRenderer().SwapBuffers();
 
-		window->GetRenderer().SwapBuffers();
-
-		if(!window->ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
+		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
 			running = false;
 
 		previousTime = currentTime;
@@ -54,9 +53,9 @@ std::weak_ptr<Level> GregorianEngine::GetCurrentLevel() const
 	return std::weak_ptr(currentLevel);
 }
 
-RenderTarget& GregorianEngine::GetRenderTarget() const
+RenderTarget& GregorianEngine::GetRenderTarget()
 {
-	return *window;
+	return window;
 }
 
 GregorianEngine& GregorianEngine::Get()
