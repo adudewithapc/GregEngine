@@ -7,12 +7,13 @@
 class PixelPrimitive : Primitive
 {
 public:
-    PixelPrimitive(const Color& color);
+    PixelPrimitive(const Color& color, unsigned int pixelSize = 1);
     
     void Draw(const Vec2<float>& position) override;
 
 private:
     Color color;
+    unsigned int pixelSize;
     
     //Buffers only need to be set up once
     inline static unsigned int vertexArrayObject = 0;

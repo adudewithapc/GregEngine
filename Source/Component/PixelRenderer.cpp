@@ -1,12 +1,14 @@
 ﻿#include "PixelRenderer.h"
 
-PixelRenderer::PixelRenderer(GameObject* owner, const Color& color)
+#include "../GameObject.h"
+
+PixelRenderer::PixelRenderer(GameObject* owner, const Color& color, unsigned int pixelSize)
 : Component(owner),
-  primitive(color)
+  primitive(color, pixelSize)
 {
 }
 
 void PixelRenderer::Draw(RenderTarget& target)
 {
-    primitive.Draw(Vec2f(300.f, 0));
+    primitive.Draw(GetOwner()->Position);
 }

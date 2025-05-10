@@ -7,7 +7,7 @@ struct Color;
 class PixelRenderer : public Component
 {
 public:
-    PixelRenderer(GameObject* owner, const Color& color);
+    PixelRenderer(GameObject* owner, const Color& color, unsigned int pixelSize = 1);
 
     PixelRenderer(const PixelRenderer& other) = default;
     PixelRenderer& operator=(const PixelRenderer& other) = default;
