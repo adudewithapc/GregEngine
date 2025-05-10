@@ -12,16 +12,19 @@ public:
     void Draw(const Vec2f& position) override;
 
 private:
+    static void SetupBuffers();
+    
     //Transforms sprite's coordinates from absolute to relative to window
     std::unique_ptr<float> GetWindowCoordinates(int textureWidth, int textureHeight, int& elements) const;
 
     std::shared_ptr<Shader> shaderInstance;
-    
     unsigned int textureID;
-    unsigned int spriteVAO;
+    Image image;
+    
+    inline static unsigned int spriteVAO;
 
     //We only want to load this shader once
     inline static std::shared_ptr<Shader> SpriteShader = nullptr;
+    inline static bool PrimitiveInitialized = false;
 
-    Image image;
 };

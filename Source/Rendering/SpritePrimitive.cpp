@@ -33,29 +33,11 @@ SpritePrimitive::SpritePrimitive(const std::string& textureLocation)
     glTexImage2D(GL_TEXTURE_2D, 0, image.GetChannels() == 4 ? GL_RGBA : GL_RGB, image.GetWidth(), image.GetHeight(), 0, image.GetChannels() == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, image.GetData());
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    glGenVertexArrays(1, &spriteVAO);
-    glBindVertexArray(spriteVAO);
-
-    unsigned int spriteVBO;
-    glGenBuffers(1, &spriteVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, spriteVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(spriteVertices), spriteVertices, GL_STATIC_DRAW);
-
-    unsigned int spriteEBO;
-    glGenBuffers(1, &spriteEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(spriteIndices), spriteIndices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) 0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) (3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    if(!SpriteShader)
-        SpriteShader = std::make_shared<Shader>("Resources/Shader/sprite_vertex.shader", "Resources/Shader/sprite_fragment.shader");
+    if(!PrimitiveInitialized)
+    {
+        SetupBuffers();
+        PrimitiveInitialized = true;
+    }
     
     shaderInstance = SpriteShader;
     shaderInstance->Use();
@@ -79,4 +61,30 @@ void SpritePrimitive::Draw(const Vec2f& position)
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+}
+
+void SpritePrimitive::SetupBuffers()
+{
+    glGenVertexArrays(1, &spriteVAO);
+    glBindVertexArray(spriteVAO);
+
+    unsigned int spriteVBO;
+    glGenBuffers(1, &spriteVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, spriteVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(spriteVertices), spriteVertices, GL_STATIC_DRAW);
+
+    unsigned int spriteEBO;
+    glGenBuffers(1, &spriteEBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(spriteIndices), spriteIndices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) 0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) (3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    SpriteShader = std::make_shared<Shader>("Resources/Shader/sprite_vertex.shader", "Resources/Shader/sprite_fragment.shader");
 }
