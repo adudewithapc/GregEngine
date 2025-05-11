@@ -12,6 +12,7 @@ int main()
 
     pixelManager->AddComponent<PixelManager>();
 
-    //GregorianEngine::Get().SetLogFrameTime(true);
+    GregorianEngine::Get().SetLogFrameTime(true);
+    GregorianEngine::Get().SetFramerateCap(144);
     GregorianEngine::Get().Run("Sand Demo");
 }

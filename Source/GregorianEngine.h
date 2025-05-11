@@ -17,6 +17,7 @@ public:
 	void Shutdown();
 
 	void SetLogFrameTime(bool logFrameTime);
+	void SetFramerateCap(unsigned int framerate);
 
 	std::shared_ptr<Level> MakeLevel();
 	std::weak_ptr<Level> GetCurrentLevel() const;
@@ -31,6 +32,7 @@ private:
 	
 	bool running = false;
 	bool logFrameTime = false;
+	float maxFrameTime = 0;
 	std::shared_ptr<Level> currentLevel;
 
 	Window window;

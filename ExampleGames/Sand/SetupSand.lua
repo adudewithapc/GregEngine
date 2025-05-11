@@ -40,7 +40,7 @@ project "Sand"
 		optimize "On"
 	
 	filter "configurations:Shipping"
-		defines {"NDEBUG"}
+		defines {"_NDEBUG"}
 		runtime "Release"
 		symbols "Off"
 		optimize "On"
