@@ -32,6 +32,11 @@ project "GregEngine"
 		"vulkan-1.lib"
 	}
 	
+	defines
+	{
+		"GREG_VULKAN"
+	}
+	
 	targetdir ("Binaries/" .. outputdir)
 	objdir ("Binaries/Intermediate/" .. outputdir)
 	
