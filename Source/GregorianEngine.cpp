@@ -33,6 +33,7 @@ void GregorianEngine::Run(const std::string& windowTitle)
 		if(timeUntilNextFrame > 0)
 			continue;
 		
+		timeUntilNextFrame = maxFrameTime;
 		currentLevel->Update();
 		
 		window.GetRenderer().Clear(Vec4f(0, 0, 0, 1));
