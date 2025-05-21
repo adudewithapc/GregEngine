@@ -14,8 +14,6 @@ public:
 
     PixelRenderer(PixelRenderer&& other) = default;
     PixelRenderer& operator=(PixelRenderer&& other) = default;
-
-    void Draw(RenderTarget& target) override;
     
 private:
     PixelPrimitive primitive;

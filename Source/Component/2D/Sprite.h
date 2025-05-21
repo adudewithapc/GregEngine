@@ -12,10 +12,9 @@ class Sprite : public Component
 public:
 	Sprite(GameObject* owner, const std::string& textureLocation);
 
-	virtual void Draw(RenderTarget& target) override;
+	void Update() override;
+	
 private:
-	SpritePrimitive primitive;
-
-	static std::unique_ptr<Shader> SpriteShader;
+	std::shared_ptr<SpritePrimitive> primitive;
 };
 

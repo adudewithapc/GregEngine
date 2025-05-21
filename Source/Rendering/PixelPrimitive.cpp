@@ -24,11 +24,11 @@ PixelPrimitive::PixelPrimitive(const Color& color, unsigned int pixelSize)
     initialized = true;
 }
 
-void PixelPrimitive::Draw(const Vec2<float>& position)
+void PixelPrimitive::Draw()
 {
     PixelShader->Use();
 
-    Mat4x4f modelMatrix = mat4x4::Identity<float>.Translate(position);
+    Mat4x4f modelMatrix = mat4x4::Identity<float>.Translate(Position);
     Camera2D::Get().Draw(*PixelShader, modelMatrix);
     
     glBindVertexArray(vertexArrayObject);

@@ -8,6 +8,10 @@
 #include "../Input/InputManager.h"
 #include "../Math/Vector.h"
 
+#if GREG_OPENGL
+#include "API/OpenGLRenderer.h"
+#endif
+
 static const wchar_t* CLASS_NAME = L"Greg Engine";
 
 static InputManager* input;
@@ -64,8 +68,10 @@ Window::Window() :
 	CaptureCursor(true);
 	SetCursorPos(MouseStartingX, MouseStartingY);
 	input->MoveWindowMouse(WindowWidth / 2, WindowHeight / 2);
+	
+	hdc = GetDC(windowHandle);
 
-	SetupRendering();
+	CreateRenderer();
 }
 
 Window::~Window()
@@ -143,34 +149,11 @@ void Window::ResizeViewport(int width, int height)
 }
 
 
-void Window::SetupRendering()
+void Window::CreateRenderer()
 {
-	//Taken from https://www.khronos.org/opengl/wiki/Creating_an_OpenGL_Context_%28WGL%29
-	PIXELFORMATDESCRIPTOR pfd =
-	{
-		sizeof(PIXELFORMATDESCRIPTOR),
-		1,
-		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,    // Flags
-		PFD_TYPE_RGBA,        // The kind of framebuffer. RGBA or palette.
-		32,                   // Colordepth of the framebuffer.
-		0, 0, 0, 0, 0, 0,
-		0,
-		0,
-		0,
-		0, 0, 0, 0,
-		24,                   // Number of bits for the depthbuffer
-		8,                    // Number of bits for the stencilbuffer
-		0,                    // Number of Aux buffers in the framebuffer.
-		PFD_MAIN_PLANE,
-		0,
-		0, 0, 0
-	};
-
-	hdc = GetDC(windowHandle);
-	int pixelFormat = ChoosePixelFormat(hdc, &pfd);
-	SetPixelFormat(hdc, pixelFormat, &pfd);
-
-	renderer = std::make_unique<Renderer>(hdc);
+#if GREG_OPENGL
+	renderer = std::make_unique<OpenGLRenderer>(hdc);
+#endif
 }
 
 LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

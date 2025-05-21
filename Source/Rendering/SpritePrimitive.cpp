@@ -45,7 +45,7 @@ SpritePrimitive::SpritePrimitive(const std::string& textureLocation)
     glUniform1i(glGetUniformLocation(shaderInstance->programID, "texture1"), 0);
 }
 
-void SpritePrimitive::Draw(const Vec2f& position)
+void SpritePrimitive::Draw()
 {
     shaderInstance->Use();
 
@@ -56,7 +56,7 @@ void SpritePrimitive::Draw(const Vec2f& position)
 
     //TODO: Tie this into the rendering system, rather than using a hard coded render target
     //Requires the rendering system to be more complete
-    Mat4x4f modelMatrix = mat4x4::Identity<float>.Translate(position).Scale(Vec3f(image.GetWidth(), image.GetHeight(), 1));
+    Mat4x4f modelMatrix = mat4x4::Identity<float>.Translate(Position).Scale(Vec3f(image.GetWidth(), image.GetHeight(), 1));
     Camera2D::Get().Draw(*shaderInstance, modelMatrix);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

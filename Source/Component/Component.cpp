@@ -9,10 +9,6 @@ void Component::Update()
 {
 }
 
-void Component::Draw(RenderTarget& target)
-{
-}
-
 void Component::CollisionEntered(GameObject* other)
 {
 }

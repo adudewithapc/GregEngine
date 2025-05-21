@@ -9,7 +9,7 @@ class PixelPrimitive : Primitive
 public:
     PixelPrimitive(const Color& color, unsigned int pixelSize = 1);
     
-    void Draw(const Vec2<float>& position) override;
+    void Draw() override;
 
 private:
     Color color;

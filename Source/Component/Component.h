@@ -11,7 +11,6 @@ public:
 	virtual ~Component() = default;
 
 	virtual void Update();
-	virtual void Draw(RenderTarget& target);
 
 	virtual void CollisionEntered(GameObject* other);
 	virtual void CollisionExited(GameObject* other);

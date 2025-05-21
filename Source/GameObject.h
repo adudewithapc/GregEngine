@@ -14,7 +14,6 @@ public:
 	GameObject& operator=(const GameObject&) = delete;
 
 	void Update();
-	void Draw(RenderTarget& target);
 
 	void CollisionEntered(GameObject* other);
 	void CollisionExited(GameObject* other);

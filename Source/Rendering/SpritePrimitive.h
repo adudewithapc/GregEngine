@@ -9,7 +9,7 @@ class SpritePrimitive : public Primitive
 public:
     SpritePrimitive(const std::string& textureLocation);
 
-    void Draw(const Vec2f& position) override;
+    void Draw() override;
 
 private:
     static void SetupBuffers();

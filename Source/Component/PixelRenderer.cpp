@@ -7,8 +7,3 @@ PixelRenderer::PixelRenderer(GameObject* owner, const Color& color, unsigned int
   primitive(color, pixelSize)
 {
 }
-
-void PixelRenderer::Draw(RenderTarget& target)
-{
-    primitive.Draw(GetOwner()->Position);
-}

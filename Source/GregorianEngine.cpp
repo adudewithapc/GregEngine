@@ -4,6 +4,7 @@
 #include "GregTime.h"
 #include "Debugging/Log.h"
 #include "Input/Keyboard.h"
+#include "Math/Color.h"
 #include "Rendering/Window.h"
 
 void GregorianEngine::Run(const std::string& windowTitle)
@@ -36,9 +37,7 @@ void GregorianEngine::Run(const std::string& windowTitle)
 		timeUntilNextFrame = maxFrameTime;
 		currentLevel->Update();
 		
-		window.GetRenderer().Clear(Vec4f(0, 0, 0, 1));
-		currentLevel->Draw(window);
-		window.GetRenderer().SwapBuffers();
+		window.GetRenderer().Render(Color(0, 0, 0, 1));
 
 		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
 			running = false;

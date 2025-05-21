@@ -13,14 +13,6 @@ void GameObject::Update()
 	}
 }
 
-void GameObject::Draw(RenderTarget& target)
-{
-	for (int i = components.size() - 1; i >= 0; i--)
-	{
-		components[i]->Draw(target);
-	}
-}
-
 void GameObject::CollisionEntered(GameObject* other)
 {
 	for (int i = components.size() - 1; i >= 0 && !isDestroyed; i--)

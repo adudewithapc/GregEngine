@@ -16,7 +16,6 @@ public:
 	Level& operator=(Level&&) = default;
 
 	void Update();
-	void Draw(RenderTarget& target);
 
 	GameObject* CreateObject();
 	void DestroyObject(int objectIndex);

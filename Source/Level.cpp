@@ -17,14 +17,6 @@ void Level::Update()
 	}
 }
 
-void Level::Draw(RenderTarget& target)
-{
-	for(int i = gameObjects.size() - 1; i >= 0; i--)
-	{
-		gameObjects[i]->Draw(target);
-	}
-}
-
 GameObject* Level::CreateObject()
 {
 	gameObjects.push_back(std::make_unique<GameObject>(gameObjects.size()));

@@ -19,7 +19,6 @@ public:
 	
 	void CaptureCursor(bool capture);
 	bool ProcessMessages();
-	void SwapBuffers();
 	void SetTitle(const std::string& windowTitle);
 
 public:
@@ -36,7 +35,7 @@ public:
 	inline static int MouseStartingX = WindowX + WindowWidth / 2;
 	inline static int MouseStartingY = WindowY + WindowHeight / 2;
 private:
-	void SetupRendering();
+	void CreateRenderer();
 	static LRESULT CALLBACK WindowProcedure(
 		HWND hWnd,		//What window is the message coming from
 		UINT message,	//Message type

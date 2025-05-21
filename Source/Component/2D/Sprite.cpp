@@ -1,23 +1,16 @@
 #include "Sprite.h"
 #include "../../GameObject.h"
-#include "../../2D/Camera2D.h"
+#include "../../GregorianEngine.h"
 #include "../../Rendering/Window.h"
-
-const unsigned int indices[] = {
-	0, 1, 3,
-	1, 2, 3
-};
 
 Sprite::Sprite(GameObject* owner, const std::string& textureLocation)
 : Component(owner),
-  primitive(textureLocation)
+  primitive(GregorianEngine::Get().GetRenderTarget().GetRenderer().AddPrimitive<SpritePrimitive>(textureLocation))
 {
 }
 
-void Sprite::Draw(RenderTarget& target)
+void Sprite::Update()
 {
-	primitive.Draw(GetOwner()->Position);
+  primitive->Position = GetOwner()->Position;
 }
 
-
-std::unique_ptr<Shader> Sprite::SpriteShader = nullptr;
