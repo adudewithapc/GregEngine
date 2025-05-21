@@ -5,18 +5,31 @@ project "GregEngine"
 	
 	files {"Source/**.h", "Source/**.cpp", "Libraries/Source/**.c"}
 	
+	vulkan_sdk = os.getenv("VULKAN_SDK")
+	
+	if vulkan_sdk == nil then
+		error("Vulkan SDK path was not found. Check if it is installed.")
+	end
+	
 	includedirs
 	{
 		"Includes/glad",
 		"Includes/KHR",
-		"Includes/stb_image"
+		"Includes/stb_image",
+		vulkan_sdk .. "/Include"
+	}
+	
+	libdirs
+	{
+		vulkan_sdk .. "/Lib"
 	}
 	
 	links
 	{
 		"opengl32",
 		"Ws2_32",
-		"Winmm"
+		"Winmm",
+		"vulkan-1.lib"
 	}
 	
 	targetdir ("Binaries/" .. outputdir)
