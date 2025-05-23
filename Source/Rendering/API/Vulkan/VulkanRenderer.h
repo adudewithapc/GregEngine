@@ -2,6 +2,7 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include "PhysicalDevice.h"
 #include "VulkanLoader.h"
 #include "../../Renderer.h"
 
@@ -20,6 +21,9 @@ protected:
 private:
     vk::UniqueInstance CreateInstance();
     vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> CreateSurface();
+
+    void LoadAllPhysicalDevices();
+    PhysicalDevice FindPreferredPhysicalDevice();
     
     std::vector<const char*> GetRequiredExtensions();
     std::vector<const char*> GetRequestedValidationLayers();
@@ -28,6 +32,9 @@ private:
     vk::UniqueInstance instance;
     vk::UniqueHandle<vk::DebugUtilsMessengerEXT, vk::detail::DispatchLoaderDynamic> debugMessenger;
     vk::UniqueSurfaceKHR surface;
+
+    std::optional<PhysicalDevice> preferredPhysicalDevice {};
+    std::vector<PhysicalDevice> physicalDevices;
 
     ////Windows specific
     HINSTANCE hInstance;

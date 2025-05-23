@@ -20,6 +20,13 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
     
     debugMessenger = instance->createDebugUtilsMessengerEXTUnique(greg::vulkan::debug::GetDefaultDebugMessengerInfo(), nullptr, loader.GetDispatchLoader());
     surface = CreateSurface();
+
+    LoadAllPhysicalDevices();
+    if(physicalDevices.empty())
+        greg::log::Fatal("Vulkan", "Failed to find any compatible graphics card!");
+    
+    preferredPhysicalDevice = FindPreferredPhysicalDevice();
+    greg::log::Debug("Vulkan", std::format("Selecting graphics device \"{}\"", preferredPhysicalDevice->GetProperties().deviceName.data()));
 }
 
 void VulkanRenderer::Render(const Color& clearColor)
@@ -67,6 +74,26 @@ vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> VulkanRendere
     vk::Win32SurfaceCreateInfoKHR createInfo({}, hInstance, windowHandle);
 
     return instance->createWin32SurfaceKHRUnique(createInfo);
+}
+
+void VulkanRenderer::LoadAllPhysicalDevices()
+{
+    std::vector<vk::PhysicalDevice> vulkanPhysicalDevices = instance->enumeratePhysicalDevices();
+    physicalDevices.clear();
+    physicalDevices.reserve(vulkanPhysicalDevices.size());
+
+    size_t i = 0;
+    for(const vk::PhysicalDevice& vulkanDevice : vulkanPhysicalDevices)
+    {
+        physicalDevices.emplace_back(vulkanDevice, surface);
+        i++;
+    }
+}
+
+PhysicalDevice VulkanRenderer::FindPreferredPhysicalDevice()
+{
+    std::sort(std::begin(physicalDevices), std::end(physicalDevices), std::greater<PhysicalDevice>());
+    return physicalDevices.front();
 }
 
 std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
