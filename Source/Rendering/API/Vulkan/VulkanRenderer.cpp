@@ -1,0 +1,84 @@
+﻿#include "VulkanRenderer.h"
+
+#include "Debugging.h"
+#include "../../../Debugging/Log.h"
+
+#include "../../../GregorianEngine.h"
+
+namespace greg::vulkan
+{
+VulkanRenderer::VulkanRenderer(const HDC& hdc)
+: Renderer(hdc)
+{
+    if(enableValidationLayers && !greg::vulkan::debug::AreValidationLayersSupported({"VK_LAYER_KHRONOS_validation"}))
+        log::Fatal("Vulkan", "Failed to find all requested validation layers!");
+
+    vulkanInstance = CreateInstance();
+    loader.AddInstance(vulkanInstance);
+    
+    debugMessenger = vulkanInstance->createDebugUtilsMessengerEXTUnique(greg::vulkan::debug::GetDefaultDebugMessengerInfo(), nullptr, loader.GetDispatchLoader());
+}
+
+void VulkanRenderer::Render(const Color& clearColor)
+{
+    
+}
+void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
+{
+    
+}
+
+vk::UniqueInstance VulkanRenderer::CreateInstance()
+{
+    std::vector<const char*> requiredExtensions = GetRequiredExtensions();
+    std::vector<vk::ExtensionProperties> availableExtensions = vk::enumerateInstanceExtensionProperties();
+    std::vector<const char*> foundRequiredExtensions;
+    for(const char* requiredExtension : requiredExtensions)
+    {
+        auto extensionIterator = std::find_if(std::begin(availableExtensions), std::end(availableExtensions), [&requiredExtension](const vk::ExtensionProperties& extension)
+        {
+            return strcmp(requiredExtension, extension.extensionName) == 0;
+        });
+        if(extensionIterator != std::end(availableExtensions))
+        {
+            greg::log::Debug("Vulkan", std::format("Found required extension {}", requiredExtension));
+            foundRequiredExtensions.push_back(requiredExtension);
+        }
+        else
+        {
+            greg::log::Fatal("Vulkan", std::format("Failed to find required extension {}", requiredExtension));
+        }
+    }
+
+    vk::ApplicationInfo applicationInfo("Test", VK_MAKE_VERSION(1, 0, 0), GregorianEngine::GetEngineName(), VK_MAKE_VERSION(1, 0, 0), VK_MAKE_VERSION(1, 0, 0));
+
+    std::vector<const char*> validationLayers = GetRequestedValidationLayers();
+    vk::DebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo = greg::vulkan::debug::GetDefaultDebugMessengerInfo();
+    vk::InstanceCreateInfo instanceCreateInfo({}, &applicationInfo, static_cast<uint32_t>(validationLayers.size()), validationLayers.data(), static_cast<uint32_t>(requiredExtensions.size()), requiredExtensions.data(), &debugMessengerCreateInfo);
+    
+    return vk::createInstanceUnique(instanceCreateInfo);
+}
+
+std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
+{
+    std::vector<const char*> extensions(3);
+
+    //Disable in shipping builds?
+    extensions[0] = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
+    extensions[1] = VK_KHR_SURFACE_EXTENSION_NAME;
+
+    ////Windows specific
+    extensions[2] = "VK_KHR_win32_surface";
+    ////
+
+    return extensions;
+}
+
+std::vector<const char*> VulkanRenderer::GetRequestedValidationLayers()
+{
+    if(enableValidationLayers)
+        return{ "VK_LAYER_KHRONOS_validation" };
+
+    return {};
+}
+}

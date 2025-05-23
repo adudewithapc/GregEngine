@@ -2,7 +2,6 @@
 #include "Window.h"
 
 #include <format>
-#include <glad.h>
 
 #include "../Debugging/Log.h"
 #include "../Input/InputManager.h"
@@ -10,6 +9,8 @@
 
 #if GREG_OPENGL
 #include "API/OpenGLRenderer.h"
+#elif GREG_VULKAN
+#include "API/Vulkan/VulkanRenderer.h"
 #endif
 
 static const wchar_t* CLASS_NAME = L"Greg Engine";
@@ -145,7 +146,7 @@ Vec2f Window::PixelToView(const Vec2f& pixel)
 
 void Window::ResizeViewport(int width, int height)
 {
-	glViewport(0, 0, width, height);
+	//glViewport(0, 0, width, height);
 }
 
 
@@ -153,6 +154,8 @@ void Window::CreateRenderer()
 {
 #if GREG_OPENGL
 	renderer = std::make_unique<OpenGLRenderer>(hdc);
+#elif GREG_VULKAN
+	renderer = std::make_unique<greg::vulkan::VulkanRenderer>(hdc);
 #endif
 }
 

@@ -13,7 +13,7 @@ public:
 	GregorianEngine(GregorianEngine&&) = delete;
 	GregorianEngine operator =(GregorianEngine&&) = delete;
 
-	void Run(const std::string& windowTitle);
+	void Run(const std::string& applicationName);
 	void Shutdown();
 
 	void SetLogFrameTime(bool logFrameTime);
@@ -23,9 +23,11 @@ public:
 	std::weak_ptr<Level> GetCurrentLevel() const;
 
 	RenderTarget& GetRenderTarget();
+	const std::string& GetApplicationName() const;
 
 public:
 	static GregorianEngine& Get();
+	static const char* GetEngineName();
 
 private:
 	GregorianEngine() = default;
@@ -34,6 +36,7 @@ private:
 	bool logFrameTime = false;
 	float maxFrameTime = 0;
 	std::shared_ptr<Level> currentLevel;
+	std::string applicationName = "Greg Engine";
 
 	Window window;
 };

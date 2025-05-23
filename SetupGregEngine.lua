@@ -34,7 +34,7 @@ project "GregEngine"
 	
 	defines
 	{
-		"GREG_OPENGL"
+		"GREG_VULKAN"
 	}
 	
 	targetdir ("Binaries/" .. outputdir)

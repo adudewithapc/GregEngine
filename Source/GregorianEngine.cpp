@@ -7,12 +7,13 @@
 #include "Math/Color.h"
 #include "Rendering/Window.h"
 
-void GregorianEngine::Run(const std::string& windowTitle)
+void GregorianEngine::Run(const std::string& applicationName)
 {
 	greg::log::SetLevel(greg::log::Level::INFO);
+	this->applicationName = applicationName;
 	using FloatingSeconds = std::chrono::duration<float>;
 
-	window.SetTitle(windowTitle);
+	window.SetTitle(applicationName);
 	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
 
 	Time time;
@@ -35,7 +36,8 @@ void GregorianEngine::Run(const std::string& windowTitle)
 			continue;
 		
 		timeUntilNextFrame = maxFrameTime;
-		currentLevel->Update();
+		if(currentLevel)
+			currentLevel->Update();
 		
 		window.GetRenderer().Render(Color(0, 0, 0, 1));
 
@@ -79,8 +81,18 @@ RenderTarget& GregorianEngine::GetRenderTarget()
 	return window;
 }
 
+const std::string& GregorianEngine::GetApplicationName() const
+{
+	return applicationName;
+}
+
 GregorianEngine& GregorianEngine::Get()
 {
 	static GregorianEngine engine;
 	return engine;
+}
+
+const char* GregorianEngine::GetEngineName()
+{
+	return "Greg Engine";
 }
