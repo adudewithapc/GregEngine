@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 #include <vulkan/vulkan.hpp>
 
 #include "VulkanLoader.h"
@@ -9,7 +10,7 @@ namespace greg::vulkan
 class VulkanRenderer : public Renderer
 {
 public:
-    VulkanRenderer(const HDC& hdc);
+    VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd);
     
     void Render(const Color& clearColor) override;
 
@@ -18,13 +19,20 @@ protected:
 
 private:
     vk::UniqueInstance CreateInstance();
+    vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> CreateSurface();
+    
     std::vector<const char*> GetRequiredExtensions();
     std::vector<const char*> GetRequestedValidationLayers();
 
     VulkanLoader loader;
-    vk::UniqueInstance vulkanInstance;
+    vk::UniqueInstance instance;
     vk::UniqueHandle<vk::DebugUtilsMessengerEXT, vk::detail::DispatchLoaderDynamic> debugMessenger;
-    
+    vk::UniqueSurfaceKHR surface;
+
+    ////Windows specific
+    HINSTANCE hInstance;
+    HWND windowHandle;
+    ////
     static constexpr bool enableValidationLayers = true;
 };
 }

@@ -155,7 +155,7 @@ void Window::CreateRenderer()
 #if GREG_OPENGL
 	renderer = std::make_unique<OpenGLRenderer>(hdc);
 #elif GREG_VULKAN
-	renderer = std::make_unique<greg::vulkan::VulkanRenderer>(hdc);
+	renderer = std::make_unique<greg::vulkan::VulkanRenderer>(hdc, hInstance, windowHandle);
 #endif
 }
 

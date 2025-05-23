@@ -43,6 +43,10 @@ project "GregEngine"
 	filter "system:windows"
 		systemversion "latest"
 		buildoptions {"/utf-8"}
+		defines
+		{
+			"VK_USE_PLATFORM_WIN32_KHR"
+		}
 		
 	filter "configurations:Debug"
 		defines {"_DEBUG", "_CONSOLE"}

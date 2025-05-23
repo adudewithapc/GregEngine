@@ -7,16 +7,19 @@
 
 namespace greg::vulkan
 {
-VulkanRenderer::VulkanRenderer(const HDC& hdc)
-: Renderer(hdc)
+VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
+: Renderer(hdc),
+  hInstance(hInstance),
+  windowHandle(hwnd)
 {
     if(enableValidationLayers && !greg::vulkan::debug::AreValidationLayersSupported({"VK_LAYER_KHRONOS_validation"}))
         log::Fatal("Vulkan", "Failed to find all requested validation layers!");
 
-    vulkanInstance = CreateInstance();
-    loader.AddInstance(vulkanInstance);
+    instance = CreateInstance();
+    loader.AddInstance(instance);
     
-    debugMessenger = vulkanInstance->createDebugUtilsMessengerEXTUnique(greg::vulkan::debug::GetDefaultDebugMessengerInfo(), nullptr, loader.GetDispatchLoader());
+    debugMessenger = instance->createDebugUtilsMessengerEXTUnique(greg::vulkan::debug::GetDefaultDebugMessengerInfo(), nullptr, loader.GetDispatchLoader());
+    surface = CreateSurface();
 }
 
 void VulkanRenderer::Render(const Color& clearColor)
@@ -57,6 +60,13 @@ vk::UniqueInstance VulkanRenderer::CreateInstance()
     vk::InstanceCreateInfo instanceCreateInfo({}, &applicationInfo, static_cast<uint32_t>(validationLayers.size()), validationLayers.data(), static_cast<uint32_t>(requiredExtensions.size()), requiredExtensions.data(), &debugMessengerCreateInfo);
     
     return vk::createInstanceUnique(instanceCreateInfo);
+}
+
+vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> VulkanRenderer::CreateSurface()
+{
+    vk::Win32SurfaceCreateInfoKHR createInfo({}, hInstance, windowHandle);
+
+    return instance->createWin32SurfaceKHRUnique(createInfo);
 }
 
 std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
