@@ -124,7 +124,7 @@ std::vector<char> LoadShader(const std::string& fileName)
     std::ifstream file(fileName, std::ios::ate | std::ios::binary);
 
     if(!file.is_open())
-        greg::log::Fatal("Vulkan Shaders", std::format("Failed trying to open shader file \"{}\"!"));
+        greg::log::Fatal("Vulkan Shaders", std::format("Failed trying to open shader file \"{}\"!", fileName));
 
 
     size_t fileSize = static_cast<size_t>(file.tellg());

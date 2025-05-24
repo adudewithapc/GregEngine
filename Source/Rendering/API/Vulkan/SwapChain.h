@@ -36,6 +36,7 @@ private:
     Details details;
     
     std::vector<vk::Image> images {};
+    std::vector<vk::UniqueImageView> imageViews {};
     vk::UniqueSwapchainKHR swapChain {};
 };
 }

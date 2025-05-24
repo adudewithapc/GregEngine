@@ -1,5 +1,6 @@
 ﻿#include "SwapChain.h"
 
+#include "Image.h"
 #include "PhysicalDevice.h"
 #include "../../Window.h"
 
@@ -25,7 +26,7 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
 
     const bool isGraphicsFamilyAlsoPresent = queueFamilies.GetGraphicsFamily() == queueFamilies.GetPresentFamily();
     vk::SharingMode sharingMode;
-   std::vector<uint32_t> queueFamilyIndices;
+    std::vector<uint32_t> queueFamilyIndices;
     if(isGraphicsFamilyAlsoPresent)
     {
         sharingMode = vk::SharingMode::eExclusive;
@@ -42,7 +43,14 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
                                           presentMode, vk::True);
 
     swapChain = logicalDevice->createSwapchainKHRUnique(createInfo);
+    
     images = logicalDevice->getSwapchainImagesKHR(*swapChain);
+
+    imageViews.reserve(images.size());
+    for(size_t i = 0; i < images.size(); i++)
+    {
+        imageViews.emplace_back(greg::vulkan::image::CreateImageView(logicalDevice, images[i], surfaceFormat.format, vk::ImageAspectFlagBits::eColor, 1));
+    }
 }
 
 vk::SurfaceFormatKHR SwapChain::PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
