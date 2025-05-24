@@ -36,6 +36,11 @@ bool PhysicalDevice::QueueFamilies::IsComplete() const
     return graphicsFamily && presentFamily;
 }
 
+std::set<uint32_t> PhysicalDevice::QueueFamilies::GetUniqueQueueFamilies() const
+{
+    return { *graphicsFamily, *presentFamily };
+}
+
 PhysicalDevice::PhysicalDevice(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface)
 {
     properties = physicalDevice.getProperties();
@@ -83,6 +88,11 @@ const vk::PhysicalDeviceProperties& PhysicalDevice::GetProperties() const
 const vk::PhysicalDeviceFeatures& PhysicalDevice::GetFeatures() const
 {
     return features;
+}
+
+const PhysicalDevice::QueueFamilies& PhysicalDevice::GetQueueFamilies() const
+{
+    return queueFamilies;
 }
 
 bool PhysicalDevice::HasAllRequiredExtensions(vk::PhysicalDevice device) const

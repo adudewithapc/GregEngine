@@ -7,6 +7,9 @@
 
 namespace greg::vulkan
 {
+static const char* GET_INSTANCE_PROC_ADDR_NAME = "vkGetInstanceProcAddr";
+static const char* ENUMERATE_INSTANCE_EXTENSION_PROPERTIES_NAME = "vkEnumerateInstanceExtensionProperties";
+
 VulkanLoader::VulkanLoader()
 {
     if(!platformHandle)
@@ -14,20 +17,21 @@ VulkanLoader::VulkanLoader()
         greg::log::Fatal("Vulkan", "Failed to find vulkan library!");
     }
     
-    getInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(GetPlatformModule("vkGetInstanceProcAddr"));
+    getInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(GetPlatformModule(GET_INSTANCE_PROC_ADDR_NAME));
     if(!getInstanceProcAddr)
     {
-        greg::log::Fatal("Vulkan", "Failed to load vulkan module \"vkGetInstanceProcAddr\"!");
+        greg::log::Fatal("Vulkan", "Failed to load required vulkan module \"" + std::string(GET_INSTANCE_PROC_ADDR_NAME) + "\"!");
     }
     
-    if(!reinterpret_cast<PFN_vkEnumerateInstanceExtensionProperties>(GetPlatformModule("vkEnumerateInstanceExtensionProperties")))
+    if(!reinterpret_cast<PFN_vkEnumerateInstanceExtensionProperties>(GetPlatformModule(ENUMERATE_INSTANCE_EXTENSION_PROPERTIES_NAME)))
     {
-        greg::log::Fatal("Vulkan", "Failed to load vulkan \"vkEnumerateInstanceExtensionProperties\"!");
+        greg::log::Fatal("Vulkan", "Failed to load required vulkan module \"" + std::string(ENUMERATE_INSTANCE_EXTENSION_PROPERTIES_NAME) + "\"!");
     }
 
     dynamicLoader.init(getInstanceProcAddr);
 }
 
+//Needs to be called after the VulkanInstance is created
 void VulkanLoader::AddInstance(const vk::UniqueInstance& instance)
 {
     dynamicLoader.init(*instance, getInstanceProcAddr);

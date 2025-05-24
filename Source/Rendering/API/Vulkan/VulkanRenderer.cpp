@@ -12,7 +12,7 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
   hInstance(hInstance),
   windowHandle(hwnd)
 {
-    if(enableValidationLayers && !greg::vulkan::debug::AreValidationLayersSupported({"VK_LAYER_KHRONOS_validation"}))
+    if(enableValidationLayers && !greg::vulkan::debug::AreAllValidationLayersSupported())
         log::Fatal("Vulkan", "Failed to find all requested validation layers!");
 
     instance = CreateInstance();
@@ -98,15 +98,16 @@ PhysicalDevice VulkanRenderer::FindPreferredPhysicalDevice()
 
 std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
 {
-    std::vector<const char*> extensions(3);
-
+    std::vector<const char*> extensions =
+    {
     //Disable in shipping builds?
-    extensions[0] = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
-    extensions[1] = VK_KHR_SURFACE_EXTENSION_NAME;
+        VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
+        VK_KHR_SURFACE_EXTENSION_NAME,
 
     ////Windows specific
-    extensions[2] = "VK_KHR_win32_surface";
+        "VK_KHR_win32_surface",
     ////
+    };
 
     return extensions;
 }

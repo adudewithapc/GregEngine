@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <optional>
+#include <set>
 #include <vulkan/vulkan.hpp>
 
 namespace greg::vulkan
@@ -15,6 +16,8 @@ public:
         uint32_t GetGraphicsFamily() const;
         uint32_t GetPresentFamily() const;
         bool IsComplete() const;
+
+        std::set<uint32_t> GetUniqueQueueFamilies() const;
 
     private:
         friend class PhysicalDevice;
@@ -38,6 +41,7 @@ public:
     const size_t& GetRating() const;
     const vk::PhysicalDeviceProperties& GetProperties() const;
     const vk::PhysicalDeviceFeatures& GetFeatures() const;
+    const QueueFamilies& GetQueueFamilies() const;
 private:
     bool HasAllRequiredExtensions(vk::PhysicalDevice device) const;
     std::vector<const char*> GetRequiredExtensions() const;
