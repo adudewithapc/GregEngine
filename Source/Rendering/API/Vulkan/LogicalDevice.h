@@ -11,8 +11,18 @@ class LogicalDevice
 public:
     LogicalDevice(const greg::vulkan::PhysicalDevice& physicalDevice);
 
+    LogicalDevice(const LogicalDevice&) = delete;
+    LogicalDevice& operator=(const LogicalDevice&) = delete;
+
+    LogicalDevice(LogicalDevice&&) = default;
+    LogicalDevice& operator=(LogicalDevice&&) = default;
+
+    const vk::Queue& GetGraphicsQueue() const;
+
 private:
     vk::Queue graphicsQueue;
+    vk::Queue presentQueue;
+    
     vk::UniqueDevice device;
 };
 }

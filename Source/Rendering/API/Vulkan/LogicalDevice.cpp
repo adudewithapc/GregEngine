@@ -12,7 +12,8 @@ static const std::vector<const char*> requestedPhysicalExtensions =
 
 LogicalDevice::LogicalDevice(const greg::vulkan::PhysicalDevice& physicalDevice)
 {
-    std::set<uint32_t> uniqueQueueFamilies = physicalDevice.GetQueueFamilies().GetUniqueQueueFamilies();
+    PhysicalDevice::QueueFamilies queueFamilies = physicalDevice.GetQueueFamilies();
+    std::set<uint32_t> uniqueQueueFamilies = queueFamilies.GetUniqueQueueFamilies();
 
     const float queuePriority = 1.0f;
     std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos(uniqueQueueFamilies.size());
@@ -28,5 +29,13 @@ LogicalDevice::LogicalDevice(const greg::vulkan::PhysicalDevice& physicalDevice)
     std::vector<const char*> validationLayers = greg::vulkan::debug::GetValidationLayers(); 
     vk::DeviceCreateInfo deviceCreateInfo({}, static_cast<uint32_t>(queueCreateInfos.size()), queueCreateInfos.data(), static_cast<uint32_t>(validationLayers.size()), validationLayers.data(), static_cast<uint32_t>(requestedPhysicalExtensions.size()), requestedPhysicalExtensions.data(), &physicalDeviceFeatures);
     device = physicalDevice.GetVulkanDevice().createDeviceUnique(deviceCreateInfo);
+
+    graphicsQueue = device->getQueue(queueFamilies.GetGraphicsFamily(), 0);
+    presentQueue = device->getQueue(queueFamilies.GetPresentFamily(), 0);
+}
+
+const vk::Queue& LogicalDevice::GetGraphicsQueue() const
+{
+    return graphicsQueue;
 }
 }
