@@ -26,7 +26,6 @@ private:
     PhysicalDevice FindPreferredPhysicalDevice();
     
     std::vector<const char*> GetRequiredExtensions();
-    std::vector<const char*> GetRequestedValidationLayers();
 
     VulkanLoader loader;
     vk::UniqueInstance instance;
@@ -40,6 +39,5 @@ private:
     HINSTANCE hInstance;
     HWND windowHandle;
     ////
-    static constexpr bool enableValidationLayers = true;
 };
 }

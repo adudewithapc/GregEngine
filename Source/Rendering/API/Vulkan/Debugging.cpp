@@ -3,7 +3,18 @@
 
 namespace greg::vulkan::debug
 {
-const std::vector<const char*> ValidationLayers = { "VK_LAYER_KHRONOS_validation" };
+constexpr bool ShouldUseValidationLayers()
+{
+    return true;
+}
+
+std::vector<const char*> GetValidationLayers()
+{
+    if(ShouldUseValidationLayers())
+        return { "VK_LAYER_KHRONOS_validation" };
+
+    return {};
+}
 
 vk::DebugUtilsMessengerCreateInfoEXT GetDefaultDebugMessengerInfo()
 {
@@ -21,7 +32,7 @@ bool AreAllValidationLayersSupported()
     std::vector<vk::LayerProperties> validationLayers = vk::enumerateInstanceLayerProperties();
     
     size_t foundLayers = 0;
-    for(const char* requestedLayer : greg::vulkan::debug::ValidationLayers)
+    for(const char* requestedLayer : greg::vulkan::debug::GetValidationLayers())
     {
         auto extensionIterator = std::find_if(std::begin(validationLayers), std::end(validationLayers), [&requestedLayer](const vk::LayerProperties& layer)
         {

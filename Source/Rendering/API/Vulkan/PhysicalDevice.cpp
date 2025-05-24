@@ -42,6 +42,7 @@ std::set<uint32_t> PhysicalDevice::QueueFamilies::GetUniqueQueueFamilies() const
 }
 
 PhysicalDevice::PhysicalDevice(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface)
+: vulkanDevice(physicalDevice)
 {
     properties = physicalDevice.getProperties();
     features = physicalDevice.getFeatures();
@@ -93,6 +94,11 @@ const vk::PhysicalDeviceFeatures& PhysicalDevice::GetFeatures() const
 const PhysicalDevice::QueueFamilies& PhysicalDevice::GetQueueFamilies() const
 {
     return queueFamilies;
+}
+
+const vk::PhysicalDevice& PhysicalDevice::GetVulkanDevice() const
+{
+    return vulkanDevice;
 }
 
 bool PhysicalDevice::HasAllRequiredExtensions(vk::PhysicalDevice device) const

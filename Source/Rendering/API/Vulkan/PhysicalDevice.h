@@ -42,13 +42,16 @@ public:
     const vk::PhysicalDeviceProperties& GetProperties() const;
     const vk::PhysicalDeviceFeatures& GetFeatures() const;
     const QueueFamilies& GetQueueFamilies() const;
+    const vk::PhysicalDevice& GetVulkanDevice() const;
 private:
     bool HasAllRequiredExtensions(vk::PhysicalDevice device) const;
     std::vector<const char*> GetRequiredExtensions() const;
     
     size_t rating = 0;
-    vk::PhysicalDeviceProperties properties;
-    vk::PhysicalDeviceFeatures features;
+    vk::PhysicalDeviceProperties properties {};
+    vk::PhysicalDeviceFeatures features {};
     QueueFamilies queueFamilies {};
+
+    vk::PhysicalDevice vulkanDevice;
 };
 }

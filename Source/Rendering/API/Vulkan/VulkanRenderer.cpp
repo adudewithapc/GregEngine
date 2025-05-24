@@ -12,7 +12,7 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
   hInstance(hInstance),
   windowHandle(hwnd)
 {
-    if(enableValidationLayers && !greg::vulkan::debug::AreAllValidationLayersSupported())
+    if(greg::vulkan::debug::ShouldUseValidationLayers() && !greg::vulkan::debug::AreAllValidationLayersSupported())
         log::Fatal("Vulkan", "Failed to find all requested validation layers!");
 
     instance = CreateInstance();
@@ -62,7 +62,7 @@ vk::UniqueInstance VulkanRenderer::CreateInstance()
 
     vk::ApplicationInfo applicationInfo("Test", VK_MAKE_VERSION(1, 0, 0), GregorianEngine::GetEngineName(), VK_MAKE_VERSION(1, 0, 0), VK_MAKE_VERSION(1, 0, 0));
 
-    std::vector<const char*> validationLayers = GetRequestedValidationLayers();
+    std::vector<const char*> validationLayers = greg::vulkan::debug::GetValidationLayers();
     vk::DebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo = greg::vulkan::debug::GetDefaultDebugMessengerInfo();
     vk::InstanceCreateInfo instanceCreateInfo({}, &applicationInfo, static_cast<uint32_t>(validationLayers.size()), validationLayers.data(), static_cast<uint32_t>(requiredExtensions.size()), requiredExtensions.data(), &debugMessengerCreateInfo);
     
@@ -110,13 +110,5 @@ std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
     };
 
     return extensions;
-}
-
-std::vector<const char*> VulkanRenderer::GetRequestedValidationLayers()
-{
-    if(enableValidationLayers)
-        return{ "VK_LAYER_KHRONOS_validation" };
-
-    return {};
 }
 }
