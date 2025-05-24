@@ -11,7 +11,7 @@ SwapChain::Details::Details(vk::PhysicalDevice physicalDevice, const vk::UniqueS
   presentModes(physicalDevice.getSurfacePresentModesKHR(*surface))
 {}
 
-SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface, const greg::vulkan::QueueFamilies& queueFamilies)
+SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface, const vk::UniqueDevice& logicalDevice, const greg::vulkan::QueueFamilies& queueFamilies)
 : details(physicalDevice, surface)
 {
     uint32_t imageCount = details.capabilities.minImageCount + 1;
@@ -41,7 +41,8 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
                                           sharingMode, static_cast<uint32_t>(queueFamilyIndices.size()), queueFamilyIndices.data(), details.capabilities.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque,
                                           presentMode, vk::True);
 
-    
+    swapChain = logicalDevice->createSwapchainKHRUnique(createInfo);
+    images = logicalDevice->getSwapchainImagesKHR(*swapChain);
 }
 
 vk::SurfaceFormatKHR SwapChain::PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)

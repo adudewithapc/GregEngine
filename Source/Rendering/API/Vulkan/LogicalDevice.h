@@ -20,6 +20,7 @@ public:
     ~LogicalDevice() = default;
 
     const vk::Queue& GetGraphicsQueue() const;
+    const vk::UniqueDevice& GetVulkanDevice() const;
 
 private:
     vk::Queue graphicsQueue;
