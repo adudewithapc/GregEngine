@@ -2,7 +2,9 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include "LogicalDevice.h"
 #include "PhysicalDevice.h"
+#include "SwapChain.h"
 #include "VulkanLoader.h"
 #include "../../Renderer.h"
 
@@ -27,14 +29,18 @@ private:
     
     std::vector<const char*> GetRequiredExtensions();
 
-    VulkanLoader loader;
     vk::UniqueInstance instance;
     vk::UniqueHandle<vk::DebugUtilsMessengerEXT, vk::detail::DispatchLoaderDynamic> debugMessenger;
     vk::UniqueSurfaceKHR surface;
+    
+    greg::vulkan::VulkanLoader loader;
 
-    std::optional<PhysicalDevice> preferredPhysicalDevice {};
-    std::vector<PhysicalDevice> physicalDevices;
+    std::optional<greg::vulkan::LogicalDevice> logicalDevice {};
+    std::optional<greg::vulkan::PhysicalDevice> preferredPhysicalDevice {};
+    std::vector<greg::vulkan::PhysicalDevice> physicalDevices {};
 
+    std::optional<greg::vulkan::SwapChain> swapChain {};
+    
     ////Windows specific
     HINSTANCE hInstance;
     HWND windowHandle;

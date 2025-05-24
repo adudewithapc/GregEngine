@@ -17,6 +17,8 @@ public:
     LogicalDevice(LogicalDevice&&) = default;
     LogicalDevice& operator=(LogicalDevice&&) = default;
 
+    ~LogicalDevice() = default;
+
     const vk::Queue& GetGraphicsQueue() const;
 
 private:

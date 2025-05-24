@@ -2,47 +2,9 @@
 
 #include <set>
 
+
 namespace greg::vulkan
 {
-//--QueueFamilies--
-PhysicalDevice::QueueFamilies::QueueFamilies(vk::PhysicalDevice device, const vk::UniqueSurfaceKHR& surface)
-{
-    std::vector<vk::QueueFamilyProperties> queueFamilyPropertyVector = device.getQueueFamilyProperties();
-
-    int i = 0;
-    for(const vk::QueueFamilyProperties& queueFamilyProperties : queueFamilyPropertyVector)
-    {
-        if(queueFamilyProperties.queueFlags & vk::QueueFlagBits::eGraphics)
-            graphicsFamily = i;
-
-        vk::Bool32 hasPresentSupport = device.getSurfaceSupportKHR(i, *surface);
-
-        if(hasPresentSupport)
-            presentFamily = i;
-
-        i++;
-    }
-}
-
-uint32_t PhysicalDevice::QueueFamilies::GetGraphicsFamily() const
-{
-    return *graphicsFamily;
-}
-uint32_t PhysicalDevice::QueueFamilies::GetPresentFamily() const
-{
-    return *presentFamily;
-}
-bool PhysicalDevice::QueueFamilies::IsComplete() const
-{
-    return graphicsFamily && presentFamily;
-}
-
-std::set<uint32_t> PhysicalDevice::QueueFamilies::GetUniqueQueueFamilies() const
-{
-    return { *graphicsFamily, *presentFamily };
-}
-
-//---PhysicalDevice---
 PhysicalDevice::PhysicalDevice(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface)
 : vulkanDevice(physicalDevice)
 {
@@ -76,6 +38,11 @@ bool PhysicalDevice::operator >(const PhysicalDevice& right) const
     return rating > right.rating;
 }
 
+/*SwapChain PhysicalDevice::CreateSwapChain(const vk::UniqueSurfaceKHR& surface) const
+{
+    return SwapChain(vulkanDevice, surface, queueFamilies);
+}*/
+
 bool PhysicalDevice::IsValid() const
 {
     return rating > 0;
@@ -96,7 +63,7 @@ const vk::PhysicalDeviceFeatures& PhysicalDevice::GetFeatures() const
     return features;
 }
 
-const PhysicalDevice::QueueFamilies& PhysicalDevice::GetQueueFamilies() const
+const QueueFamilies& PhysicalDevice::GetQueueFamilies() const
 {
     return queueFamilies;
 }

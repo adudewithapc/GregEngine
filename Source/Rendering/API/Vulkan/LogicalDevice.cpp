@@ -12,7 +12,7 @@ static const std::vector<const char*> requestedPhysicalExtensions =
 
 LogicalDevice::LogicalDevice(const greg::vulkan::PhysicalDevice& physicalDevice)
 {
-    PhysicalDevice::QueueFamilies queueFamilies = physicalDevice.GetQueueFamilies();
+    QueueFamilies queueFamilies = physicalDevice.GetQueueFamilies();
     std::set<uint32_t> uniqueQueueFamilies = queueFamilies.GetUniqueQueueFamilies();
 
     const float queuePriority = 1.0f;

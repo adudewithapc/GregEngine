@@ -27,6 +27,9 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
     
     preferredPhysicalDevice = FindPreferredPhysicalDevice();
     greg::log::Debug("Vulkan", std::format("Selecting graphics device \"{}\"", preferredPhysicalDevice->GetProperties().deviceName.data()));
+
+    logicalDevice = greg::vulkan::LogicalDevice(*preferredPhysicalDevice);
+    swapChain = greg::vulkan::SwapChain(preferredPhysicalDevice->GetVulkanDevice(), surface, preferredPhysicalDevice->GetQueueFamilies());
 }
 
 void VulkanRenderer::Render(const Color& clearColor)

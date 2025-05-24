@@ -1,0 +1,38 @@
+﻿#pragma once
+
+#include <vulkan/vulkan.hpp>
+
+#include "PhysicalDevice.h"
+
+namespace greg::vulkan
+{
+class SwapChain
+{
+public:
+    struct Details
+    {
+    public:
+        Details(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface);
+        
+        vk::SurfaceCapabilitiesKHR capabilities;
+        std::vector<vk::SurfaceFormatKHR> formats;
+        std::vector<vk::PresentModeKHR> presentModes;
+    };
+
+    SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface,
+              const greg::vulkan::QueueFamilies& queueFamilies);
+
+    SwapChain(const SwapChain&) = delete;
+    SwapChain& operator=(const SwapChain&) = delete;
+
+    SwapChain(SwapChain&&) = default;
+    SwapChain& operator=(SwapChain&&) = default;
+
+private:
+    static vk::SurfaceFormatKHR PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats);
+    static vk::PresentModeKHR PickPresentMode(const std::vector<vk::PresentModeKHR>& availablePresentModes);
+    static vk::Extent2D PickExtent(const vk::SurfaceCapabilitiesKHR& capabilities);
+    
+    Details details;
+};
+}
