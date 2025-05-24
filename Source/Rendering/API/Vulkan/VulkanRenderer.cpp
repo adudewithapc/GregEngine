@@ -1,5 +1,7 @@
 ﻿#include "VulkanRenderer.h"
 
+#include <fstream>
+
 #include "Debugging.h"
 #include "../../../Debugging/Log.h"
 
@@ -115,5 +117,24 @@ std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
     };
 
     return extensions;
+}
+
+std::vector<char> LoadShader(const std::string& fileName)
+{
+    std::ifstream file(fileName, std::ios::ate | std::ios::binary);
+
+    if(!file.is_open())
+        greg::log::Fatal("Vulkan Shaders", std::format("Failed trying to open shader file \"{}\"!"));
+
+
+    size_t fileSize = static_cast<size_t>(file.tellg());
+    std::vector<char> fileBuffer(fileSize);
+
+    file.seekg(0);
+    file.read(fileBuffer.data(), fileSize);
+
+    file.close();
+
+    return fileBuffer;
 }
 }

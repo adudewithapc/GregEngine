@@ -46,4 +46,6 @@ private:
     HWND windowHandle;
     ////
 };
+
+static std::vector<char> LoadShader(const std::string& fileName);
 }
