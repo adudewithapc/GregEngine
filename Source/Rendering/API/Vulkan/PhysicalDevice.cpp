@@ -4,6 +4,7 @@
 
 namespace greg::vulkan
 {
+//--QueueFamilies--
 PhysicalDevice::QueueFamilies::QueueFamilies(vk::PhysicalDevice device, const vk::UniqueSurfaceKHR& surface)
 {
     std::vector<vk::QueueFamilyProperties> queueFamilyPropertyVector = device.getQueueFamilyProperties();
@@ -41,6 +42,7 @@ std::set<uint32_t> PhysicalDevice::QueueFamilies::GetUniqueQueueFamilies() const
     return { *graphicsFamily, *presentFamily };
 }
 
+//---PhysicalDevice---
 PhysicalDevice::PhysicalDevice(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface)
 : vulkanDevice(physicalDevice)
 {
@@ -55,7 +57,10 @@ PhysicalDevice::PhysicalDevice(vk::PhysicalDevice physicalDevice, const vk::Uniq
     if(!queueFamilies.IsComplete())
         return;
 
-    if(!HasAllRequiredExtensions(physicalDevice))
+    if(!HasAllRequiredExtensions())
+        return;
+
+    if(!HasSwapChainSupport(surface))
         return;
 
     if(properties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
@@ -101,9 +106,9 @@ const vk::PhysicalDevice& PhysicalDevice::GetVulkanDevice() const
     return vulkanDevice;
 }
 
-bool PhysicalDevice::HasAllRequiredExtensions(vk::PhysicalDevice device) const
+bool PhysicalDevice::HasAllRequiredExtensions() const
 {
-    std::vector<vk::ExtensionProperties> availableExtensions = device.enumerateDeviceExtensionProperties();
+    std::vector<vk::ExtensionProperties> availableExtensions = vulkanDevice.enumerateDeviceExtensionProperties();
     std::vector<const char*> requiredExtensions = GetRequiredExtensions();
     std::set<const char*> uniqueRequiredExtensions = {std::begin(requiredExtensions), std::end(requiredExtensions)};
 
@@ -112,11 +117,16 @@ bool PhysicalDevice::HasAllRequiredExtensions(vk::PhysicalDevice device) const
         uniqueRequiredExtensions.erase(availableExtension.extensionName);
     }
 
-    return uniqueRequiredExtensions.empty();
+    return !uniqueRequiredExtensions.empty();
 }
 
 std::vector<const char*> PhysicalDevice::GetRequiredExtensions() const
 {
     return { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+}
+
+bool PhysicalDevice::HasSwapChainSupport(const vk::UniqueSurfaceKHR& surface) const
+{
+    return !vulkanDevice.getSurfaceFormatsKHR(*surface).empty() && !vulkanDevice.getSurfacePresentModesKHR(*surface).empty();
 }
 }

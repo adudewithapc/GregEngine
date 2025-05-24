@@ -44,14 +44,15 @@ public:
     const QueueFamilies& GetQueueFamilies() const;
     const vk::PhysicalDevice& GetVulkanDevice() const;
 private:
-    bool HasAllRequiredExtensions(vk::PhysicalDevice device) const;
+    bool HasAllRequiredExtensions() const;
     std::vector<const char*> GetRequiredExtensions() const;
+    bool HasSwapChainSupport(const vk::UniqueSurfaceKHR& surface) const;
     
     size_t rating = 0;
     vk::PhysicalDeviceProperties properties {};
     vk::PhysicalDeviceFeatures features {};
     QueueFamilies queueFamilies {};
-
+    
     vk::PhysicalDevice vulkanDevice;
 };
 }

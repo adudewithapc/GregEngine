@@ -85,7 +85,9 @@ void VulkanRenderer::LoadAllPhysicalDevices()
     size_t i = 0;
     for(const vk::PhysicalDevice& vulkanDevice : vulkanPhysicalDevices)
     {
-        physicalDevices.emplace_back(vulkanDevice, surface);
+        greg::vulkan::PhysicalDevice physicalDevice(vulkanDevice, surface);
+        if(physicalDevice.IsValid())
+            physicalDevices.push_back(physicalDevice);
         i++;
     }
 }
