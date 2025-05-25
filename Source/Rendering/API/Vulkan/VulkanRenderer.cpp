@@ -34,8 +34,10 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
     greg::log::Debug("Vulkan", std::format("Selecting graphics device \"{}\"", preferredPhysicalDevice->GetProperties().deviceName.data()));
 
     logicalDevice = greg::vulkan::LogicalDevice(*preferredPhysicalDevice);
+    
     swapChain = greg::vulkan::SwapChain(preferredPhysicalDevice->GetVulkanDevice(), surface, logicalDevice->GetVulkanDevice(), preferredPhysicalDevice->GetQueueFamilies());
     renderPass = CreateRenderPass();
+    swapChain->CreateFramebuffers(logicalDevice->GetVulkanDevice(), renderPass);
 
     graphicsPipeline = CreateGraphicsPipeline();
 }
@@ -200,7 +202,13 @@ std::vector<char> LoadShaderFile(const std::string& fileName)
     std::ifstream file(fullPath, std::ios::ate | std::ios::binary);
 
     if(!file.is_open())
-        greg::log::Fatal("Vulkan Shaders", std::format("Failed trying to open shader file \"{}\"! Reason: {}", fullPath, strerror(errno)));
+    {
+        char errorBuffer[256];
+        ////Windows specific
+        strerror_s(errorBuffer, sizeof(errorBuffer), errno);
+        ////
+        greg::log::Fatal("Vulkan Shaders", std::format("Failed trying to open shader file \"{}\"! Reason: {}", fullPath, errorBuffer));
+    }
 
     size_t fileSize = static_cast<size_t>(file.tellg());
     std::vector<char> fileBuffer(fileSize);

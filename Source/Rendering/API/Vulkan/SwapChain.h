@@ -28,6 +28,7 @@ public:
     SwapChain(SwapChain&&) = default;
     SwapChain& operator=(SwapChain&&) = default;
 
+    void CreateFramebuffers(const vk::UniqueDevice& logicalDevice, const vk::UniqueRenderPass& renderPass);
     vk::Extent2D GetExtent() const;
     vk::Format GetFormat() const;
 private:
@@ -42,6 +43,7 @@ private:
     
     std::vector<vk::Image> images {};
     std::vector<vk::UniqueImageView> imageViews {};
+    std::vector<vk::UniqueFramebuffer> framebuffers {};
     vk::UniqueSwapchainKHR swapChain {};
 };
 }

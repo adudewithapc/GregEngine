@@ -49,9 +49,21 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
     images = logicalDevice->getSwapchainImagesKHR(*swapChain);
 
     imageViews.reserve(images.size());
-    for(size_t i = 0; i < images.size(); i++)
+    for(const vk::Image& image : images)
     {
-        imageViews.emplace_back(greg::vulkan::image::CreateImageView(logicalDevice, images[i], surfaceFormat.format, vk::ImageAspectFlagBits::eColor, 1));
+        imageViews.emplace_back(greg::vulkan::image::CreateImageView(logicalDevice, image, surfaceFormat.format, vk::ImageAspectFlagBits::eColor, 1));
+    }
+}
+
+void SwapChain::CreateFramebuffers(const vk::UniqueDevice& logicalDevice, const vk::UniqueRenderPass& renderPass)
+{
+    framebuffers.reserve(imageViews.size());
+    for(const vk::UniqueImageView& imageView : imageViews)
+    {
+        vk::ImageView attachments[] = { *imageView };
+
+        vk::FramebufferCreateInfo framebufferCreateInfo({}, *renderPass, 1, attachments, extent.width, extent.height, 1);
+        framebuffers.emplace_back(logicalDevice->createFramebufferUnique(framebufferCreateInfo));
     }
 }
 
