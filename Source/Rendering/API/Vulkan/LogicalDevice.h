@@ -21,6 +21,7 @@ public:
 
     const vk::Queue& GetGraphicsQueue() const;
     const vk::UniqueDevice& GetVulkanDevice() const;
+    vk::UniqueShaderModule CreateShaderStage(const std::vector<char>& code);
 
 private:
     vk::Queue graphicsQueue;

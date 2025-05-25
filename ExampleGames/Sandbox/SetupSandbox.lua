@@ -19,6 +19,12 @@ project "Sandbox"
 	
 	targetdir ("Binaries/" .. outputdir)
 	objdir ("Binaries/Intermediate/" .. outputdir)
+	debugdir "%{cfg.targetdir}"
+	
+	postbuildcommands
+	{
+		'{COPYDIR} "Binaries/Shaders" "%{cfg.targetdir}/Shaders"'
+	}
 	
 	filter "system:windows"
 		systemversion "latest"

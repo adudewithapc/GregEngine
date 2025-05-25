@@ -23,6 +23,8 @@ protected:
 private:
     vk::UniqueInstance CreateInstance();
     vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> CreateSurface();
+    vk::UniquePipeline CreateGraphicsPipeline();
+    vk::UniqueRenderPass CreateRenderPass();
 
     void LoadAllPhysicalDevices();
     PhysicalDevice FindPreferredPhysicalDevice();
@@ -40,6 +42,8 @@ private:
     std::vector<greg::vulkan::PhysicalDevice> physicalDevices {};
 
     std::optional<greg::vulkan::SwapChain> swapChain {};
+    vk::UniqueRenderPass renderPass {};
+    vk::UniquePipeline graphicsPipeline {};
     
     ////Windows specific
     HINSTANCE hInstance;
@@ -47,5 +51,5 @@ private:
     ////
 };
 
-static std::vector<char> LoadShader(const std::string& fileName);
+static std::vector<char> LoadShaderFile(const std::string& fileName);
 }

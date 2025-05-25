@@ -28,12 +28,17 @@ public:
     SwapChain(SwapChain&&) = default;
     SwapChain& operator=(SwapChain&&) = default;
 
+    vk::Extent2D GetExtent() const;
+    vk::Format GetFormat() const;
 private:
     static vk::SurfaceFormatKHR PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats);
     static vk::PresentModeKHR PickPresentMode(const std::vector<vk::PresentModeKHR>& availablePresentModes);
     static vk::Extent2D PickExtent(const vk::SurfaceCapabilitiesKHR& capabilities);
 
     Details details;
+
+    vk::Extent2D extent;
+    vk::Format format;
     
     std::vector<vk::Image> images {};
     std::vector<vk::UniqueImageView> imageViews {};

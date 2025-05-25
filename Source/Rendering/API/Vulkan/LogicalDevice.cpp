@@ -43,4 +43,10 @@ const vk::UniqueDevice& LogicalDevice::GetVulkanDevice() const
 {
     return device;
 }
+
+vk::UniqueShaderModule LogicalDevice::CreateShaderStage(const std::vector<char>& code)
+{
+    vk::ShaderModuleCreateInfo createInfo({}, code.size(), reinterpret_cast<const uint32_t*>(code.data()));
+    return device->createShaderModuleUnique(createInfo);
+}
 }

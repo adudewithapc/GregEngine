@@ -21,8 +21,10 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
         imageCount = details.capabilities.maxImageCount;
 
     const vk::SurfaceFormatKHR surfaceFormat = PickSurfaceFormat(details.formats);
+    format = surfaceFormat.format;
+    
     const vk::PresentModeKHR presentMode = PickPresentMode(details.presentModes);
-    const vk::Extent2D extent = PickExtent(details.capabilities);
+    extent = PickExtent(details.capabilities);
 
     const bool isGraphicsFamilyAlsoPresent = queueFamilies.GetGraphicsFamily() == queueFamilies.GetPresentFamily();
     vk::SharingMode sharingMode;
@@ -51,6 +53,16 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
     {
         imageViews.emplace_back(greg::vulkan::image::CreateImageView(logicalDevice, images[i], surfaceFormat.format, vk::ImageAspectFlagBits::eColor, 1));
     }
+}
+
+vk::Extent2D SwapChain::GetExtent() const
+{
+    return extent;
+}
+
+vk::Format SwapChain::GetFormat() const
+{
+    return format;
 }
 
 vk::SurfaceFormatKHR SwapChain::PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)

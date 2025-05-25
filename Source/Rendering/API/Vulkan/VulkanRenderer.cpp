@@ -1,11 +1,14 @@
 ﻿#include "VulkanRenderer.h"
 
+#include <filesystem>
 #include <fstream>
 
 #include "Debugging.h"
 #include "../../../Debugging/Log.h"
 
 #include "../../../GregorianEngine.h"
+
+static const bool WIREFRAME_MODE = false;
 
 namespace greg::vulkan
 {
@@ -32,6 +35,9 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
 
     logicalDevice = greg::vulkan::LogicalDevice(*preferredPhysicalDevice);
     swapChain = greg::vulkan::SwapChain(preferredPhysicalDevice->GetVulkanDevice(), surface, logicalDevice->GetVulkanDevice(), preferredPhysicalDevice->GetQueueFamilies());
+    renderPass = CreateRenderPass();
+
+    graphicsPipeline = CreateGraphicsPipeline();
 }
 
 void VulkanRenderer::Render(const Color& clearColor)
@@ -81,6 +87,73 @@ vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> VulkanRendere
     return instance->createWin32SurfaceKHRUnique(createInfo);
 }
 
+vk::UniquePipeline VulkanRenderer::CreateGraphicsPipeline()
+{
+    std::vector<char> vertexShaderCode = LoadShaderFile("triangle_vertex");
+    std::vector<char> fragmentShaderCode = LoadShaderFile("triangle_fragment");
+
+    vk::UniqueShaderModule vertexShaderModule = logicalDevice->CreateShaderStage(vertexShaderCode);
+    vk::UniqueShaderModule fragmentShaderModule = logicalDevice->CreateShaderStage(fragmentShaderCode);
+
+    vk::PipelineShaderStageCreateInfo vertexShaderStage({}, vk::ShaderStageFlagBits::eVertex, *vertexShaderModule, "main");
+    vk::PipelineShaderStageCreateInfo fragmentShaderStage({}, vk::ShaderStageFlagBits::eFragment, *fragmentShaderModule, "main");
+
+    vk::PipelineShaderStageCreateInfo shaderStages[] = { vertexShaderStage, fragmentShaderStage };
+
+    vk::PipelineVertexInputStateCreateInfo vertexInputCreateInfo({}, 0, nullptr, 0, nullptr);
+    
+    std::vector<vk::DynamicState> dynamicStates = { vk::DynamicState::eViewport, vk::DynamicState::eScissor };
+    vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo({}, static_cast<uint32_t>(dynamicStates.size()), dynamicStates.data());
+
+    vk::PipelineInputAssemblyStateCreateInfo inputAssemblyCreateInfo({}, vk::PrimitiveTopology::eTriangleList, vk::False);
+
+    vk::Viewport viewport(0.0f, 0.0f, static_cast<float>(swapChain->GetExtent().width), static_cast<float>(swapChain->GetExtent().height), 0.0f, 1.0f);
+    vk::Rect2D scissor(vk::Offset2D(0, 0), swapChain->GetExtent());
+    vk::PipelineViewportStateCreateInfo viewportStateCreateInfo({}, 1, &viewport, 1, &scissor);
+
+    //Fixed state
+    vk::PolygonMode polygonMode = WIREFRAME_MODE ? vk::PolygonMode::eLine : vk::PolygonMode::eFill;
+    vk::PipelineRasterizationStateCreateInfo rasterizerCreateInfo({}, vk::False, vk::False, polygonMode, vk::CullModeFlagBits::eBack,
+                                                                  vk::FrontFace::eClockwise, vk::False, 0.0f, 0.0f, 0.0f, 1.0f);
+    vk::PipelineMultisampleStateCreateInfo multisampleCreateInfo({}, vk::SampleCountFlagBits::e1, vk::False, 1.0f, nullptr, vk::False, vk::False);
+    vk::PipelineDepthStencilStateCreateInfo depthStencilCreateInfo {};
+
+    //Color blending
+    vk::PipelineColorBlendAttachmentState colorBlendAttachment(vk::False, vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd,
+                                                                vk::BlendFactor::eOne, vk::BlendFactor::eZero, vk::BlendOp::eAdd, 
+                                                                vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
+    vk::PipelineColorBlendStateCreateInfo colorBlendingCreateInfo({}, vk::False, vk::LogicOp::eClear, 1, &colorBlendAttachment, {0, 0, 0, 0});
+
+    vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo({}, 0, nullptr, 0, nullptr);
+    vk::UniquePipelineLayout pipelineLayout = logicalDevice->GetVulkanDevice()->createPipelineLayoutUnique(pipelineLayoutCreateInfo);
+
+    vk::GraphicsPipelineCreateInfo graphicsPipelineCreateInfo({}, 2, shaderStages, &vertexInputCreateInfo, &inputAssemblyCreateInfo, nullptr, &viewportStateCreateInfo, &rasterizerCreateInfo,
+                                                              &multisampleCreateInfo, &depthStencilCreateInfo, &colorBlendingCreateInfo, &dynamicStateCreateInfo, *pipelineLayout, *renderPass, 0, nullptr, -1);
+
+    auto [result, pipelines] = logicalDevice->GetVulkanDevice()->createGraphicsPipelinesUnique(nullptr, graphicsPipelineCreateInfo);
+    if(result != vk::Result::eSuccess)
+        greg::log::Fatal("Vulkan", "Failed to create graphics pipeline!");
+
+    return std::move(pipelines.front());
+}
+
+vk::UniqueRenderPass VulkanRenderer::CreateRenderPass()
+{
+    //Color
+    vk::AttachmentDescription colorAttachment({}, swapChain->GetFormat(), vk::SampleCountFlagBits::e1, vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+                                              vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal);
+    vk::AttachmentReference colorAttachmentRef(0, vk::ImageLayout::eColorAttachmentOptimal);
+
+    //Subpasses
+    vk::SubpassDescription subpass({}, vk::PipelineBindPoint::eGraphics, 0, nullptr, 1, &colorAttachmentRef,
+                                   nullptr, nullptr, 0, nullptr);
+
+    std::vector<vk::AttachmentDescription> attachments = { colorAttachment };
+    vk::RenderPassCreateInfo renderPassCreateInfo({}, static_cast<uint32_t>(attachments.size()), attachments.data(), 1, &subpass, 0, nullptr);
+
+    return logicalDevice->GetVulkanDevice()->createRenderPassUnique(renderPassCreateInfo);
+}
+
 void VulkanRenderer::LoadAllPhysicalDevices()
 {
     std::vector<vk::PhysicalDevice> vulkanPhysicalDevices = instance->enumeratePhysicalDevices();
@@ -119,13 +192,15 @@ std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
     return extensions;
 }
 
-std::vector<char> LoadShader(const std::string& fileName)
+//Assumed to be in {targetdirectory}/Shaders
+//Also assumed to use .spv extension
+std::vector<char> LoadShaderFile(const std::string& fileName)
 {
-    std::ifstream file(fileName, std::ios::ate | std::ios::binary);
+    std::string fullPath = "Shaders/" + fileName + ".spv";
+    std::ifstream file(fullPath, std::ios::ate | std::ios::binary);
 
     if(!file.is_open())
-        greg::log::Fatal("Vulkan Shaders", std::format("Failed trying to open shader file \"{}\"!", fileName));
-
+        greg::log::Fatal("Vulkan Shaders", std::format("Failed trying to open shader file \"{}\"! Reason: {}", fullPath, strerror(errno)));
 
     size_t fileSize = static_cast<size_t>(file.tellg());
     std::vector<char> fileBuffer(fileSize);
