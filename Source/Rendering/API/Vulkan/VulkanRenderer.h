@@ -2,11 +2,13 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include "CommandPool.h"
 #include "LogicalDevice.h"
 #include "PhysicalDevice.h"
 #include "SwapChain.h"
 #include "VulkanLoader.h"
 #include "../../Renderer.h"
+#include "../../../Math/Color.h"
 
 namespace greg::vulkan
 {
@@ -25,9 +27,13 @@ private:
     vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> CreateSurface();
     vk::UniquePipeline CreateGraphicsPipeline();
     vk::UniqueRenderPass CreateRenderPass();
-
     void LoadAllPhysicalDevices();
     PhysicalDevice FindPreferredPhysicalDevice();
+
+    vk::UniqueSemaphore CreateUniqueSemaphore(const LogicalDevice& logicalDevice);
+    vk::UniqueFence CreateFence(const LogicalDevice& logicalDevice);
+
+    void RecordDrawCommand(const Color& clearColor);
     
     std::vector<const char*> GetRequiredExtensions();
 
@@ -37,13 +43,26 @@ private:
     
     greg::vulkan::VulkanLoader loader;
 
+#pragma region Devices
     std::optional<greg::vulkan::LogicalDevice> logicalDevice {};
     std::optional<greg::vulkan::PhysicalDevice> preferredPhysicalDevice {};
     std::vector<greg::vulkan::PhysicalDevice> physicalDevices {};
+#pragma endregion
 
+#pragma region Rendering
+    //Rendering
     std::optional<greg::vulkan::SwapChain> swapChain {};
     vk::UniqueRenderPass renderPass {};
     vk::UniquePipeline graphicsPipeline {};
+#pragma endregion 
+
+    std::optional<greg::vulkan::command::CommandPool> graphicsCommandPool {};
+
+#pragma region Sync Objects
+    vk::UniqueSemaphore imageAvailableSemaphore {};
+    vk::UniqueSemaphore renderFinishedSemaphore {};
+    vk::UniqueFence inFlightFence {};
+#pragma endregion 
     
     ////Windows specific
     HINSTANCE hInstance;

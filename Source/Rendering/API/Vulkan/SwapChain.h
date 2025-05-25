@@ -31,6 +31,7 @@ public:
     void CreateFramebuffers(const vk::UniqueDevice& logicalDevice, const vk::UniqueRenderPass& renderPass);
     vk::Extent2D GetExtent() const;
     vk::Format GetFormat() const;
+    const vk::UniqueFramebuffer& GetFramebuffer(uint32_t frameIndex);
 private:
     static vk::SurfaceFormatKHR PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats);
     static vk::PresentModeKHR PickPresentMode(const std::vector<vk::PresentModeKHR>& availablePresentModes);

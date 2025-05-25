@@ -34,6 +34,11 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
     greg::log::Debug("Vulkan", std::format("Selecting graphics device \"{}\"", preferredPhysicalDevice->GetProperties().deviceName.data()));
 
     logicalDevice = greg::vulkan::LogicalDevice(*preferredPhysicalDevice);
+    graphicsCommandPool = greg::vulkan::command::CommandPool(*logicalDevice, preferredPhysicalDevice->GetQueueFamilies().GetGraphicsFamily());
+
+    imageAvailableSemaphore = CreateUniqueSemaphore(*logicalDevice);
+    renderFinishedSemaphore = CreateUniqueSemaphore(*logicalDevice);
+    inFlightFence = CreateFence(*logicalDevice);
     
     swapChain = greg::vulkan::SwapChain(preferredPhysicalDevice->GetVulkanDevice(), surface, logicalDevice->GetVulkanDevice(), preferredPhysicalDevice->GetQueueFamilies());
     renderPass = CreateRenderPass();
@@ -156,6 +161,34 @@ vk::UniqueRenderPass VulkanRenderer::CreateRenderPass()
     return logicalDevice->GetVulkanDevice()->createRenderPassUnique(renderPassCreateInfo);
 }
 
+void VulkanRenderer::RecordDrawCommand(const Color& clearColor)
+{
+    vk::CommandBuffer buffer = *graphicsCommandPool->GetBuffer(0);
+    vk::CommandBufferBeginInfo beginInfo;
+
+    vk::Extent2D swapChainExtent = swapChain->GetExtent();
+
+    buffer.begin(beginInfo);
+
+    vk::Rect2D renderArea(vk::Offset2D(0, 0), swapChainExtent);
+    vk::ClearValue clearValue(vk::ClearColorValue(clearColor.r, clearColor.g, clearColor.b, clearColor.a));
+    vk::RenderPassBeginInfo renderPassBeginInfo(*renderPass, *swapChain->GetFramebuffer(0), renderArea, 1, &clearValue);
+
+    buffer.beginRenderPass(&renderPassBeginInfo, vk::SubpassContents::eInline);
+    buffer.bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
+    
+    vk::Viewport viewport(0.0f, 0.0f, static_cast<float>(swapChainExtent.width), static_cast<float>(swapChainExtent.height), 0.0f, 1.0f);
+    buffer.setViewport(0, 1, &viewport);
+
+    vk::Rect2D scissor(vk::Offset2D(0, 0), swapChainExtent);
+    buffer.setScissor(0, 1, &scissor);
+
+    buffer.draw(3, 1, 0, 0);
+
+    buffer.endRenderPass();
+    buffer.end();
+}
+
 void VulkanRenderer::LoadAllPhysicalDevices()
 {
     std::vector<vk::PhysicalDevice> vulkanPhysicalDevices = instance->enumeratePhysicalDevices();
@@ -176,6 +209,18 @@ PhysicalDevice VulkanRenderer::FindPreferredPhysicalDevice()
 {
     std::sort(std::begin(physicalDevices), std::end(physicalDevices), std::greater<PhysicalDevice>());
     return physicalDevices.front();
+}
+
+vk::UniqueSemaphore VulkanRenderer::CreateUniqueSemaphore(const LogicalDevice& logicalDevice)
+{
+    vk::SemaphoreCreateInfo createInfo;
+    return logicalDevice.GetVulkanDevice()->createSemaphoreUnique(createInfo);
+}
+
+vk::UniqueFence VulkanRenderer::CreateFence(const LogicalDevice& logicalDevice)
+{
+    vk::FenceCreateInfo createInfo;
+    return logicalDevice.GetVulkanDevice()->createFenceUnique(createInfo);
 }
 
 std::vector<const char*> VulkanRenderer::GetRequiredExtensions()

@@ -77,6 +77,11 @@ vk::Format SwapChain::GetFormat() const
     return format;
 }
 
+const vk::UniqueFramebuffer& SwapChain::GetFramebuffer(uint32_t frameIndex)
+{
+    return framebuffers[frameIndex];
+}
+
 vk::SurfaceFormatKHR SwapChain::PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
 {
     for(const vk::SurfaceFormatKHR& availableFormat : availableFormats)
