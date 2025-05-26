@@ -16,6 +16,8 @@ class VulkanRenderer : public Renderer
 {
 public:
     VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd);
+
+    ~VulkanRenderer();
     
     void Render(const Color& clearColor) override;
 
@@ -31,9 +33,9 @@ private:
     PhysicalDevice FindPreferredPhysicalDevice();
 
     vk::UniqueSemaphore CreateUniqueSemaphore(const LogicalDevice& logicalDevice);
-    vk::UniqueFence CreateFence(const LogicalDevice& logicalDevice);
+    vk::UniqueFence CreateFence(const LogicalDevice& logicalDevice, bool startSignaled);
 
-    void RecordDrawCommand(const Color& clearColor);
+    void RecordDrawCommand(const vk::UniqueCommandBuffer& commandBuffer, const Color& clearColor, uint32_t imageIndex);
     
     std::vector<const char*> GetRequiredExtensions();
 

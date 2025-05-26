@@ -32,6 +32,7 @@ public:
     vk::Extent2D GetExtent() const;
     vk::Format GetFormat() const;
     const vk::UniqueFramebuffer& GetFramebuffer(uint32_t frameIndex);
+    const vk::UniqueSwapchainKHR& GetVulkanSwapChain() const;
 private:
     static vk::SurfaceFormatKHR PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats);
     static vk::PresentModeKHR PickPresentMode(const std::vector<vk::PresentModeKHR>& availablePresentModes);

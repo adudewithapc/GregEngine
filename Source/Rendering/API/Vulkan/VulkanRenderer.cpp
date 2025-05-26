@@ -38,7 +38,7 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
 
     imageAvailableSemaphore = CreateUniqueSemaphore(*logicalDevice);
     renderFinishedSemaphore = CreateUniqueSemaphore(*logicalDevice);
-    inFlightFence = CreateFence(*logicalDevice);
+    inFlightFence = CreateFence(*logicalDevice, true);
     
     swapChain = greg::vulkan::SwapChain(preferredPhysicalDevice->GetVulkanDevice(), surface, logicalDevice->GetVulkanDevice(), preferredPhysicalDevice->GetQueueFamilies());
     renderPass = CreateRenderPass();
@@ -47,9 +47,52 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
     graphicsPipeline = CreateGraphicsPipeline();
 }
 
+VulkanRenderer::~VulkanRenderer()
+{
+    logicalDevice->GetVulkanDevice()->waitIdle();
+}
+
 void VulkanRenderer::Render(const Color& clearColor)
 {
-    
+    logicalDevice->GetVulkanDevice()->waitForFences(1, &*inFlightFence, vk::True, UINT64_MAX);
+    logicalDevice->GetVulkanDevice()->resetFences(1, &*inFlightFence);
+
+    uint32_t swapChainImageIndex;
+    {
+        vk::Result acquireResult = logicalDevice->GetVulkanDevice()->acquireNextImageKHR(*swapChain->GetVulkanSwapChain(), UINT64_MAX, *imageAvailableSemaphore, nullptr, &swapChainImageIndex);
+
+        if(acquireResult == vk::Result::eErrorOutOfDateKHR)
+        {
+            //Recreate swapchain
+            return;
+        }
+        else if(acquireResult != vk::Result::eSuccess && acquireResult != vk::Result::eSuboptimalKHR)
+        {
+            greg::log::Fatal("Vulkan", "Failed to acquire swap chain image!");
+        }
+    }
+
+    graphicsCommandPool->GetBuffer(0)->reset();
+    RecordDrawCommand(graphicsCommandPool->GetBuffer(0), clearColor, swapChainImageIndex);
+
+    std::array<vk::PipelineStageFlags, 1> waitStages = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
+    vk::Semaphore waitSemaphores[] = { *imageAvailableSemaphore };
+    vk::Semaphore signalSemaphores[] = { *renderFinishedSemaphore };
+    vk::SubmitInfo submitInfo(1, waitSemaphores, waitStages.data(), 1, &*graphicsCommandPool->GetBuffer(0), 1, signalSemaphores);
+    if(logicalDevice->GetGraphicsQueue().submit(1, &submitInfo, *inFlightFence) != vk::Result::eSuccess)
+        greg::log::Fatal("Vulkan", "Failed to submit draw command buffer!");
+
+    vk::SwapchainKHR swapChains[] = { *swapChain->GetVulkanSwapChain() };
+    vk::PresentInfoKHR presentInfo(1, signalSemaphores, 1, swapChains, &swapChainImageIndex, nullptr);
+    vk::Result result = logicalDevice->GetPresentQueue().presentKHR(presentInfo);
+    if(result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR)
+    {
+        //Recreate swapchain
+    }
+    else if(result != vk::Result::eSuccess)
+    {
+        greg::log::Fatal("Vulkan", "Failed to present swap chain!");
+    }
 }
 void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
 {
@@ -148,7 +191,7 @@ vk::UniqueRenderPass VulkanRenderer::CreateRenderPass()
 {
     //Color
     vk::AttachmentDescription colorAttachment({}, swapChain->GetFormat(), vk::SampleCountFlagBits::e1, vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
-                                              vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal);
+                                              vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
     vk::AttachmentReference colorAttachmentRef(0, vk::ImageLayout::eColorAttachmentOptimal);
 
     //Subpasses
@@ -161,7 +204,7 @@ vk::UniqueRenderPass VulkanRenderer::CreateRenderPass()
     return logicalDevice->GetVulkanDevice()->createRenderPassUnique(renderPassCreateInfo);
 }
 
-void VulkanRenderer::RecordDrawCommand(const Color& clearColor)
+void VulkanRenderer::RecordDrawCommand(const vk::UniqueCommandBuffer& commandBuffer, const Color& clearColor, uint32_t imageIndex)
 {
     vk::CommandBuffer buffer = *graphicsCommandPool->GetBuffer(0);
     vk::CommandBufferBeginInfo beginInfo;
@@ -172,7 +215,7 @@ void VulkanRenderer::RecordDrawCommand(const Color& clearColor)
 
     vk::Rect2D renderArea(vk::Offset2D(0, 0), swapChainExtent);
     vk::ClearValue clearValue(vk::ClearColorValue(clearColor.r, clearColor.g, clearColor.b, clearColor.a));
-    vk::RenderPassBeginInfo renderPassBeginInfo(*renderPass, *swapChain->GetFramebuffer(0), renderArea, 1, &clearValue);
+    vk::RenderPassBeginInfo renderPassBeginInfo(*renderPass, *swapChain->GetFramebuffer(imageIndex), renderArea, 1, &clearValue);
 
     buffer.beginRenderPass(&renderPassBeginInfo, vk::SubpassContents::eInline);
     buffer.bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
@@ -217,9 +260,11 @@ vk::UniqueSemaphore VulkanRenderer::CreateUniqueSemaphore(const LogicalDevice& l
     return logicalDevice.GetVulkanDevice()->createSemaphoreUnique(createInfo);
 }
 
-vk::UniqueFence VulkanRenderer::CreateFence(const LogicalDevice& logicalDevice)
+vk::UniqueFence VulkanRenderer::CreateFence(const LogicalDevice& logicalDevice, bool startSignaled = false)
 {
     vk::FenceCreateInfo createInfo;
+    if(startSignaled)
+        createInfo.setFlags(vk::FenceCreateFlagBits::eSignaled);
     return logicalDevice.GetVulkanDevice()->createFenceUnique(createInfo);
 }
 

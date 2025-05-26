@@ -39,6 +39,11 @@ const vk::Queue& LogicalDevice::GetGraphicsQueue() const
     return graphicsQueue;
 }
 
+const vk::Queue& LogicalDevice::GetPresentQueue() const
+{
+    return presentQueue;
+}
+
 const vk::UniqueDevice& LogicalDevice::GetVulkanDevice() const
 {
     return device;

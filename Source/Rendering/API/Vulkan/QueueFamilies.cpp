@@ -17,6 +17,9 @@ QueueFamilies::QueueFamilies(vk::PhysicalDevice device, const vk::UniqueSurfaceK
         if(hasPresentSupport)
             presentFamily = i;
 
+        if(IsComplete())
+            break;
+
         i++;
     }
 }

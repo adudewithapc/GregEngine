@@ -20,6 +20,8 @@ public:
     ~LogicalDevice() = default;
 
     const vk::Queue& GetGraphicsQueue() const;
+    const vk::Queue& GetPresentQueue() const;
+    
     const vk::UniqueDevice& GetVulkanDevice() const;
     vk::UniqueShaderModule CreateShaderStage(const std::vector<char>& code);
 

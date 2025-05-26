@@ -42,7 +42,7 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
 
     vk::SwapchainCreateInfoKHR createInfo({}, *surface, imageCount, surfaceFormat.format, surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment,
                                           sharingMode, static_cast<uint32_t>(queueFamilyIndices.size()), queueFamilyIndices.data(), details.capabilities.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque,
-                                          presentMode, vk::True);
+                                          presentMode, vk::True, nullptr);
 
     swapChain = logicalDevice->createSwapchainKHRUnique(createInfo);
     
@@ -80,6 +80,11 @@ vk::Format SwapChain::GetFormat() const
 const vk::UniqueFramebuffer& SwapChain::GetFramebuffer(uint32_t frameIndex)
 {
     return framebuffers[frameIndex];
+}
+
+const vk::UniqueSwapchainKHR& SwapChain::GetVulkanSwapChain() const
+{
+    return swapChain;
 }
 
 vk::SurfaceFormatKHR SwapChain::PickSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
