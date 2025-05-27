@@ -5,6 +5,7 @@
 
 #include "Debugging.h"
 #include "../../../Debugging/Log.h"
+#include "../../../Math/Color.h"
 
 #include "../../../GregorianEngine.h"
 
@@ -34,11 +35,14 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
     greg::log::Debug("Vulkan", std::format("Selecting graphics device \"{}\"", preferredPhysicalDevice->GetProperties().deviceName.data()));
 
     logicalDevice = greg::vulkan::LogicalDevice(*preferredPhysicalDevice);
-    graphicsCommandPool = greg::vulkan::command::CommandPool(*logicalDevice, preferredPhysicalDevice->GetQueueFamilies().GetGraphicsFamily());
+    graphicsCommandPool = greg::vulkan::command::CommandPool(*logicalDevice, preferredPhysicalDevice->GetQueueFamilies().GetGraphicsFamily(), MAX_FRAMES_IN_FLIGHT);
 
-    imageAvailableSemaphore = CreateUniqueSemaphore(*logicalDevice);
-    renderFinishedSemaphore = CreateUniqueSemaphore(*logicalDevice);
-    inFlightFence = CreateFence(*logicalDevice, true);
+    for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+    {
+        imageAvailableSemaphores[i] = CreateUniqueSemaphore(*logicalDevice);
+        renderFinishedSemaphores[i] = CreateUniqueSemaphore(*logicalDevice);
+        inFlightFences[i] = CreateFence(*logicalDevice, true);
+    }
     
     swapChain = greg::vulkan::SwapChain(preferredPhysicalDevice->GetVulkanDevice(), surface, logicalDevice->GetVulkanDevice(), preferredPhysicalDevice->GetQueueFamilies());
     renderPass = CreateRenderPass();
@@ -54,12 +58,12 @@ VulkanRenderer::~VulkanRenderer()
 
 void VulkanRenderer::Render(const Color& clearColor)
 {
-    logicalDevice->GetVulkanDevice()->waitForFences(1, &*inFlightFence, vk::True, UINT64_MAX);
-    logicalDevice->GetVulkanDevice()->resetFences(1, &*inFlightFence);
+    logicalDevice->GetVulkanDevice()->waitForFences(1, &*inFlightFences[currentFrameIndex], vk::True, UINT64_MAX);
+    logicalDevice->GetVulkanDevice()->resetFences(1, &*inFlightFences[currentFrameIndex]);
 
     uint32_t swapChainImageIndex;
     {
-        vk::Result acquireResult = logicalDevice->GetVulkanDevice()->acquireNextImageKHR(*swapChain->GetVulkanSwapChain(), UINT64_MAX, *imageAvailableSemaphore, nullptr, &swapChainImageIndex);
+        vk::Result acquireResult = logicalDevice->GetVulkanDevice()->acquireNextImageKHR(*swapChain->GetVulkanSwapChain(), UINT64_MAX, *imageAvailableSemaphores[currentFrameIndex], nullptr, &swapChainImageIndex);
 
         if(acquireResult == vk::Result::eErrorOutOfDateKHR)
         {
@@ -72,14 +76,15 @@ void VulkanRenderer::Render(const Color& clearColor)
         }
     }
 
-    graphicsCommandPool->GetBuffer(0)->reset();
-    RecordDrawCommand(graphicsCommandPool->GetBuffer(0), clearColor, swapChainImageIndex);
+    
+    graphicsCommandPool->GetBuffer(currentFrameIndex)->reset();
+    RecordDrawCommand(graphicsCommandPool->GetBuffer(currentFrameIndex), clearColor, swapChainImageIndex);
 
     std::array<vk::PipelineStageFlags, 1> waitStages = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
-    vk::Semaphore waitSemaphores[] = { *imageAvailableSemaphore };
-    vk::Semaphore signalSemaphores[] = { *renderFinishedSemaphore };
-    vk::SubmitInfo submitInfo(1, waitSemaphores, waitStages.data(), 1, &*graphicsCommandPool->GetBuffer(0), 1, signalSemaphores);
-    if(logicalDevice->GetGraphicsQueue().submit(1, &submitInfo, *inFlightFence) != vk::Result::eSuccess)
+    vk::Semaphore waitSemaphores[] = { *imageAvailableSemaphores[currentFrameIndex] };
+    vk::Semaphore signalSemaphores[] = { *renderFinishedSemaphores[currentFrameIndex] };
+    vk::SubmitInfo submitInfo(1, waitSemaphores, waitStages.data(), 1, &*graphicsCommandPool->GetBuffer(currentFrameIndex), 1, signalSemaphores);
+    if(logicalDevice->GetGraphicsQueue().submit(1, &submitInfo, *inFlightFences[currentFrameIndex]) != vk::Result::eSuccess)
         greg::log::Fatal("Vulkan", "Failed to submit draw command buffer!");
 
     vk::SwapchainKHR swapChains[] = { *swapChain->GetVulkanSwapChain() };
@@ -93,6 +98,8 @@ void VulkanRenderer::Render(const Color& clearColor)
     {
         greg::log::Fatal("Vulkan", "Failed to present swap chain!");
     }
+
+    currentFrameIndex = (currentFrameIndex + 1) % MAX_FRAMES_IN_FLIGHT;
 }
 void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
 {
@@ -204,32 +211,31 @@ vk::UniqueRenderPass VulkanRenderer::CreateRenderPass()
     return logicalDevice->GetVulkanDevice()->createRenderPassUnique(renderPassCreateInfo);
 }
 
-void VulkanRenderer::RecordDrawCommand(const vk::UniqueCommandBuffer& commandBuffer, const Color& clearColor, uint32_t imageIndex)
+void VulkanRenderer::RecordDrawCommand(const vk::UniqueCommandBuffer& buffer, const Color& clearColor, uint32_t imageIndex)
 {
-    vk::CommandBuffer buffer = *graphicsCommandPool->GetBuffer(0);
     vk::CommandBufferBeginInfo beginInfo;
 
     vk::Extent2D swapChainExtent = swapChain->GetExtent();
 
-    buffer.begin(beginInfo);
+    buffer->begin(beginInfo);
 
     vk::Rect2D renderArea(vk::Offset2D(0, 0), swapChainExtent);
     vk::ClearValue clearValue(vk::ClearColorValue(clearColor.r, clearColor.g, clearColor.b, clearColor.a));
     vk::RenderPassBeginInfo renderPassBeginInfo(*renderPass, *swapChain->GetFramebuffer(imageIndex), renderArea, 1, &clearValue);
 
-    buffer.beginRenderPass(&renderPassBeginInfo, vk::SubpassContents::eInline);
-    buffer.bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
+    buffer->beginRenderPass(&renderPassBeginInfo, vk::SubpassContents::eInline);
+    buffer->bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
     
     vk::Viewport viewport(0.0f, 0.0f, static_cast<float>(swapChainExtent.width), static_cast<float>(swapChainExtent.height), 0.0f, 1.0f);
-    buffer.setViewport(0, 1, &viewport);
+    buffer->setViewport(0, 1, &viewport);
 
     vk::Rect2D scissor(vk::Offset2D(0, 0), swapChainExtent);
-    buffer.setScissor(0, 1, &scissor);
+    buffer->setScissor(0, 1, &scissor);
 
-    buffer.draw(3, 1, 0, 0);
+    buffer->draw(3, 1, 0, 0);
 
-    buffer.endRenderPass();
-    buffer.end();
+    buffer->endRenderPass();
+    buffer->end();
 }
 
 void VulkanRenderer::LoadAllPhysicalDevices()

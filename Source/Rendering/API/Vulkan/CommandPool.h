@@ -13,7 +13,7 @@ namespace command
 class CommandPool
 {
 public:
-    CommandPool(const greg::vulkan::LogicalDevice& logicalDevice, uint32_t queueFamilyIndex);
+    CommandPool(const greg::vulkan::LogicalDevice& logicalDevice, uint32_t queueFamilyIndex, uint32_t bufferCount);
 
     CommandPool(const CommandPool&) = delete;
     CommandPool& operator=(const CommandPool&) = delete;

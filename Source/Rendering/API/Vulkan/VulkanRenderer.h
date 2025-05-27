@@ -8,7 +8,6 @@
 #include "SwapChain.h"
 #include "VulkanLoader.h"
 #include "../../Renderer.h"
-#include "../../../Math/Color.h"
 
 namespace greg::vulkan
 {
@@ -17,13 +16,16 @@ class VulkanRenderer : public Renderer
 public:
     VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd);
 
-    ~VulkanRenderer();
+    ~VulkanRenderer() override;
     
     void Render(const Color& clearColor) override;
 
 protected:
     void SetupPrimitive(std::shared_ptr<Primitive> primitive) override;
 
+private:
+    static constexpr size_t MAX_FRAMES_IN_FLIGHT = 2;
+    
 private:
     vk::UniqueInstance CreateInstance();
     vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> CreateSurface();
@@ -35,7 +37,7 @@ private:
     vk::UniqueSemaphore CreateUniqueSemaphore(const LogicalDevice& logicalDevice);
     vk::UniqueFence CreateFence(const LogicalDevice& logicalDevice, bool startSignaled);
 
-    void RecordDrawCommand(const vk::UniqueCommandBuffer& commandBuffer, const Color& clearColor, uint32_t imageIndex);
+    void RecordDrawCommand(const vk::UniqueCommandBuffer& buffer, const Color& clearColor, uint32_t imageIndex);
     
     std::vector<const char*> GetRequiredExtensions();
 
@@ -44,6 +46,8 @@ private:
     vk::UniqueSurfaceKHR surface;
     
     greg::vulkan::VulkanLoader loader;
+
+    size_t currentFrameIndex = 0;
 
 #pragma region Devices
     std::optional<greg::vulkan::LogicalDevice> logicalDevice {};
@@ -61,10 +65,11 @@ private:
     std::optional<greg::vulkan::command::CommandPool> graphicsCommandPool {};
 
 #pragma region Sync Objects
-    vk::UniqueSemaphore imageAvailableSemaphore {};
-    vk::UniqueSemaphore renderFinishedSemaphore {};
-    vk::UniqueFence inFlightFence {};
-#pragma endregion 
+    std::array<vk::UniqueSemaphore, MAX_FRAMES_IN_FLIGHT> imageAvailableSemaphores;
+    std::array<vk::UniqueSemaphore, MAX_FRAMES_IN_FLIGHT> renderFinishedSemaphores;
+    std::array<vk::UniqueFence, MAX_FRAMES_IN_FLIGHT> inFlightFences;
+#pragma endregion
+
     
     ////Windows specific
     HINSTANCE hInstance;
