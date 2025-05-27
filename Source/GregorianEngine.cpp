@@ -21,6 +21,9 @@ void GregorianEngine::Run(const std::string& applicationName)
 
 	running = true;
 	float timeUntilNextFrame = maxFrameTime;
+	
+	size_t frameCount = 0;
+	double timeUntilNextFramePrint = 1.0;
 	while(running)
 	{
 		std::chrono::time_point currentTime = std::chrono::high_resolution_clock::now();
@@ -30,7 +33,17 @@ void GregorianEngine::Run(const std::string& applicationName)
 		time.Tick(deltaTime);
 
 		if(logFrameTime)
-			greg::log::Info("Frame Time", std::format("{}ms", deltaTime * 1000.f));
+		{
+			frameCount++;
+			timeUntilNextFramePrint -= deltaTime;
+
+			if(timeUntilNextFramePrint <= 0)
+			{
+				timeUntilNextFramePrint = 1;
+				greg::log::Info("Frame count", std::format("{} fps", frameCount));
+				frameCount = 0;
+			}
+		}
 
 		if(timeUntilNextFrame > 0)
 			continue;
@@ -52,7 +65,7 @@ void GregorianEngine::Shutdown()
 	running = false;
 }
 
-void GregorianEngine::SetLogFrameTime(bool logFrameTime)
+void GregorianEngine::SetLogFrameCounter(bool logFrameTime)
 {
 	this->logFrameTime = logFrameTime;
 }

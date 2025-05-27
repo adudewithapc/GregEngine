@@ -16,7 +16,7 @@ public:
 	void Run(const std::string& applicationName);
 	void Shutdown();
 
-	void SetLogFrameTime(bool logFrameTime);
+	void SetLogFrameCounter(bool logFrameTime);
 	void SetFramerateCap(unsigned int framerate);
 
 	std::shared_ptr<Level> MakeLevel();
@@ -33,7 +33,7 @@ private:
 	GregorianEngine() = default;
 	
 	bool running = false;
-	bool logFrameTime = false;
+	bool logFrameTime = true;
 	float maxFrameTime = 0;
 	std::shared_ptr<Level> currentLevel;
 	std::string applicationName = "Greg Engine";
