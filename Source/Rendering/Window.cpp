@@ -62,6 +62,8 @@ Window::Window() :
 		nullptr					//Optional parameters (N/A)
 	);
 
+	SetPropW(windowHandle, L"GregWindow", this);
+
 	input = new InputManager();
 	input->RegisterInputDevices();
 
@@ -161,6 +163,11 @@ void Window::CreateRenderer()
 
 LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	Window* window = static_cast<Window*>(GetPropW(hWnd, L"GregWindow"));
+
+	if(window == nullptr || window->windowHandle != hWnd)
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	
 	switch(message)
 	{
 		case WM_CLOSE:
