@@ -38,7 +38,6 @@ void GregorianEngine::Run(const std::string& applicationName)
 		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
 			running = false;
 		
-
 		if(logFrameTime)
 		{
 			frameCount++;

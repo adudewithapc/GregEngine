@@ -37,6 +37,8 @@ private:
     vk::UniqueSemaphore CreateUniqueSemaphore(const LogicalDevice& logicalDevice);
     vk::UniqueFence CreateFence(const LogicalDevice& logicalDevice, bool startSignaled);
 
+    void RecreateSwapChain();
+
     void RecordDrawCommand(const vk::UniqueCommandBuffer& buffer, const Color& clearColor, uint32_t imageIndex);
     
     std::vector<const char*> GetRequiredExtensions();

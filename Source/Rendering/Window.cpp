@@ -194,7 +194,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 		//Window is forced out of focus
 		case WM_CANCELMODE:
 			return 0;
-		/*case WM_SIZE:
+		case WM_SIZE:
 		{
 			int newWidth = LOWORD(lParam);
 			int newHeight = HIWORD(lParam);
@@ -214,7 +214,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 		case WM_SIZING:
 		{
 			return 0;
-		}*/
+		}
 		//Input code taken from https://learn.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
 		case WM_INPUT:
 		{
@@ -259,7 +259,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 			delete[] rawData;
 			break;
 		}
-		/*case WM_MOUSEMOVE:
+		case WM_MOUSEMOVE:
 		{
 			//Coordinates are local to canvas
 			int x = LOWORD(lParam);
@@ -284,7 +284,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 			ReleaseCapture();
 			ClipCursor(nullptr);
 			break;
-		}*/
+		}
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);

@@ -20,7 +20,7 @@ public:
     };
 
     SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface, const vk::UniqueDevice& device,
-              const greg::vulkan::QueueFamilies& queueFamilies);
+              const greg::vulkan::QueueFamilies& queueFamilies, const std::optional<SwapChain>& oldSwapChain = {});
 
     SwapChain(const SwapChain&) = delete;
     SwapChain& operator=(const SwapChain&) = delete;

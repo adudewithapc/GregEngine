@@ -13,7 +13,7 @@ SwapChain::Details::Details(vk::PhysicalDevice physicalDevice, const vk::UniqueS
   presentModes(greg::vulkan::debug::TieResult(physicalDevice.getSurfacePresentModesKHR(*surface), "Failed to fetch surface present modes!"))
 {}
 
-SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface, const vk::UniqueDevice& logicalDevice, const greg::vulkan::QueueFamilies& queueFamilies)
+SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface, const vk::UniqueDevice& logicalDevice, const greg::vulkan::QueueFamilies& queueFamilies, const std::optional<SwapChain>& oldSwapChain)
 : details(physicalDevice, surface)
 {
     uint32_t imageCount = details.capabilities.minImageCount + 1;
@@ -43,9 +43,9 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
 
     vk::SwapchainCreateInfoKHR createInfo({}, *surface, imageCount, surfaceFormat.format, surfaceFormat.colorSpace, extent, 1, vk::ImageUsageFlagBits::eColorAttachment,
                                           sharingMode, static_cast<uint32_t>(queueFamilyIndices.size()), queueFamilyIndices.data(), details.capabilities.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque,
-                                          presentMode, vk::True, nullptr);
+                                          presentMode, vk::True, oldSwapChain ? *oldSwapChain->GetVulkanSwapChain() : nullptr);
 
-    swapChain = greg::vulkan::debug::TieResult(logicalDevice->createSwapchainKHRUnique(createInfo), "Failed to create swap chain");
+    swapChain = greg::vulkan::debug::TieResult(logicalDevice->createSwapchainKHRUnique(createInfo), "Failed to create swap chain!");
     
     images = greg::vulkan::debug::TieResult(logicalDevice->getSwapchainImagesKHR(*swapChain), "Failed to fetch images from swap chain!");
 

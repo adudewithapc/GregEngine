@@ -72,7 +72,7 @@ void VulkanRenderer::Render(const Color& clearColor)
 
         if(acquireResult == vk::Result::eErrorOutOfDateKHR)
         {
-            //Recreate swapchain
+            RecreateSwapChain();
             return;
         }
         else if(acquireResult != vk::Result::eSuccess && acquireResult != vk::Result::eSuboptimalKHR)
@@ -97,7 +97,7 @@ void VulkanRenderer::Render(const Color& clearColor)
     vk::Result result = logicalDevice->GetPresentQueue().presentKHR(presentInfo);
     if(result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR)
     {
-        //Recreate swapchain
+        RecreateSwapChain();
     }
     else if(result != vk::Result::eSuccess)
     {
@@ -280,6 +280,13 @@ vk::UniqueFence VulkanRenderer::CreateFence(const LogicalDevice& logicalDevice, 
     if(startSignaled)
         createInfo.setFlags(vk::FenceCreateFlagBits::eSignaled);
     return greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->createFenceUnique(createInfo), "Failed to create fence!");
+}
+
+void VulkanRenderer::RecreateSwapChain()
+{
+    logicalDevice->GetVulkanDevice()->waitIdle();
+    swapChain = SwapChain(preferredPhysicalDevice->GetVulkanDevice(), surface, logicalDevice->GetVulkanDevice(), preferredPhysicalDevice->GetQueueFamilies(), swapChain);
+    swapChain->CreateFramebuffers(logicalDevice->GetVulkanDevice(), renderPass);
 }
 
 std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
