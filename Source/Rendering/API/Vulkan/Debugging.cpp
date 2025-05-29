@@ -29,7 +29,7 @@ vk::DebugUtilsMessengerCreateInfoEXT GetDefaultDebugMessengerInfo()
 
 bool AreAllValidationLayersSupported()
 {
-    std::vector<vk::LayerProperties> validationLayers = vk::enumerateInstanceLayerProperties();
+    std::vector<vk::LayerProperties> validationLayers = TieResult(vk::enumerateInstanceLayerProperties(), "Failed to get any validation layers!");
     
     size_t foundLayers = 0;
     for(const char* requestedLayer : greg::vulkan::debug::GetValidationLayers())

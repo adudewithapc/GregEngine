@@ -1,5 +1,6 @@
 ﻿#include "SwapChain.h"
 
+#include "Debugging.h"
 #include "Image.h"
 #include "PhysicalDevice.h"
 #include "../../Window.h"
@@ -7,9 +8,9 @@
 namespace greg::vulkan
 {
 SwapChain::Details::Details(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface)
-: capabilities(physicalDevice.getSurfaceCapabilitiesKHR(*surface)),
-  formats(physicalDevice.getSurfaceFormatsKHR(*surface)),
-  presentModes(physicalDevice.getSurfacePresentModesKHR(*surface))
+: capabilities(greg::vulkan::debug::TieResult(physicalDevice.getSurfaceCapabilitiesKHR(*surface), "Failed to fetch surface capabilities!")),
+  formats(greg::vulkan::debug::TieResult(physicalDevice.getSurfaceFormatsKHR(*surface), "Failed to fetch surface formats!")),
+  presentModes(greg::vulkan::debug::TieResult(physicalDevice.getSurfacePresentModesKHR(*surface), "Failed to fetch surface present modes!"))
 {}
 
 SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceKHR& surface, const vk::UniqueDevice& logicalDevice, const greg::vulkan::QueueFamilies& queueFamilies)
@@ -44,9 +45,9 @@ SwapChain::SwapChain(vk::PhysicalDevice physicalDevice, const vk::UniqueSurfaceK
                                           sharingMode, static_cast<uint32_t>(queueFamilyIndices.size()), queueFamilyIndices.data(), details.capabilities.currentTransform, vk::CompositeAlphaFlagBitsKHR::eOpaque,
                                           presentMode, vk::True, nullptr);
 
-    swapChain = logicalDevice->createSwapchainKHRUnique(createInfo);
+    swapChain = greg::vulkan::debug::TieResult(logicalDevice->createSwapchainKHRUnique(createInfo), "Failed to create swap chain");
     
-    images = logicalDevice->getSwapchainImagesKHR(*swapChain);
+    images = greg::vulkan::debug::TieResult(logicalDevice->getSwapchainImagesKHR(*swapChain), "Failed to fetch images from swap chain!");
 
     imageViews.reserve(images.size());
     for(const vk::Image& image : images)
@@ -63,7 +64,7 @@ void SwapChain::CreateFramebuffers(const vk::UniqueDevice& logicalDevice, const 
         vk::ImageView attachments[] = { *imageView };
 
         vk::FramebufferCreateInfo framebufferCreateInfo({}, *renderPass, 1, attachments, extent.width, extent.height, 1);
-        framebuffers.emplace_back(logicalDevice->createFramebufferUnique(framebufferCreateInfo));
+        framebuffers.emplace_back(greg::vulkan::debug::TieResult(logicalDevice->createFramebufferUnique(framebufferCreateInfo), "Failed to create frame buffer!"));
     }
 }
 

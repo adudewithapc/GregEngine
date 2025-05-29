@@ -1,5 +1,7 @@
 ﻿#include "QueueFamilies.h"
 
+#include "Debugging.h"
+
 namespace greg::vulkan
 {
 QueueFamilies::QueueFamilies(vk::PhysicalDevice device, const vk::UniqueSurfaceKHR& surface)
@@ -12,7 +14,7 @@ QueueFamilies::QueueFamilies(vk::PhysicalDevice device, const vk::UniqueSurfaceK
         if(queueFamilyProperties.queueFlags & vk::QueueFlagBits::eGraphics)
             graphicsFamily = i;
 
-        vk::Bool32 hasPresentSupport = device.getSurfaceSupportKHR(i, *surface);
+        vk::Bool32 hasPresentSupport = greg::vulkan::debug::TieResult(device.getSurfaceSupportKHR(i, *surface), "Failed to check if physical device has present support!");
 
         if(hasPresentSupport)
             presentFamily = i;

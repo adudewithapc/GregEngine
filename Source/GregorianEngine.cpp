@@ -31,6 +31,13 @@ void GregorianEngine::Run(const std::string& applicationName)
 		timeUntilNextFrame -= deltaTime;
 		
 		time.Tick(deltaTime);
+		
+		if(Keyboard::IsKeyDown(Key::W))
+			window.Test();
+		
+		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
+			running = false;
+		
 
 		if(logFrameTime)
 		{
@@ -54,8 +61,6 @@ void GregorianEngine::Run(const std::string& applicationName)
 		
 		window.GetRenderer().Render(Color(0, 0, 0, 1));
 
-		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
-			running = false;
 		previousTime = currentTime;
 	}
 }

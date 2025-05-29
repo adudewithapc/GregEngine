@@ -21,6 +21,8 @@ public:
 	bool ProcessMessages();
 	void SetTitle(const std::string& windowTitle);
 
+	void Test();
+
 public:
 	static Vec2f ViewToPixel(const Vec2f& view);
 	static Vec2f PixelToView(const Vec2f& pixel);

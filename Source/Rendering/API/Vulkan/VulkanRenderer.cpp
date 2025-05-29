@@ -23,8 +23,13 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
 
     instance = CreateInstance();
     loader.AddInstance(instance);
-    
-    debugMessenger = instance->createDebugUtilsMessengerEXTUnique(greg::vulkan::debug::GetDefaultDebugMessengerInfo(), nullptr, loader.GetDispatchLoader());
+
+    if(greg::vulkan::debug::ShouldUseValidationLayers())
+    {
+        auto [result, debugMessenger] = instance->createDebugUtilsMessengerEXTUnique(greg::vulkan::debug::GetDefaultDebugMessengerInfo(), nullptr, loader.GetDispatchLoader());
+        if(result != vk::Result::eSuccess)
+            greg::log::Fatal("Vulkan", "Failed to create debug messenger even though it was requested!");
+    }
     surface = CreateSurface();
 
     LoadAllPhysicalDevices();
@@ -109,7 +114,9 @@ void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
 vk::UniqueInstance VulkanRenderer::CreateInstance()
 {
     std::vector<const char*> requiredExtensions = GetRequiredExtensions();
-    std::vector<vk::ExtensionProperties> availableExtensions = vk::enumerateInstanceExtensionProperties();
+    
+    std::vector<vk::ExtensionProperties> availableExtensions = greg::vulkan::debug::TieResult(vk::enumerateInstanceExtensionProperties(), "Failed to get any available extensions!");
+    
     std::vector<const char*> foundRequiredExtensions;
     for(const char* requiredExtension : requiredExtensions)
     {
@@ -134,14 +141,14 @@ vk::UniqueInstance VulkanRenderer::CreateInstance()
     vk::DebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo = greg::vulkan::debug::GetDefaultDebugMessengerInfo();
     vk::InstanceCreateInfo instanceCreateInfo({}, &applicationInfo, static_cast<uint32_t>(validationLayers.size()), validationLayers.data(), static_cast<uint32_t>(requiredExtensions.size()), requiredExtensions.data(), &debugMessengerCreateInfo);
     
-    return vk::createInstanceUnique(instanceCreateInfo);
+    return greg::vulkan::debug::TieResult(vk::createInstanceUnique(instanceCreateInfo), "Failed to create instance!");
 }
 
 vk::UniqueHandle<vk::SurfaceKHR, vk::detail::DispatchLoaderStatic> VulkanRenderer::CreateSurface()
 {
     vk::Win32SurfaceCreateInfoKHR createInfo({}, hInstance, windowHandle);
 
-    return instance->createWin32SurfaceKHRUnique(createInfo);
+    return greg::vulkan::debug::TieResult(instance->createWin32SurfaceKHRUnique(createInfo), "Failed to create Windows surface!");
 }
 
 vk::UniquePipeline VulkanRenderer::CreateGraphicsPipeline()
@@ -182,15 +189,16 @@ vk::UniquePipeline VulkanRenderer::CreateGraphicsPipeline()
     vk::PipelineColorBlendStateCreateInfo colorBlendingCreateInfo({}, vk::False, vk::LogicOp::eClear, 1, &colorBlendAttachment, {0, 0, 0, 0});
 
     vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo({}, 0, nullptr, 0, nullptr);
-    vk::UniquePipelineLayout pipelineLayout = logicalDevice->GetVulkanDevice()->createPipelineLayoutUnique(pipelineLayoutCreateInfo);
+    vk::UniquePipelineLayout pipelineLayout = greg::vulkan::debug::TieResult(logicalDevice->GetVulkanDevice()->createPipelineLayoutUnique(pipelineLayoutCreateInfo), "Failed to create graphics pipeline layout!");
 
     vk::GraphicsPipelineCreateInfo graphicsPipelineCreateInfo({}, 2, shaderStages, &vertexInputCreateInfo, &inputAssemblyCreateInfo, nullptr, &viewportStateCreateInfo, &rasterizerCreateInfo,
                                                               &multisampleCreateInfo, &depthStencilCreateInfo, &colorBlendingCreateInfo, &dynamicStateCreateInfo, *pipelineLayout, *renderPass, 0, nullptr, -1);
 
-    auto [result, pipelines] = logicalDevice->GetVulkanDevice()->createGraphicsPipelinesUnique(nullptr, graphicsPipelineCreateInfo);
-    if(result != vk::Result::eSuccess)
-        greg::log::Fatal("Vulkan", "Failed to create graphics pipeline!");
+    std::vector<vk::UniquePipeline> pipelines = greg::vulkan::debug::TieResult(logicalDevice->GetVulkanDevice()->createGraphicsPipelinesUnique(nullptr, graphicsPipelineCreateInfo), "Failed to create graphics pipeline!");
 
+    if(pipelines.size() == 0)
+        greg::log::Fatal("Vulkan", "Tried to create pipelines but result was empty!");
+    
     return std::move(pipelines.front());
 }
 
@@ -208,7 +216,7 @@ vk::UniqueRenderPass VulkanRenderer::CreateRenderPass()
     std::vector<vk::AttachmentDescription> attachments = { colorAttachment };
     vk::RenderPassCreateInfo renderPassCreateInfo({}, static_cast<uint32_t>(attachments.size()), attachments.data(), 1, &subpass, 0, nullptr);
 
-    return logicalDevice->GetVulkanDevice()->createRenderPassUnique(renderPassCreateInfo);
+    return greg::vulkan::debug::TieResult(logicalDevice->GetVulkanDevice()->createRenderPassUnique(renderPassCreateInfo), "Failed to create render pass!");
 }
 
 void VulkanRenderer::RecordDrawCommand(const vk::UniqueCommandBuffer& buffer, const Color& clearColor, uint32_t imageIndex)
@@ -240,7 +248,7 @@ void VulkanRenderer::RecordDrawCommand(const vk::UniqueCommandBuffer& buffer, co
 
 void VulkanRenderer::LoadAllPhysicalDevices()
 {
-    std::vector<vk::PhysicalDevice> vulkanPhysicalDevices = instance->enumeratePhysicalDevices();
+    std::vector<vk::PhysicalDevice> vulkanPhysicalDevices = greg::vulkan::debug::TieResult(instance->enumeratePhysicalDevices(), "Failed to find any physical devices!");
     physicalDevices.clear();
     physicalDevices.reserve(vulkanPhysicalDevices.size());
 
@@ -263,7 +271,7 @@ PhysicalDevice VulkanRenderer::FindPreferredPhysicalDevice()
 vk::UniqueSemaphore VulkanRenderer::CreateUniqueSemaphore(const LogicalDevice& logicalDevice)
 {
     vk::SemaphoreCreateInfo createInfo;
-    return logicalDevice.GetVulkanDevice()->createSemaphoreUnique(createInfo);
+    return greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->createSemaphoreUnique(createInfo), "Failed to create semaphore!");
 }
 
 vk::UniqueFence VulkanRenderer::CreateFence(const LogicalDevice& logicalDevice, bool startSignaled = false)
@@ -271,7 +279,7 @@ vk::UniqueFence VulkanRenderer::CreateFence(const LogicalDevice& logicalDevice, 
     vk::FenceCreateInfo createInfo;
     if(startSignaled)
         createInfo.setFlags(vk::FenceCreateFlagBits::eSignaled);
-    return logicalDevice.GetVulkanDevice()->createFenceUnique(createInfo);
+    return greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->createFenceUnique(createInfo), "Failed to create fence!");
 }
 
 std::vector<const char*> VulkanRenderer::GetRequiredExtensions()

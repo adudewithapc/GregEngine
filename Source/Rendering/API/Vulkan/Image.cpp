@@ -1,5 +1,6 @@
 #include "Image.h"
 
+#include "Debugging.h"
 #include "LogicalDevice.h"
 
 namespace greg::vulkan::image
@@ -16,6 +17,6 @@ vk::UniqueImageView CreateImageView(const vk::UniqueDevice& logicalDevice, const
     
     vk::ImageViewCreateInfo createInfo({}, image, vk::ImageViewType::e2D, format, componentMapping, subresourceRange);
 
-    return logicalDevice->createImageViewUnique(createInfo);
+    return greg::vulkan::debug::TieResult(logicalDevice->createImageViewUnique(createInfo), "Failed to create image view!");
 }
 }

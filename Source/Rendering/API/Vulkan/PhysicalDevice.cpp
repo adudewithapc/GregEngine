@@ -2,6 +2,8 @@
 
 #include <set>
 
+#include "Debugging.h"
+
 
 namespace greg::vulkan
 {
@@ -75,7 +77,7 @@ const vk::PhysicalDevice& PhysicalDevice::GetVulkanDevice() const
 
 bool PhysicalDevice::HasAllRequiredExtensions() const
 {
-    std::vector<vk::ExtensionProperties> availableExtensions = vulkanDevice.enumerateDeviceExtensionProperties();
+    std::vector<vk::ExtensionProperties> availableExtensions = greg::vulkan::debug::TieResult(vulkanDevice.enumerateDeviceExtensionProperties(), "Failed to enumerate extension properties on physical device!");
     std::vector<const char*> requiredExtensions = GetRequiredExtensions();
     std::set<const char*> uniqueRequiredExtensions = {std::begin(requiredExtensions), std::end(requiredExtensions)};
 
@@ -94,6 +96,8 @@ std::vector<const char*> PhysicalDevice::GetRequiredExtensions() const
 
 bool PhysicalDevice::HasSwapChainSupport(const vk::UniqueSurfaceKHR& surface) const
 {
-    return !vulkanDevice.getSurfaceFormatsKHR(*surface).empty() && !vulkanDevice.getSurfacePresentModesKHR(*surface).empty();
+    std::vector<vk::SurfaceFormatKHR> availableSurfaceFormats = greg::vulkan::debug::TieResult(vulkanDevice.getSurfaceFormatsKHR(*surface), "Failed to fetch swapchain surface formats!");
+    std::vector<vk::PresentModeKHR> availablePresentModes = greg::vulkan::debug::TieResult(vulkanDevice.getSurfacePresentModesKHR(*surface), "Failed to fetch swapchain present modes!");
+    return !availableSurfaceFormats.empty() && !availablePresentModes.empty();
 }
 }

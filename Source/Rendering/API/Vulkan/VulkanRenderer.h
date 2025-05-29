@@ -1,13 +1,13 @@
 ﻿#pragma once
 
-#include <vulkan/vulkan.hpp>
-
+#include "Vulkan.h"
 #include "CommandPool.h"
 #include "LogicalDevice.h"
 #include "PhysicalDevice.h"
 #include "SwapChain.h"
 #include "VulkanLoader.h"
 #include "../../Renderer.h"
+#include "../../../Debugging/Log.h"
 
 namespace greg::vulkan
 {
@@ -76,6 +76,5 @@ private:
     HWND windowHandle;
     ////
 };
-
 static std::vector<char> LoadShaderFile(const std::string& fileName);
 }

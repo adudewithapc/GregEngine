@@ -28,7 +28,7 @@ LogicalDevice::LogicalDevice(const greg::vulkan::PhysicalDevice& physicalDevice)
 
     std::vector<const char*> validationLayers = greg::vulkan::debug::GetValidationLayers(); 
     vk::DeviceCreateInfo deviceCreateInfo({}, static_cast<uint32_t>(queueCreateInfos.size()), queueCreateInfos.data(), static_cast<uint32_t>(validationLayers.size()), validationLayers.data(), static_cast<uint32_t>(requestedPhysicalExtensions.size()), requestedPhysicalExtensions.data(), &physicalDeviceFeatures);
-    device = physicalDevice.GetVulkanDevice().createDeviceUnique(deviceCreateInfo);
+    device = greg::vulkan::debug::TieResult(physicalDevice.GetVulkanDevice().createDeviceUnique(deviceCreateInfo), "Failed to create logical device!");
 
     graphicsQueue = device->getQueue(queueFamilies.GetGraphicsFamily(), 0);
     presentQueue = device->getQueue(queueFamilies.GetPresentFamily(), 0);
@@ -52,6 +52,6 @@ const vk::UniqueDevice& LogicalDevice::GetVulkanDevice() const
 vk::UniqueShaderModule LogicalDevice::CreateShaderStage(const std::vector<char>& code)
 {
     vk::ShaderModuleCreateInfo createInfo({}, code.size(), reinterpret_cast<const uint32_t*>(code.data()));
-    return device->createShaderModuleUnique(createInfo);
+    return greg::vulkan::debug::TieResult(device->createShaderModuleUnique(createInfo), "Failed to create shader stage!");
 }
 }

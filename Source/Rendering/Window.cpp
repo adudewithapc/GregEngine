@@ -9,6 +9,7 @@
 
 #if GREG_OPENGL
 #include "API/OpenGLRenderer.h"
+#include <glad.h>
 #elif GREG_VULKAN
 #include "API/Vulkan/VulkanRenderer.h"
 #endif
@@ -27,11 +28,12 @@ Window::Window() :
 	wndClass.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
 	wndClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wndClass.lpfnWndProc = WindowProcedure;
+	wndClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 
 	RegisterClass(&wndClass);
 
 	//Define window style (title bar, minimize button, close button)
-	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | CS_OWNDC | WS_MAXIMIZEBOX;
+	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_MAXIMIZEBOX | WS_VISIBLE;
 
 	RECT rect;
 	rect.left = WindowX;
@@ -136,6 +138,16 @@ void Window::SetTitle(const std::string& windowTitle)
 	}
 }
 
+void Window::Test()
+{
+	RECT rect = { 0, 0, 1200, 1200 };
+	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | CS_OWNDC | WS_MAXIMIZEBOX;
+	DWORD exStyle = WS_EX_APPWINDOW | WS_EX_TOPMOST;
+	AdjustWindowRectExForDpi(&rect, style, false, exStyle, GetDpiForWindow(windowHandle));
+
+	SetWindowPos(windowHandle, HWND_TOP, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOMOVE | SWP_NOZORDER);
+}
+
 Vec2f Window::ViewToPixel(const Vec2f& view)
 {
 	return Vec2f(view.x * WindowWidth, view.y * WindowHeight);
@@ -148,7 +160,9 @@ Vec2f Window::PixelToView(const Vec2f& pixel)
 
 void Window::ResizeViewport(int width, int height)
 {
-	//glViewport(0, 0, width, height);
+#if GREG_OPENGL
+	glViewport(0, 0, width, height);
+#endif
 }
 
 
@@ -180,7 +194,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 		//Window is forced out of focus
 		case WM_CANCELMODE:
 			return 0;
-		case WM_SIZE:
+		/*case WM_SIZE:
 		{
 			int newWidth = LOWORD(lParam);
 			int newHeight = HIWORD(lParam);
@@ -190,9 +204,17 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 				break;
 			}
 
+			RECT rect = { 0, 0, newWidth, newHeight };
+			DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_MAXIMIZEBOX | WS_VISIBLE;
+			DWORD exStyle = WS_EX_APPWINDOW | WS_EX_TOPMOST;
+				
 			Window::ResizeViewport(newWidth, newHeight);
 			break;
 		}
+		case WM_SIZING:
+		{
+			return 0;
+		}*/
 		//Input code taken from https://learn.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
 		case WM_INPUT:
 		{
@@ -237,7 +259,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 			delete[] rawData;
 			break;
 		}
-		case WM_MOUSEMOVE:
+		/*case WM_MOUSEMOVE:
 		{
 			//Coordinates are local to canvas
 			int x = LOWORD(lParam);
@@ -262,7 +284,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 			ReleaseCapture();
 			ClipCursor(nullptr);
 			break;
-		}
+		}*/
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);

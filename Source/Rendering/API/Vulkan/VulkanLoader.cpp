@@ -1,7 +1,7 @@
 ﻿#include "VulkanLoader.h"
 
 #include <Windows.h>
-#include <vulkan/vulkan.hpp>
+#include "Vulkan.h"
 
 #include "../../../Debugging/Log.h"
 

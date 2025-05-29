@@ -34,7 +34,9 @@ project "GregEngine"
 	
 	defines
 	{
-		"GREG_VULKAN"
+		"GREG_VULKAN",
+		"VULKAN_HPP_NO_EXCEPTIONS",
+		"GREG_VULKAN_DISABLE_ASSERTS"
 	}
 	
 	targetdir ("Binaries/" .. outputdir)
