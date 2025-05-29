@@ -4,6 +4,7 @@
 #include "Image.h"
 #include "PhysicalDevice.h"
 #include "../../Window.h"
+#include "../../../GregorianEngine.h"
 
 namespace greg::vulkan
 {
@@ -114,11 +115,12 @@ vk::Extent2D SwapChain::PickExtent(const vk::SurfaceCapabilitiesKHR& capabilitie
     {
         return capabilities.currentExtent;
     }
-    
+
+    Vec2i framebufferSize = GregorianEngine::Get().GetWindow().GetFramebufferSize();
     vk::Extent2D actualExtent
     {
-        static_cast<uint32_t>(Window::WindowWidth),
-        static_cast<uint32_t>(Window::WindowHeight),
+        static_cast<uint32_t>(framebufferSize.x),
+        static_cast<uint32_t>(framebufferSize.y),
     };
 
     actualExtent.width = std::clamp(actualExtent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);

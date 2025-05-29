@@ -31,7 +31,7 @@ private:
 	Vec3f front = Vec3f(0, 0, -1);
 	Vec3f up = Vec3f(0, 1, 0);
 
-	Vec2i lastMousePos = Vec2i(Window::WindowY + Window::WindowWidth / 2, Window::WindowX + Window::WindowHeight);
+	Vec2i lastMousePos = Vec2i(Window::StartWindowY + Window::StartWindowWidth / 2, Window::StartWindowX + Window::StartWindowHeight);
 
 	float viewbobY = 0;
 

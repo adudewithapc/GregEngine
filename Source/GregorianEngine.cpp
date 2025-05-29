@@ -14,7 +14,6 @@ void GregorianEngine::Run(const std::string& applicationName)
 	using FloatingSeconds = std::chrono::duration<float>;
 
 	window.SetTitle(applicationName);
-	window.ResizeViewport(Window::WindowWidth, Window::WindowHeight);
 
 	Time time;
 	std::chrono::time_point previousTime = std::chrono::high_resolution_clock::now();
@@ -101,6 +100,16 @@ RenderTarget& GregorianEngine::GetRenderTarget()
 const std::string& GregorianEngine::GetApplicationName() const
 {
 	return applicationName;
+}
+
+Window& GregorianEngine::GetWindow()
+{
+	return window;
+}
+
+const Window& GregorianEngine::GetWindow() const
+{
+	return window;
 }
 
 GregorianEngine& GregorianEngine::Get()

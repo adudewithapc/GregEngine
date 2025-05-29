@@ -284,6 +284,14 @@ vk::UniqueFence VulkanRenderer::CreateFence(const LogicalDevice& logicalDevice, 
 
 void VulkanRenderer::RecreateSwapChain()
 {
+    Vec2i framebufferSize = GregorianEngine::Get().GetWindow().GetFramebufferSize();
+
+    while(framebufferSize.Magnitude() == 0)
+    {
+        framebufferSize = GregorianEngine::Get().GetWindow().GetFramebufferSize();
+        GregorianEngine::Get().GetWindow().ProcessMessages();
+    }
+    
     logicalDevice->GetVulkanDevice()->waitIdle();
     swapChain = SwapChain(preferredPhysicalDevice->GetVulkanDevice(), surface, logicalDevice->GetVulkanDevice(), preferredPhysicalDevice->GetQueueFamilies(), swapChain);
     swapChain->CreateFramebuffers(logicalDevice->GetVulkanDevice(), renderPass);

@@ -22,9 +22,13 @@ public:
 	std::shared_ptr<Level> MakeLevel();
 	std::weak_ptr<Level> GetCurrentLevel() const;
 
+	//This should probably be rethought at one point.
+	//The render target should probably be in the window.
 	RenderTarget& GetRenderTarget();
 	const std::string& GetApplicationName() const;
 
+	Window& GetWindow();
+	const Window& GetWindow() const;
 public:
 	static GregorianEngine& Get();
 	static const char* GetEngineName();

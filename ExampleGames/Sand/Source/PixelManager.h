@@ -21,10 +21,10 @@ public:
 private:
     void AddPixel(const Vec2i& position, const Color& color);
 
-    const int width = Window::WindowWidth;
-    const int height = Window::WindowHeight;
+    const int width = Window::StartWindowWidth;
+    const int height = Window::StartWindowHeight;
 
     float spawnTimer = 0;
     
-    Pixel* pixels[Window::WindowWidth * Window::WindowHeight];
+    Pixel* pixels[Window::StartWindowWidth * Window::StartWindowHeight];
 };

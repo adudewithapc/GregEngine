@@ -10,7 +10,7 @@ Apple::Apple(GameObject* owner) : Component(owner)
 void Apple::Update()
 {
 	GetOwner()->Position.y -= GRAVITY * Time::GetDeltaTime();
-	if (GetOwner()->Position.y < -Window::WindowHeight)
+	if (GetOwner()->Position.y < -Window::StartWindowHeight)
 	{
 		GetOwner()->Destroy();
 	}

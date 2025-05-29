@@ -21,29 +21,33 @@ public:
 	bool ProcessMessages();
 	void SetTitle(const std::string& windowTitle);
 
+	const Vec2i& GetFramebufferSize() const;
+
 	void Test();
 
 public:
 	static Vec2f ViewToPixel(const Vec2f& view);
 	static Vec2f PixelToView(const Vec2f& pixel);
-	static void ResizeViewport(int width, int height);
 
-	constexpr static int WindowWidth = 800;
-	constexpr static int WindowHeight = 600;
+	constexpr static int StartWindowWidth = 800;
+	constexpr static int StartWindowHeight = 600;
 
-	constexpr static int WindowX = 250;
-	constexpr static int WindowY = 250;
+	constexpr static int StartWindowX = 250;
+	constexpr static int StartWindowY = 250;
 
-	inline static int MouseStartingX = WindowX + WindowWidth / 2;
-	inline static int MouseStartingY = WindowY + WindowHeight / 2;
+	inline static int MouseStartingX = StartWindowX + StartWindowWidth / 2;
+	inline static int MouseStartingY = StartWindowY + StartWindowHeight / 2;
 private:
-	void CreateRenderer();
+	void SetFramebufferSize(int width, int height);
 	static LRESULT CALLBACK WindowProcedure(
 		HWND hWnd,		//What window is the message coming from
 		UINT message,	//Message type
 		WPARAM wParam,	//Extra parameters
 		LPARAM lParam	//Extra parameters
 	);
+
+private:
+	void CreateRenderer();
 
 	HINSTANCE hInstance;
 	HWND windowHandle;
@@ -52,6 +56,8 @@ private:
 
 	inline static int LastWidth;
 	inline static int LastHeight;
+
+	Vec2i framebufferSize;
 
 	std::unique_ptr<Renderer> renderer = nullptr;
 };

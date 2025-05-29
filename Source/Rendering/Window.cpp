@@ -36,13 +36,13 @@ Window::Window() :
 	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_MAXIMIZEBOX | WS_VISIBLE;
 
 	RECT rect;
-	rect.left = WindowX;
-	rect.top = WindowY;
-	rect.right = rect.left + WindowWidth;
-	rect.bottom = rect.top + WindowHeight;
+	rect.left = StartWindowX;
+	rect.top = StartWindowY;
+	rect.right = rect.left + StartWindowWidth;
+	rect.bottom = rect.top + StartWindowHeight;
 
-	LastWidth = WindowWidth;
-	LastHeight = WindowHeight;
+	LastWidth = StartWindowWidth;
+	LastHeight = StartWindowHeight;
 
 
 	//Make the window dimensions define the actual canvas, as opposed to the decorations (like the title bar)
@@ -72,7 +72,9 @@ Window::Window() :
 	ShowWindow(windowHandle, SW_SHOW);
 	CaptureCursor(true);
 	SetCursorPos(MouseStartingX, MouseStartingY);
-	input->MoveWindowMouse(WindowWidth / 2, WindowHeight / 2);
+	input->MoveWindowMouse(StartWindowWidth / 2, StartWindowHeight / 2);
+
+	SetFramebufferSize(StartWindowWidth, StartWindowHeight);
 	
 	hdc = GetDC(windowHandle);
 
@@ -97,10 +99,10 @@ void Window::CaptureCursor(bool capture)
 	{
 		SetCapture(windowHandle);
 		RECT clipRect;
-		clipRect.left = WindowX;
-		clipRect.top = WindowY;
-		clipRect.right = clipRect.left + WindowWidth;
-		clipRect.bottom = clipRect.top + WindowHeight;
+		clipRect.left = StartWindowX;
+		clipRect.top = StartWindowY;
+		clipRect.right = clipRect.left + StartWindowWidth;
+		clipRect.bottom = clipRect.top + StartWindowHeight;
 		ClipCursor(&clipRect);
 	}
 	else
@@ -138,6 +140,20 @@ void Window::SetTitle(const std::string& windowTitle)
 	}
 }
 
+const Vec2i& Window::GetFramebufferSize() const
+{
+	return framebufferSize;
+}
+
+void Window::SetFramebufferSize(int width, int height)
+{
+#if GREG_OPENGL
+	glViewport(0, 0, width, height);
+#endif
+
+	framebufferSize = Vec2i(width, height);
+}
+
 void Window::Test()
 {
 	RECT rect = { 0, 0, 1200, 1200 };
@@ -150,21 +166,13 @@ void Window::Test()
 
 Vec2f Window::ViewToPixel(const Vec2f& view)
 {
-	return Vec2f(view.x * WindowWidth, view.y * WindowHeight);
+	return Vec2f(view.x * StartWindowWidth, view.y * StartWindowHeight);
 }
 
 Vec2f Window::PixelToView(const Vec2f& pixel)
 {
-	return Vec2f(pixel.x / WindowWidth, pixel.y / WindowHeight);
+	return Vec2f(pixel.x / StartWindowWidth, pixel.y / StartWindowHeight);
 }
-
-void Window::ResizeViewport(int width, int height)
-{
-#if GREG_OPENGL
-	glViewport(0, 0, width, height);
-#endif
-}
-
 
 void Window::CreateRenderer()
 {
@@ -204,11 +212,7 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 				break;
 			}
 
-			RECT rect = { 0, 0, newWidth, newHeight };
-			DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_MAXIMIZEBOX | WS_VISIBLE;
-			DWORD exStyle = WS_EX_APPWINDOW | WS_EX_TOPMOST;
-				
-			Window::ResizeViewport(newWidth, newHeight);
+			window->SetFramebufferSize(newWidth, newHeight);
 			break;
 		}
 		case WM_SIZING:
@@ -272,10 +276,10 @@ LRESULT CALLBACK Window::WindowProcedure(HWND hWnd, UINT message, WPARAM wParam,
 		{
 			SetCapture(hWnd);
 			RECT clipRect;
-			clipRect.left = WindowX;
-			clipRect.top = WindowY;
-			clipRect.right = clipRect.left + WindowWidth;
-			clipRect.bottom = clipRect.top + WindowHeight;
+			clipRect.left = StartWindowX;
+			clipRect.top = StartWindowY;
+			clipRect.right = clipRect.left + StartWindowWidth;
+			clipRect.bottom = clipRect.top + StartWindowHeight;
 			ClipCursor(&clipRect);
 			break;
 		}
