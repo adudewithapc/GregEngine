@@ -5,7 +5,10 @@
 
 namespace greg::vulkan::debug
 {
-constexpr bool ShouldUseValidationLayers();
+constexpr bool ShouldUseValidationLayers()
+{
+    return true;
+}
 
 vk::DebugUtilsMessengerCreateInfoEXT GetDefaultDebugMessengerInfo();
 std::vector<const char*> GetValidationLayers();

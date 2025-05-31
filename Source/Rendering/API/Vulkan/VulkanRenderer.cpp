@@ -161,7 +161,6 @@ void VulkanRenderer::Test()
     Mat4x4f model = mat4x4::Identity<float>.Translate(primitive->Position);
     model = model.Transpose();
     UniformBufferObject ubo(model, mat4x4::Identity<float>, mat4x4::OrthographicView(0, 800, 0, 600, 0.1f, 100));
-    ubo.projection(1, 1) *= 1;
     uniform->WriteNewObject(ubo, currentFrameIndex);
 }
 

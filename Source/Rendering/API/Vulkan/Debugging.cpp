@@ -3,10 +3,6 @@
 
 namespace greg::vulkan::debug
 {
-constexpr bool ShouldUseValidationLayers()
-{
-    return true;
-}
 
 std::vector<const char*> GetValidationLayers()
 {
