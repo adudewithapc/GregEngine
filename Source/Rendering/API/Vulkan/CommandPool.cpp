@@ -2,11 +2,10 @@
 
 #include "Debugging.h"
 #include "LogicalDevice.h"
-#include "../../../Math/Color.h"
 
 namespace greg::vulkan::command
 {
-CommandPool::CommandPool(const greg::vulkan::LogicalDevice& logicalDevice, uint32_t queueFamilyIndex, uint32_t bufferCount)
+CommandPool::CommandPool(const greg::vulkan::LogicalDevice& logicalDevice, uint32_t queueFamilyIndex)
 {
     vk::CommandPoolCreateInfo createInfo(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, queueFamilyIndex);
     pool = greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->createCommandPoolUnique(createInfo), "Failed to create command pool!");
