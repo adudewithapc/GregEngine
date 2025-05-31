@@ -1,8 +1,5 @@
 #pragma once
 
-#define Vec2i Vec2<int>
-#define Vec2f Vec2<float>
-
 #define Vec3i Vec3<int>
 #define Vec3f Vec3<float>
 
@@ -301,5 +298,8 @@ Vec3<T> operator +(Vec3<T>& vec1, Vec3<T>& vec2)
 {
 	return Vec3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
 }
+
+using Vec2i = Vec2<int>;
+using Vec2f = Vec2<float>;
 
 #undef TypeT

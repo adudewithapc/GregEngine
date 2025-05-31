@@ -13,9 +13,6 @@ public:
 
 private:
     static void SetupBuffers();
-    
-    //Transforms sprite's coordinates from absolute to relative to window
-    std::unique_ptr<float> GetWindowCoordinates(int textureWidth, int textureHeight, int& elements) const;
 
     std::shared_ptr<Shader> shaderInstance;
     unsigned int textureID;

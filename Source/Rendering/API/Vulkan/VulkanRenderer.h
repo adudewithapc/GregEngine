@@ -46,6 +46,9 @@ private:
     vk::UniqueInstance instance;
     vk::UniqueHandle<vk::DebugUtilsMessengerEXT, vk::detail::DispatchLoaderDynamic> debugMessenger;
     vk::UniqueSurfaceKHR surface;
+
+    size_t vertexBufferOffset = 0;
+    size_t indexBufferOffset = 0;
     
     greg::vulkan::VulkanLoader loader;
 
@@ -78,5 +81,6 @@ private:
     HWND windowHandle;
     ////
 };
+
 static std::vector<char> LoadShaderFile(const std::string& fileName);
 }

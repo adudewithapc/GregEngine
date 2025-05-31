@@ -4,8 +4,10 @@
 #include <fstream>
 
 #include "Debugging.h"
+#include "MemoryBuffer.h"
 #include "../../../Debugging/Log.h"
 #include "../../../Math/Color.h"
+#include "../../Vertex.h"
 
 #include "../../../GregorianEngine.h"
 
@@ -108,7 +110,30 @@ void VulkanRenderer::Render(const Color& clearColor)
 }
 void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
 {
+    static bool test = false;
     
+    if(!test)
+        test = true;
+    else
+        greg::log::Fatal("Vulkan", "Function under construction! Only supposed to be called once");
+    const std::vector<Vertex>& primitiveVertices = primitive->GetVertices();
+    const std::vector<size_t>& primitiveIndices = primitive->GetIndices();
+
+    vk::DeviceSize vertexBufferSize = sizeof(primitiveVertices.front()) * primitiveVertices.size();
+    vk::DeviceSize indexBufferSize = sizeof(primitiveIndices.front()) * primitiveIndices.size();
+    vk::DeviceSize combinedSize = vertexBufferSize + indexBufferSize;
+
+    vertexBufferOffset = 0;
+    indexBufferOffset = vertexBufferSize;
+
+    greg::vulkan::MemoryBuffer stagingBuffer(combinedSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, *preferredPhysicalDevice, *logicalDevice);
+
+    char* mappedData = static_cast<char*>(greg::vulkan::debug::TieResult(logicalDevice->GetVulkanDevice()->mapMemory(stagingBuffer.GetMemory(), 0, vertexBufferSize), "Failed to map vertex buffer memory!"));
+    memcpy(mappedData + vertexBufferOffset, primitiveVertices.data(), static_cast<size_t>(vertexBufferSize));
+    memcpy(mappedData + indexBufferOffset, primitiveIndices.data(), static_cast<size_t>(indexBufferSize));
+    logicalDevice->GetVulkanDevice()->unmapMemory(stagingBuffer.GetMemory());
+
+    greg::vulkan::MemoryBuffer indexVertexBuffer(combinedSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, *preferredPhysicalDevice, *logicalDevice);
 }
 
 vk::UniqueInstance VulkanRenderer::CreateInstance()

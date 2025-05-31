@@ -1,5 +1,8 @@
 ﻿#pragma once
+
 #include "../Math/Vector.h"
+#include <vector>
+#include "Vertex.h"
 
 class Primitive
 {
@@ -16,6 +19,20 @@ public:
     virtual ~Primitive() = default;
     
     virtual void Draw() = 0;
+
+    //TODO: Make these pure virtual
+    virtual const std::vector<greg::Vertex>& GetVertices() const
+    {
+        return emptyVertices;
+    }
+    virtual const std::vector<size_t>& GetIndices() const
+    {
+        return emptyIndices;
+    }
     
     Vec2f Position;
+
+protected:
+    const std::vector<greg::Vertex> emptyVertices = {};
+    const std::vector<size_t> emptyIndices = {};
 };
