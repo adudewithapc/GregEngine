@@ -130,7 +130,8 @@ void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
         test = true;
     else
         greg::log::Fatal("Vulkan", "Function under construction! Only supposed to be called once");
-    
+
+    this->primitive = primitive;
     primitiveVertices = primitive->GetVertices();
     primitiveIndices = primitive->GetIndices();
 
@@ -157,10 +158,10 @@ void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
 
 void VulkanRenderer::Test()
 {
-    Mat4x4f model = mat4x4::Identity<float>.Rotate(Vec3f(0, 0, 1), trigonometry::Radians(Time::GetTimeSinceStartup() * 180));
-    //UniformBufferObject ubo(mat4x4::Identity<float>, mat4x4::Identity<float>, mat4x4::Identity<float>);
+    Mat4x4f model = mat4x4::Identity<float>.Translate(primitive->Position);
+    model = model.Transpose();
     UniformBufferObject ubo(model, mat4x4::Identity<float>, mat4x4::OrthographicView(0, 800, 0, 600, 0.1f, 100));
-    ubo.projection(1, 1) *= -1;
+    ubo.projection(1, 1) *= 1;
     uniform->WriteNewObject(ubo, currentFrameIndex);
 }
 

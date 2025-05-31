@@ -154,16 +154,6 @@ void Window::SetFramebufferSize(int width, int height)
 	framebufferSize = Vec2i(width, height);
 }
 
-void Window::Test()
-{
-	RECT rect = { 0, 0, 1200, 1200 };
-	DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | CS_OWNDC | WS_MAXIMIZEBOX;
-	DWORD exStyle = WS_EX_APPWINDOW | WS_EX_TOPMOST;
-	AdjustWindowRectExForDpi(&rect, style, false, exStyle, GetDpiForWindow(windowHandle));
-
-	SetWindowPos(windowHandle, HWND_TOP, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOMOVE | SWP_NOZORDER);
-}
-
 Vec2f Window::ViewToPixel(const Vec2f& view)
 {
 	return Vec2f(view.x * StartWindowWidth, view.y * StartWindowHeight);

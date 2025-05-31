@@ -30,7 +30,7 @@ public:
         return emptyIndices;
     }
     
-    Vec2f Position;
+    Vec2f Position = Vec2f(0.0f, 0.0f);
 
 protected:
     const std::vector<greg::Vertex> emptyVertices = {};

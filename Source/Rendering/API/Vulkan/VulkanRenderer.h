@@ -52,6 +52,7 @@ private:
     vk::UniqueSurfaceKHR surface;
 
 #pragma region Hard coded vertex and index buffer for testing
+    std::shared_ptr<Primitive> primitive;
     size_t vertexBufferOffset = 0;
     size_t indexBufferOffset = 0;
     std::optional<greg::vulkan::MemoryBuffer> vertexIndexBuffer;

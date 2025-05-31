@@ -31,9 +31,6 @@ void GregorianEngine::Run(const std::string& applicationName)
 		
 		time.Tick(deltaTime);
 		
-		if(Keyboard::IsKeyDown(Key::W))
-			window.Test();
-		
 		if(!window.ProcessMessages() || Keyboard::IsKeyDown(Key::Esc))
 			running = false;
 		

@@ -23,8 +23,6 @@ public:
 
 	const Vec2i& GetFramebufferSize() const;
 
-	void Test();
-
 public:
 	static Vec2f ViewToPixel(const Vec2f& view);
 	static Vec2f PixelToView(const Vec2f& pixel);
