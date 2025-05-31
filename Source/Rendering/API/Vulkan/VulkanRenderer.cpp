@@ -6,11 +6,14 @@
 #include "CommandBuffer.h"
 #include "Debugging.h"
 #include "MemoryBuffer.h"
+#include "UniformBufferObject.h"
 #include "../../../Debugging/Log.h"
 #include "../../../Math/Color.h"
 #include "../../Vertex.h"
 
 #include "../../../GregorianEngine.h"
+#include "../../../GregTime.h"
+#include "../../../Math/Trigonometry.h"
 
 static const bool WIREFRAME_MODE = false;
 
@@ -60,6 +63,8 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
     renderPass = CreateRenderPass();
     swapChain->CreateFramebuffers(logicalDevice->GetVulkanDevice(), renderPass);
 
+    uniform = Uniform(MAX_FRAMES_IN_FLIGHT, *preferredPhysicalDevice, *logicalDevice);
+
     graphicsPipeline = CreateGraphicsPipeline();
 }
 
@@ -72,7 +77,6 @@ VulkanRenderer::~VulkanRenderer()
 void VulkanRenderer::Render(const Color& clearColor)
 {
     logicalDevice->GetVulkanDevice()->waitForFences(1, &*inFlightFences[currentFrameIndex], vk::True, UINT64_MAX);
-    logicalDevice->GetVulkanDevice()->resetFences(1, &*inFlightFences[currentFrameIndex]);
 
     uint32_t swapChainImageIndex;
     {
@@ -88,6 +92,10 @@ void VulkanRenderer::Render(const Color& clearColor)
             greg::log::Fatal("Vulkan", "Failed to acquire swap chain image!");
         }
     }
+
+    logicalDevice->GetVulkanDevice()->resetFences(1, &*inFlightFences[currentFrameIndex]);
+
+    Test();
 
     vk::UniqueCommandBuffer& currentRenderCommandBuffer = renderCommandBuffers[currentFrameIndex];
     currentRenderCommandBuffer->reset();
@@ -145,6 +153,15 @@ void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
     vk::UniqueCommandBuffer copyCommandBuffer = transferCommandPool->CreateAndStartTransientBuffer(*logicalDevice);
     greg::vulkan::command::CopyBuffer(stagingBuffer, *vertexIndexBuffer, combinedSize, *copyCommandBuffer);
     greg::vulkan::command::FlushTransientBuffer(std::move(copyCommandBuffer), logicalDevice->GetTransferQueue());
+}
+
+void VulkanRenderer::Test()
+{
+    Mat4x4f model = mat4x4::Identity<float>.Rotate(Vec3f(0, 0, 1), trigonometry::Radians(Time::GetTimeSinceStartup() * 180));
+    //UniformBufferObject ubo(mat4x4::Identity<float>, mat4x4::Identity<float>, mat4x4::Identity<float>);
+    UniformBufferObject ubo(model, mat4x4::Identity<float>, mat4x4::OrthographicView(0, 800, 0, 600, 0.1f, 100));
+    ubo.projection(1, 1) *= -1;
+    uniform->WriteNewObject(ubo, currentFrameIndex);
 }
 
 vk::UniqueInstance VulkanRenderer::CreateInstance()
@@ -222,8 +239,8 @@ vk::UniquePipeline VulkanRenderer::CreateGraphicsPipeline()
                                                                 vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA);
     vk::PipelineColorBlendStateCreateInfo colorBlendingCreateInfo({}, vk::False, vk::LogicOp::eClear, 1, &colorBlendAttachment, {0, 0, 0, 0});
 
-    vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo({}, 0, nullptr, 0, nullptr);
-    vk::UniquePipelineLayout pipelineLayout = greg::vulkan::debug::TieResult(logicalDevice->GetVulkanDevice()->createPipelineLayoutUnique(pipelineLayoutCreateInfo), "Failed to create graphics pipeline layout!");
+    vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo({}, uniform->GetDescriptorLayout(), nullptr);
+    pipelineLayout = greg::vulkan::debug::TieResult(logicalDevice->GetVulkanDevice()->createPipelineLayoutUnique(pipelineLayoutCreateInfo), "Failed to create graphics pipeline layout!");
 
     //Vertices
     vk::VertexInputBindingDescription bindingDescription = GetVertexBindingDescription();
@@ -284,6 +301,8 @@ void VulkanRenderer::RecordDrawCommand(const vk::UniqueCommandBuffer& buffer, co
 
     vk::Rect2D scissor(vk::Offset2D(0, 0), swapChainExtent);
     buffer->setScissor(0, 1, &scissor);
+
+    buffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, *pipelineLayout, 0, uniform->GetDescriptorSet(currentFrameIndex), nullptr);
 
     buffer->drawIndexed(static_cast<uint32_t>(primitiveIndices.size()), 1, 0, 0, 0);
 

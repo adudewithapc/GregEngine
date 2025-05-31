@@ -13,7 +13,10 @@ struct Matrix
 private:
 	T elements[R * C];
 public:
-	const size_t SIZE = R * C;
+	constexpr size_t GetSize()
+	{
+		return R * C;
+	}
 
 	Matrix<T, C, R>()
 	{
@@ -22,7 +25,7 @@ public:
 
 	Matrix<T, C, R>(const T elements[R * C])
 	{
-		for(int i = 0; i < SIZE; i++)
+		for(int i = 0; i < GetSize(); i++)
 		{
 			this->elements[i] = elements[i];
 		}
@@ -30,9 +33,9 @@ public:
 
 	Matrix<T, C, R>(const std::initializer_list<T>& list)
 	{
-		if(list.size() != SIZE)
+		if(list.size() != GetSize())
 		{
-			greg::log::Fatal("Matrix", std::format("Initializer list is wrong size. It is {} when it should be {}", list.size(), SIZE));
+			greg::log::Fatal("Matrix", std::format("Initializer list is wrong size. It is {} when it should be {}", list.size(), GetSize()));
 			throw std::out_of_range("initializer_list_size");
 		}
 
@@ -79,7 +82,7 @@ public:
 
 	void Empty()
 	{
-		for(size_t i = 0; i < SIZE; i++)
+		for(size_t i = 0; i < GetSize(); i++)
 		{
 			elements[i] = 0;
 		}
@@ -107,7 +110,7 @@ public:
 	//Matrix = Matrix
 	Matrix<T, C, R>& operator =(Matrix<T, R, C> other)
 	{
-		for(size_t i = 0; i < SIZE; i++)
+		for(size_t i = 0; i < GetSize(); i++)
 		{
 			elements[i] = other.elements[i];
 		}
@@ -118,7 +121,7 @@ public:
 	//Matrix + Scalar
 	Matrix<T, C, R>& operator +(const T scalar)
 	{
-		for(int i = 0; i < SIZE; i++)
+		for(int i = 0; i < GetSize(); i++)
 		{
 			elements[i] += scalar;
 		}
@@ -132,7 +135,7 @@ public:
 	//Matrix - Scalar
 	Matrix<T, C, R>& operator -(const T scalar)
 	{
-		for(int i = 0; i < SIZE; i++)
+		for(int i = 0; i < GetSize(); i++)
 		{
 			elements[i] -= scalar;
 		}
@@ -146,7 +149,7 @@ public:
 	//Matrix * Scalar
 	Matrix<T, C, R>& operator *(const T scalar)
 	{
-		for(int i = 0; i < SIZE; i++)
+		for(int i = 0; i < GetSize(); i++)
 		{
 			elements[i] *= scalar;
 		}
@@ -162,7 +165,7 @@ public:
 	{
 		Matrix<T, C, R> output;
 
-		for(size_t i = 0; i < SIZE; i++)
+		for(size_t i = 0; i < GetSize(); i++)
 		{
 			output[i] = elements[i] + right[i];
 		}
@@ -179,7 +182,8 @@ public:
 	{
 		Matrix<T, R, C> output;
 
-		for(int i = 0; i < SIZE; i++)
+		for(int i = 0; i < GetSize(); i++)
+			
 		{
 			output[i] = elements[i] - right[i];
 		}
@@ -269,6 +273,10 @@ public:
 							   axis.y * axis.x * (1 - c) + axis.z * s, c + (T) pow(axis.y, 2) * (1 - c), axis.y * axis.z * (1 - c) - axis.x * s, 0,
 							   axis.z * axis.x * (1 - c) - axis.y * s, axis.z * axis.y * (1 - c) + axis.x * s, c + (T) pow(axis.z, 2) * (1 - c), 0,
 							   0, 0, 0, 1});
+		/*Matrix<T, 4, 4> output({c + (T) pow(axis.x, 2) * (1 - c), axis.y * axis.x * (1 - c) + axis.z * s, axis.z * axis.x * (1 - c) - axis.y * s, 0,
+								axis.x * axis.y * (1 - c) - axis.z * s, c + (T) pow(axis.y, 2) * (1 - c), axis.z * axis.y * (1 - c) + axis.x * s, 0,
+								axis.x * axis.z * (1 - c) + axis.y * s, axis.y * axis.z * (1 - c) - axis.x * s, c + (T) pow(axis.z, 2) * (1 - c), 0,
+								0, 0, 0, 1});*/
 
 		return *this * output;
 	}
@@ -286,6 +294,21 @@ public:
 		output(3, 3) = 1;
 
 		return *this * output;
+	}
+
+	Matrix<T, R, C> Transpose()
+	{
+		Matrix<T, R, C> output;
+
+		for(size_t column = 0; column < C; column++)
+		{
+			for(size_t row = 0; row < R; row++)
+			{
+				output(row, column) = elements[row * C + column];
+			}
+		}
+
+		return output;
 	}
 
 	//Conversion

@@ -15,6 +15,8 @@ namespace greg::vulkan
 class MemoryBuffer
 {
 public:
+    MemoryBuffer() = default;
+    
     MemoryBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags memoryProperties, const greg::vulkan::PhysicalDevice& physicalDevice, const greg::vulkan::LogicalDevice& logicalDevice);
 
     vk::Buffer GetBuffer() const;

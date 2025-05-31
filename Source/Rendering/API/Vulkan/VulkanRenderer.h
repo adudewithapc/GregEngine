@@ -6,6 +6,7 @@
 #include "MemoryBuffer.h"
 #include "PhysicalDevice.h"
 #include "SwapChain.h"
+#include "Uniform.h"
 #include "VulkanLoader.h"
 #include "../../Renderer.h"
 #include "../../../Debugging/Log.h"
@@ -26,6 +27,8 @@ protected:
 
 private:
     static constexpr size_t MAX_FRAMES_IN_FLIGHT = 2;
+
+    void Test();
     
 private:
     vk::UniqueInstance CreateInstance();
@@ -57,10 +60,7 @@ private:
     std::vector<uint32_t> primitiveIndices;
 #pragma endregion
     
-    
     greg::vulkan::VulkanLoader loader;
-
-    size_t currentFrameIndex = 0;
 
 #pragma region Devices
     std::optional<greg::vulkan::LogicalDevice> logicalDevice {};
@@ -72,7 +72,10 @@ private:
     //Rendering
     std::optional<greg::vulkan::SwapChain> swapChain {};
     vk::UniqueRenderPass renderPass {};
+    vk::UniquePipelineLayout pipelineLayout;
     vk::UniquePipeline graphicsPipeline {};
+
+    size_t currentFrameIndex = 0;
 #pragma endregion 
 
     std::optional<greg::vulkan::command::CommandPool> graphicsCommandPool {};
@@ -85,6 +88,8 @@ private:
     std::array<vk::UniqueSemaphore, MAX_FRAMES_IN_FLIGHT> renderFinishedSemaphores;
     std::array<vk::UniqueFence, MAX_FRAMES_IN_FLIGHT> inFlightFences;
 #pragma endregion
+
+    std::optional<Uniform> uniform;
     
     ////Windows specific
     HINSTANCE hInstance;
