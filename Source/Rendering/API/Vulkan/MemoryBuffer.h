@@ -21,7 +21,7 @@ public:
     vk::DeviceMemory GetMemory() const;
 
 private:
-    uint32_t FindMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlagBits properties, const vk::PhysicalDevice& physicalDevice);
+    uint32_t FindMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties, const vk::PhysicalDevice& physicalDevice);
     
     vk::UniqueBuffer buffer;
     vk::UniqueDeviceMemory memory;

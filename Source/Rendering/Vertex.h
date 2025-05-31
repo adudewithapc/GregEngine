@@ -8,6 +8,7 @@ namespace greg
 struct Vertex
 {
 public:
+    Vertex();
     Vertex(const Vec2f& position, const Color& color);
     
     Vec2f position;

@@ -33,9 +33,9 @@ vk::DeviceMemory MemoryBuffer::GetMemory() const
     return *memory;
 }
 
-uint32_t MemoryBuffer::FindMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlagBits properties, const vk::PhysicalDevice& physicalDevice)
+uint32_t MemoryBuffer::FindMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties, const vk::PhysicalDevice& physicalDevice)
 {
-    vk::PhysicalDeviceMemoryProperties memoryProperties = physicalDevice.getMemoryProperties(properties);
+    vk::PhysicalDeviceMemoryProperties memoryProperties = physicalDevice.getMemoryProperties();
 
     for(uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++)
     {
