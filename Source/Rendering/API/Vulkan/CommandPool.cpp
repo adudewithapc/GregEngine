@@ -22,4 +22,15 @@ std::vector<vk::UniqueCommandBuffer> CommandPool::CreateCommandBuffers(const gre
     vk::CommandBufferAllocateInfo allocInfo(*pool, vk::CommandBufferLevel::ePrimary, bufferCount);
     return greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->allocateCommandBuffersUnique(allocInfo), "Failed to create command buffers!");
 }
+
+vk::UniqueCommandBuffer CommandPool::CreateAndStartTransientBuffer(const greg::vulkan::LogicalDevice& logicalDevice)
+{
+    vk::UniqueCommandBuffer buffer = CreateBuffer(logicalDevice);
+    vk::CommandBufferBeginInfo beginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+
+    if(buffer->begin(beginInfo) != vk::Result::eSuccess)
+        greg::log::Fatal("Vulkan", "Failed to set up transient command buffer!");
+
+    return buffer;
+}
 }

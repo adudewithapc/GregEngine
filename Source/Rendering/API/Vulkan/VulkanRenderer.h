@@ -3,6 +3,7 @@
 #include "Vulkan.h"
 #include "CommandPool.h"
 #include "LogicalDevice.h"
+#include "MemoryBuffer.h"
 #include "PhysicalDevice.h"
 #include "SwapChain.h"
 #include "VulkanLoader.h"
@@ -49,6 +50,7 @@ private:
 
     size_t vertexBufferOffset = 0;
     size_t indexBufferOffset = 0;
+    std::optional<greg::vulkan::MemoryBuffer> vertexIndexBuffer;
     
     greg::vulkan::VulkanLoader loader;
 
@@ -70,12 +72,13 @@ private:
     std::optional<greg::vulkan::command::CommandPool> graphicsCommandPool {};
     std::vector<vk::UniqueCommandBuffer> renderCommandBuffers {};
 
+    std::optional<greg::vulkan::command::CommandPool> transferCommandPool {};
+
 #pragma region Sync Objects
     std::array<vk::UniqueSemaphore, MAX_FRAMES_IN_FLIGHT> imageAvailableSemaphores;
     std::array<vk::UniqueSemaphore, MAX_FRAMES_IN_FLIGHT> renderFinishedSemaphores;
     std::array<vk::UniqueFence, MAX_FRAMES_IN_FLIGHT> inFlightFences;
 #pragma endregion
-
     
     ////Windows specific
     HINSTANCE hInstance;

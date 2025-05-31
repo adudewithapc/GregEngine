@@ -25,6 +25,8 @@ public:
 
     vk::UniqueCommandBuffer CreateBuffer(const greg::vulkan::LogicalDevice& logicalDevice);
     std::vector<vk::UniqueCommandBuffer> CreateCommandBuffers(const greg::vulkan::LogicalDevice& logicalDevice, uint32_t bufferCount);
+
+    vk::UniqueCommandBuffer CreateAndStartTransientBuffer(const greg::vulkan::LogicalDevice& logicalDevice);
 private:
     
     vk::UniqueCommandPool pool;
