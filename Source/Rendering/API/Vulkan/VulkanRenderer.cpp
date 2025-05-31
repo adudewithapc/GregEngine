@@ -66,6 +66,7 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
 VulkanRenderer::~VulkanRenderer()
 {
     logicalDevice->GetVulkanDevice()->waitIdle();
+    vertexIndexBuffer.reset();
 }
 
 void VulkanRenderer::Render(const Color& clearColor)
