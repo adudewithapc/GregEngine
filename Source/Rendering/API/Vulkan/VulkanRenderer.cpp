@@ -122,8 +122,8 @@ void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
     else
         greg::log::Fatal("Vulkan", "Function under construction! Only supposed to be called once");
     
-    const std::vector<Vertex>& primitiveVertices = primitive->GetVertices();
-    const std::vector<size_t>& primitiveIndices = primitive->GetIndices();
+    primitiveVertices = primitive->GetVertices();
+    primitiveIndices = primitive->GetIndices();
 
     vk::DeviceSize vertexBufferSize = sizeof(primitiveVertices.front()) * primitiveVertices.size();
     vk::DeviceSize indexBufferSize = sizeof(primitiveIndices.front()) * primitiveIndices.size();
@@ -143,7 +143,7 @@ void VulkanRenderer::SetupPrimitive(std::shared_ptr<Primitive> primitive)
 
     vk::UniqueCommandBuffer copyCommandBuffer = transferCommandPool->CreateAndStartTransientBuffer(*logicalDevice);
     greg::vulkan::command::CopyBuffer(stagingBuffer, *vertexIndexBuffer, combinedSize, *copyCommandBuffer);
-    greg::vulkan::command::FlushTransientBuffer(std::move(copyCommandBuffer));
+    greg::vulkan::command::FlushTransientBuffer(std::move(copyCommandBuffer), logicalDevice->GetTransferQueue());
 }
 
 vk::UniqueInstance VulkanRenderer::CreateInstance()
@@ -198,8 +198,6 @@ vk::UniquePipeline VulkanRenderer::CreateGraphicsPipeline()
     vk::PipelineShaderStageCreateInfo fragmentShaderStage({}, vk::ShaderStageFlagBits::eFragment, *fragmentShaderModule, "main");
 
     vk::PipelineShaderStageCreateInfo shaderStages[] = { vertexShaderStage, fragmentShaderStage };
-
-    vk::PipelineVertexInputStateCreateInfo vertexInputCreateInfo({}, 0, nullptr, 0, nullptr);
     
     std::vector<vk::DynamicState> dynamicStates = { vk::DynamicState::eViewport, vk::DynamicState::eScissor };
     vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo({}, static_cast<uint32_t>(dynamicStates.size()), dynamicStates.data());
@@ -226,6 +224,13 @@ vk::UniquePipeline VulkanRenderer::CreateGraphicsPipeline()
     vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo({}, 0, nullptr, 0, nullptr);
     vk::UniquePipelineLayout pipelineLayout = greg::vulkan::debug::TieResult(logicalDevice->GetVulkanDevice()->createPipelineLayoutUnique(pipelineLayoutCreateInfo), "Failed to create graphics pipeline layout!");
 
+    //Vertices
+    vk::VertexInputBindingDescription bindingDescription = GetVertexBindingDescription();
+    std::array<vk::VertexInputAttributeDescription, 2> attributeDescriptions = GetVertexAttributeDescriptions();
+
+    vk::PipelineVertexInputStateCreateInfo vertexInputCreateInfo({}, 1, &bindingDescription, attributeDescriptions.size(), attributeDescriptions.data());
+
+    //Create pipeline!
     vk::GraphicsPipelineCreateInfo graphicsPipelineCreateInfo({}, 2, shaderStages, &vertexInputCreateInfo, &inputAssemblyCreateInfo, nullptr, &viewportStateCreateInfo, &rasterizerCreateInfo,
                                                               &multisampleCreateInfo, &depthStencilCreateInfo, &colorBlendingCreateInfo, &dynamicStateCreateInfo, *pipelineLayout, *renderPass, 0, nullptr, -1);
 
@@ -268,6 +273,10 @@ void VulkanRenderer::RecordDrawCommand(const vk::UniqueCommandBuffer& buffer, co
 
     buffer->beginRenderPass(&renderPassBeginInfo, vk::SubpassContents::eInline);
     buffer->bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
+
+    //There is currently only one vertex and index buffer
+    buffer->bindVertexBuffers(0, vertexIndexBuffer->GetBuffer(), vertexBufferOffset);
+    buffer->bindIndexBuffer(vertexIndexBuffer->GetBuffer(), indexBufferOffset, vk::IndexType::eUint32);
     
     vk::Viewport viewport(0.0f, 0.0f, static_cast<float>(swapChainExtent.width), static_cast<float>(swapChainExtent.height), 0.0f, 1.0f);
     buffer->setViewport(0, 1, &viewport);
@@ -275,7 +284,7 @@ void VulkanRenderer::RecordDrawCommand(const vk::UniqueCommandBuffer& buffer, co
     vk::Rect2D scissor(vk::Offset2D(0, 0), swapChainExtent);
     buffer->setScissor(0, 1, &scissor);
 
-    buffer->draw(3, 1, 0, 0);
+    buffer->drawIndexed(static_cast<uint32_t>(primitiveIndices.size()), 1, 0, 0, 0);
 
     buffer->endRenderPass();
     buffer->end();
@@ -346,6 +355,22 @@ std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
     };
 
     return extensions;
+}
+
+constexpr vk::VertexInputBindingDescription GetVertexBindingDescription()
+{
+    return vk::VertexInputBindingDescription(0, sizeof(Vertex), vk::VertexInputRate::eVertex);
+}
+
+constexpr std::array<vk::VertexInputAttributeDescription, 2> GetVertexAttributeDescriptions()
+{
+    std::array<vk::VertexInputAttributeDescription, 2> attributeDescriptions
+    {
+        vk::VertexInputAttributeDescription(0, 0, vk::Format::eR32G32Sfloat, offsetof(Vertex, position)),
+        vk::VertexInputAttributeDescription(1, 0, vk::Format::eR32G32B32A32Sfloat, offsetof(Vertex, color)),
+    };
+
+    return attributeDescriptions;
 }
 
 //Assumed to be in {targetdirectory}/Shaders

@@ -25,7 +25,7 @@ public:
     {
         return emptyVertices;
     }
-    virtual const std::vector<size_t>& GetIndices() const
+    virtual const std::vector<uint32_t>& GetIndices() const
     {
         return emptyIndices;
     }
@@ -34,5 +34,5 @@ public:
 
 protected:
     const std::vector<greg::Vertex> emptyVertices = {};
-    const std::vector<size_t> emptyIndices = {};
+    const std::vector<uint32_t> emptyIndices = {};
 };

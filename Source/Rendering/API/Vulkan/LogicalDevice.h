@@ -21,6 +21,7 @@ public:
 
     const vk::Queue& GetGraphicsQueue() const;
     const vk::Queue& GetPresentQueue() const;
+    const vk::Queue& GetTransferQueue() const;
     
     const vk::UniqueDevice& GetVulkanDevice() const;
     vk::UniqueShaderModule CreateShaderStage(const std::vector<char>& code);
@@ -28,6 +29,7 @@ public:
 private:
     vk::Queue graphicsQueue;
     vk::Queue presentQueue;
+    vk::Queue transferQueue;
     
     vk::UniqueDevice device;
 };

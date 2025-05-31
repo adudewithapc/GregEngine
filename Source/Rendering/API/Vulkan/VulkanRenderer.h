@@ -48,9 +48,15 @@ private:
     vk::UniqueHandle<vk::DebugUtilsMessengerEXT, vk::detail::DispatchLoaderDynamic> debugMessenger;
     vk::UniqueSurfaceKHR surface;
 
+#pragma region Hard coded vertex and index buffer for testing
     size_t vertexBufferOffset = 0;
     size_t indexBufferOffset = 0;
     std::optional<greg::vulkan::MemoryBuffer> vertexIndexBuffer;
+
+    std::vector<Vertex> primitiveVertices;
+    std::vector<uint32_t> primitiveIndices;
+#pragma endregion
+    
     
     greg::vulkan::VulkanLoader loader;
 
@@ -86,5 +92,7 @@ private:
     ////
 };
 
+constexpr static vk::VertexInputBindingDescription GetVertexBindingDescription();
+constexpr static std::array<vk::VertexInputAttributeDescription, 2> GetVertexAttributeDescriptions(); 
 static std::vector<char> LoadShaderFile(const std::string& fileName);
 }

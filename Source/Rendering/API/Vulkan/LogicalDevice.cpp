@@ -32,6 +32,7 @@ LogicalDevice::LogicalDevice(const greg::vulkan::PhysicalDevice& physicalDevice)
 
     graphicsQueue = device->getQueue(queueFamilies.GetGraphicsFamily(), 0);
     presentQueue = device->getQueue(queueFamilies.GetPresentFamily(), 0);
+    transferQueue = device->getQueue(queueFamilies.GetTransferFamily(), 0);
 }
 
 const vk::Queue& LogicalDevice::GetGraphicsQueue() const
@@ -42,6 +43,11 @@ const vk::Queue& LogicalDevice::GetGraphicsQueue() const
 const vk::Queue& LogicalDevice::GetPresentQueue() const
 {
     return presentQueue;
+}
+
+const vk::Queue& LogicalDevice::GetTransferQueue() const
+{
+    return transferQueue;
 }
 
 const vk::UniqueDevice& LogicalDevice::GetVulkanDevice() const

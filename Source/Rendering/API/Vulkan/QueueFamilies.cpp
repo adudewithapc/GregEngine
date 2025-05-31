@@ -49,6 +49,6 @@ bool QueueFamilies::IsComplete() const
 
 std::set<uint32_t> QueueFamilies::GetUniqueQueueFamilies() const
 {
-    return { *graphicsFamily, *presentFamily };
+    return { *graphicsFamily, *presentFamily, *transferFamily };
 }
 }
