@@ -68,6 +68,7 @@ private:
 #pragma endregion 
 
     std::optional<greg::vulkan::command::CommandPool> graphicsCommandPool {};
+    std::vector<vk::UniqueCommandBuffer> renderCommandBuffers {};
 
 #pragma region Sync Objects
     std::array<vk::UniqueSemaphore, MAX_FRAMES_IN_FLIGHT> imageAvailableSemaphores;

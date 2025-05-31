@@ -10,13 +10,17 @@ CommandPool::CommandPool(const greg::vulkan::LogicalDevice& logicalDevice, uint3
 {
     vk::CommandPoolCreateInfo createInfo(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, queueFamilyIndex);
     pool = greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->createCommandPoolUnique(createInfo), "Failed to create command pool!");
-    
-    vk::CommandBufferAllocateInfo allocInfo(*pool, vk::CommandBufferLevel::ePrimary, bufferCount);
-    buffers = greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->allocateCommandBuffersUnique(allocInfo), "Failed to allocate command buffers!");
 }
 
-const vk::UniqueCommandBuffer& CommandPool::GetBuffer(uint32_t frameIndex) const
+vk::UniqueCommandBuffer CommandPool::CreateBuffer(const greg::vulkan::LogicalDevice& logicalDevice)
 {
-    return buffers[frameIndex];
+    vk::CommandBufferAllocateInfo allocInfo(*pool, vk::CommandBufferLevel::ePrimary, 1);
+    return std::move(greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->allocateCommandBuffersUnique(allocInfo), "Failed to create command buffer!").front());
+}
+
+std::vector<vk::UniqueCommandBuffer> CommandPool::CreateCommandBuffers(const greg::vulkan::LogicalDevice& logicalDevice, uint32_t bufferCount)
+{
+    vk::CommandBufferAllocateInfo allocInfo(*pool, vk::CommandBufferLevel::ePrimary, bufferCount);
+    return greg::vulkan::debug::TieResult(logicalDevice.GetVulkanDevice()->allocateCommandBuffersUnique(allocInfo), "Failed to create command buffers!");
 }
 }

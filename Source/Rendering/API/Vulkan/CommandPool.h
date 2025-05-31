@@ -23,7 +23,8 @@ public:
 
     ~CommandPool() = default;
 
-    const vk::UniqueCommandBuffer& GetBuffer(uint32_t frameIndex) const;
+    vk::UniqueCommandBuffer CreateBuffer(const greg::vulkan::LogicalDevice& logicalDevice);
+    std::vector<vk::UniqueCommandBuffer> CreateCommandBuffers(const greg::vulkan::LogicalDevice& logicalDevice, uint32_t bufferCount);
 private:
     
     vk::UniqueCommandPool pool;

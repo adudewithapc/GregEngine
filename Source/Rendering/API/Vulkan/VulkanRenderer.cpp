@@ -43,6 +43,7 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
 
     logicalDevice = greg::vulkan::LogicalDevice(*preferredPhysicalDevice);
     graphicsCommandPool = greg::vulkan::command::CommandPool(*logicalDevice, preferredPhysicalDevice->GetQueueFamilies().GetGraphicsFamily(), MAX_FRAMES_IN_FLIGHT);
+    renderCommandBuffers = graphicsCommandPool->CreateCommandBuffers(*logicalDevice, MAX_FRAMES_IN_FLIGHT);
 
     for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
@@ -83,14 +84,14 @@ void VulkanRenderer::Render(const Color& clearColor)
         }
     }
 
-    
-    graphicsCommandPool->GetBuffer(currentFrameIndex)->reset();
-    RecordDrawCommand(graphicsCommandPool->GetBuffer(currentFrameIndex), clearColor, swapChainImageIndex);
+    vk::UniqueCommandBuffer& currentRenderCommandBuffer = renderCommandBuffers[currentFrameIndex];
+    currentRenderCommandBuffer->reset();
+    RecordDrawCommand(currentRenderCommandBuffer, clearColor, swapChainImageIndex);
 
     std::array<vk::PipelineStageFlags, 1> waitStages = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
     vk::Semaphore waitSemaphores[] = { *imageAvailableSemaphores[currentFrameIndex] };
     vk::Semaphore signalSemaphores[] = { *renderFinishedSemaphores[currentFrameIndex] };
-    vk::SubmitInfo submitInfo(1, waitSemaphores, waitStages.data(), 1, &*graphicsCommandPool->GetBuffer(currentFrameIndex), 1, signalSemaphores);
+    vk::SubmitInfo submitInfo(1, waitSemaphores, waitStages.data(), 1, &*currentRenderCommandBuffer, 1, signalSemaphores);
     if(logicalDevice->GetGraphicsQueue().submit(1, &submitInfo, *inFlightFences[currentFrameIndex]) != vk::Result::eSuccess)
         greg::log::Fatal("Vulkan", "Failed to submit draw command buffer!");
 
