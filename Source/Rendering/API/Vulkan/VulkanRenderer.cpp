@@ -42,7 +42,7 @@ VulkanRenderer::VulkanRenderer(HDC hdc, HINSTANCE hInstance, HWND hwnd)
     greg::log::Debug("Vulkan", std::format("Selecting graphics device \"{}\"", preferredPhysicalDevice->GetProperties().deviceName.data()));
 
     logicalDevice = greg::vulkan::LogicalDevice(*preferredPhysicalDevice);
-    graphicsCommandPool = greg::vulkan::command::CommandPool(*logicalDevice, preferredPhysicalDevice->GetQueueFamilies().GetGraphicsFamily(), MAX_FRAMES_IN_FLIGHT);
+    graphicsCommandPool = greg::vulkan::command::CommandPool(*logicalDevice, preferredPhysicalDevice->GetQueueFamilies().GetGraphicsFamily());
     renderCommandBuffers = graphicsCommandPool->CreateCommandBuffers(*logicalDevice, MAX_FRAMES_IN_FLIGHT);
 
     for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
